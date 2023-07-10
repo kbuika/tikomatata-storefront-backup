@@ -1,8 +1,8 @@
 "use client"
 
-import EventCard from "../components/EventCard"
-import Hero from "../components/Hero"
-import Nav from "../components/Nav"
+import EventCard from "../../components/EventCard"
+import Hero from "../../components/Hero"
+import Nav from "../../components/Nav"
 
 export default function Home() {
   return (

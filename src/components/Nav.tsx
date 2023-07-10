@@ -2,6 +2,9 @@ import React from "react"
 import Link from "next/link"
 import CustomButton from "./ui/CustomButton"
 import { usePathname } from "next/navigation"
+import MailLogo from "../images/logos/tikomatata.svg"
+import BrightLogo from "../images/logos/tikomatata-bright.svg"
+import Image from "next/image"
 
 const Nav = () => {
   const pathname = usePathname()
@@ -21,9 +24,11 @@ const Nav = () => {
       }`}
     >
       <Link href="/">
-        <h1 className={`text-xl font-bold ${titleVariants[isMain ? "isMain" : "isNotMain"]}`}>
-          Tikomatata
-        </h1>
+        {isMain ? (
+          <Image src={BrightLogo} alt="logo" height={35} width={105} />
+        ) : (
+          <Image src={MailLogo} alt="logo" height={35} width={105} />
+        )}
       </Link>
       <div className="md:flex items-center justify-between hidden space-x-8">
         <Link href="/login" className=" text-gray-400 hover:text-white">

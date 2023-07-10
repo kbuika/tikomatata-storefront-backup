@@ -26,8 +26,8 @@ const TicketCard: React.FC<EventTicketProps> = ({ title, date, location }) => {
                   <div className="border-b border-dashed border-b-2 my-3"></div>
                   <div className="flex flex-col items-start justify-center text-sm ">
                     <div className="flex flex-col items-start">
-                      <p className="font-bold text-center text-xl mt-2 text-gray-500">
-                        <span className="text-stone-900">KES </span>2000
+                      <p className="font-bold text-center text-xl mt-2 text-mainSecondary">
+                        <span className="text-gray-600">KES </span>2000
                       </p>
                       <div className="flex flex-row mt-4 items-center justify-center">
                         <Minus className="mr-2 cursor-pointer" size={17} />{" "}
