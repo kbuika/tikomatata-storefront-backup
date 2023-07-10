@@ -1,19 +1,20 @@
 "use client"
 import "./globals.css"
-import { Inter } from "next/font/google"
+import { Inter, Rubik } from "next/font/google"
 import Head from "./head"
-import Nav from "./components/Nav"
+import Nav from "./../components/Nav"
 import { usePathname, useRouter } from "next/navigation"
 import { Copyright } from "lucide-react"
 
 const inter = Inter({ subsets: ["latin"] })
+const rubik = Rubik({ subsets: ["latin"], display: "swap" })
 
 // TODO: Change the pathname before launch
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   console.log(pathname)
   return (
-    <html lang="en">
+    <html lang="en" className={inter.className}>
       <Head />
       <body>
         {pathname !== "/main" && <Nav />}

@@ -17,6 +17,7 @@ module.exports = {
     extend: {
       colors: {
         mainPrimary: "#F28500",
+        testPrimary: "#3C0862",
         mainSecondary: "#54318C",
         success: "#37356A2",
         successBg: "#F5EFFF",
@@ -31,8 +32,8 @@ module.exports = {
         navBar: "#FFFCEE",
         menuBg: "#FDFDFD",
         border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
+        input: "#3C0862",
+        ring: "#3C0862",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {

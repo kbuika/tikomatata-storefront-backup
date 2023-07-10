@@ -2,11 +2,11 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
-import TicketCard from "../components/TicketCard"
-import CustomButton from "../components/ui/CustomButton"
-import testImage from "../images/Chapo.jpg"
-import KenyaIcon from "../images/kenya.png"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
+import TicketCard from "../../components/TicketCard"
+import CustomButton from "../../components/ui/CustomButton"
+import testImage from "../../images/Chapo.jpg"
+import KenyaIcon from "../../images/kenya.png"
 import { Loader2, BadgeCheck } from "lucide-react"
 import {
   AlertDialog,
@@ -18,17 +18,41 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../components/ui/alert-dialog"
-import { Button } from "../components/ui/button"
-import PaymentSuccess from "../components/PaymentSuccess"
-import PaymentFailure from "../components/PaymentFailure"
+} from "../../components/ui/alert-dialog"
+import { Button } from "../../components/ui/button"
+import PaymentSuccess from "../../components/PaymentSuccess"
+import PaymentFailure from "../../components/PaymentFailure"
 
 export default function Checkout() {
-  const [paymentState, setPaymentState] = useState("success")
+  const [paymentState, setPaymentState] = useState("none")
   return (
-    <main className="flex min-h-screen flex-row items-start justify-center w-full -z-100">
-      <div className="w-[50%] p-8 pl-36">
-        <h2 className="text-lg">Where do we send your tickets?</h2>
+    <main className="flex min-h-screen flex-row items-start justify-center w-full">
+      <div className="w-[40%] border-l-2 min-h-[50em] p-8 flex flex-col items-center justify-start">
+        <div className="h-[10em] w-[20em]">
+          <Image src={testImage} alt="" className="w-full h-full object-cover rounded-xl" />
+        </div>
+        <div className="mt-4 items-start w-[20em]">
+          <h2 className="text-xl font-semibold">Event Name</h2>
+          <p className="text-base mt-2 flex flex-row items-center">Sat July 6 at 12:00 PM</p>
+          <p className="text-base mt-2 flex flex-row items-center">Anzana Gardens</p>
+        </div>
+        <div className="w-[20em]">
+          <h2 className="text-xl font-semibold mt-6">Tickets</h2>
+          <div className="flex flex-row w-full items-center justify-between mt-2 mb-2">
+            <p>
+              <span className="text-gray-500">2 x </span>Early Bird
+            </p>
+            <p>KES 2000</p>
+          </div>
+          <hr className="my-4" />
+          <div className="flex flex-row w-full items-center justify-between mt-2 mb-2">
+            <p>TOTAL</p>
+            <p>KES 2000</p>
+          </div>
+        </div>
+      </div>
+      <div className="w-[50%] p-8 pl-36 border-l-2 min-h-[50em]">
+        <h2 className="text-lg font-medium">Where do we send your tickets?</h2>
         <div className="h-auto w-full flex flex-col items-center">
           <div className="w-full mt-[16px] text-neutralDark">
             <div>
@@ -36,7 +60,7 @@ export default function Checkout() {
                 id="name"
                 type="text"
                 required
-                className="h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                className="h-[50px] bg-white appearance-none rounded-sm block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                 placeholder="Name"
               ></input>
             </div>
@@ -47,7 +71,7 @@ export default function Checkout() {
                 id="email"
                 type="email"
                 required
-                className="h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                className="h-[50px] bg-white appearance-none rounded-sm block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                 placeholder="Email Address"
               ></input>
             </div>
@@ -63,8 +87,8 @@ export default function Checkout() {
                   id="phone"
                   type="text"
                   required
-                  className="w-3/4 h-[50px] bg-white appearance-none rounded-r-sm relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                  placeholder="Phone number"
+                  className="w-3/4 h-[50px] bg-white appearance-none rounded-r-sm block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                  placeholder="7XXXXXXXX"
                   autoComplete="nope"
                 ></input>
               </div>
@@ -72,18 +96,18 @@ export default function Checkout() {
           </div>
         </div>
         <div className="mt-6">
-          <h2 className="mb-4 text-lg font-medium">Payment Details</h2>
+          <h2 className="mb-4 text-lg">Payment Details</h2>
           <Tabs defaultValue="mpesa" className="w-full">
             <TabsList className="bg-none w-full flex justify-start">
               <TabsTrigger
                 value="mpesa"
-                className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-mainPrimary"
+                className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-testPrimary"
               >
                 Mpesa
               </TabsTrigger>
               <TabsTrigger
                 value="card"
-                className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-mainPrimary"
+                className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-testPrimary"
               >
                 Card
               </TabsTrigger>
@@ -104,7 +128,7 @@ export default function Checkout() {
                             type="text"
                             required
                             className="w-3/4 h-[50px] bg-white appearance-none rounded-r-sm relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                            placeholder="Phone number"
+                            placeholder="7XXXXXXXX"
                             autoComplete="nope"
                           ></input>
                         </div>
@@ -117,7 +141,7 @@ export default function Checkout() {
                     <div className="w-full mt-[20px]">
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <button
+                          <CustomButton
                             type="submit"
                             className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded-sm text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
                           >
@@ -128,7 +152,7 @@ export default function Checkout() {
                             ) : (
                               "Pay KES 2000"
                             )}
-                          </button>
+                          </CustomButton>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
@@ -161,7 +185,7 @@ export default function Checkout() {
                                     type="text"
                                     required
                                     className="w-3/4 h-[50px] bg-white appearance-none rounded-r-sm relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                                    placeholder="Phone number"
+                                    placeholder="7XXXXXXXX"
                                     autoComplete="nope"
                                   ></input>
                                 </div>
@@ -170,14 +194,14 @@ export default function Checkout() {
                           </div>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <button
+                            <CustomButton
                               type="submit"
-                              className="h-[40px] group relative w-[7em] flex justify-center items-center text-base font-medium rounded-sm text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
+                              className="h-[40px] group relative w-[7em] flex justify-center items-center text-base font-medium rounded-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
                             >
-                              <AlertDialogAction className="bg-transparent text-neutralDark w-full hover:bg-transparent">
+                              <AlertDialogAction className="bg-transparent w-full hover:bg-transparent">
                                 Confirm
                               </AlertDialogAction>
-                            </button>
+                            </CustomButton>
                           </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialog>
@@ -194,7 +218,7 @@ export default function Checkout() {
                 <div className="w-full mt-[20px]">
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <button
+                      <CustomButton
                         type="submit"
                         className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded-sm text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
                       >
@@ -205,7 +229,7 @@ export default function Checkout() {
                         ) : (
                           "Pay KES 2000"
                         )}
-                      </button>
+                      </CustomButton>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
@@ -247,14 +271,14 @@ export default function Checkout() {
                       </div>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <button
+                        <CustomButton
                           type="submit"
                           className="h-[40px] group relative w-[7em] flex justify-center items-center text-base font-medium rounded-sm text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
                         >
-                          <AlertDialogAction className="bg-transparent text-neutralDark w-full hover:bg-transparent">
+                          <AlertDialogAction className="bg-transparent w-full hover:bg-transparent">
                             Confirm
                           </AlertDialogAction>
-                        </button>
+                        </CustomButton>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
@@ -262,30 +286,6 @@ export default function Checkout() {
               </div>
             </TabsContent>
           </Tabs>
-        </div>
-      </div>
-      <div className="w-[40%] border-l-2 h-[50em] p-8 flex flex-col items-start justify-start">
-        <div className="h-[10em] w-[20em]">
-          <Image src={testImage} alt="" className="w-full h-full object-cover rounded-xl" />
-        </div>
-        <div className="mt-4">
-          <h2 className="text-xl font-semibold">Event Name</h2>
-          <p className="text-base mt-2 flex flex-row items-center">Sat July 6 at 12:00 PM</p>
-          <p className="text-base mt-2 flex flex-row items-center">Anzana Gardens</p>
-        </div>
-        <div className="w-[60%]">
-          <h2 className="text-xl font-semibold mt-4">Tickets</h2>
-          <div className="flex flex-row w-full items-center justify-between mt-2 mb-2">
-            <p>
-              <span className="text-gray-500">2 x </span>Early Bird
-            </p>
-            <p>KES 2000</p>
-          </div>
-          <hr className="my-4" />
-          <div className="flex flex-row w-full items-center justify-between mt-2 mb-2">
-            <p>TOTAL</p>
-            <p>KES 2000</p>
-          </div>
         </div>
       </div>
     </main>
