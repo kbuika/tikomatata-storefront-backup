@@ -26,8 +26,8 @@ import PaymentFailure from "../../components/PaymentFailure"
 export default function Checkout() {
   const [paymentState, setPaymentState] = useState("none")
   return (
-    <main className="flex min-h-screen flex-row items-start justify-center w-full">
-      <div className="w-[40%] border-l-2 min-h-[50em] p-8 flex flex-col items-center justify-start">
+    <main className="flex min-h-screen flex-col items-center justify-center w-full sm:flex-row sm:items-start">
+      <div className="w-[40%] p-8 flex flex-col items-center justify-start sm:border-l-2 sm:min-h-[50em]">
         <div className="h-[10em] w-[20em]">
           <Image src={testImage} alt="" className="w-full h-full object-cover rounded-xl" />
         </div>
@@ -51,10 +51,10 @@ export default function Checkout() {
           </div>
         </div>
       </div>
-      <div className="w-[50%] p-8 pl-36 border-l-2 min-h-[50em]">
-        <h2 className="text-lg font-medium">Where do we send your tickets?</h2>
+      <div className="w-full px-12 min-h-[50em] border-t-2 sm:border-t-0 sm:border-l-2 sm:w-[50%] sm:p-8 sm:pl-36 sm:px-0">
+        <h2 className="text-lg font-medium mt-6 sm:mt-0">Where do we send your tickets?</h2>
         <div className="h-auto w-full flex flex-col items-center">
-          <div className="w-full mt-[16px] text-neutralDark">
+          <div className="w-full mt-[4px] text-neutralDark sm:mt-[16px]">
             <div>
               <input
                 id="name"
