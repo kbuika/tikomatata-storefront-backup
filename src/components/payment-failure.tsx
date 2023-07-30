@@ -1,5 +1,5 @@
 import { XCircle } from "lucide-react"
-import CustomButton from "./ui/CustomButton"
+import CustomButton from "./ui/custom-button"
 
 const PaymentFailure = () => {
   return (

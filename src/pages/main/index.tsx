@@ -1,12 +1,11 @@
-"use client"
-
-import EventCard from "../../components/EventCard"
-import Hero from "../../components/Hero"
-import Nav from "../../components/Nav"
+import Hero from "@/components/Hero"
+import EventCard from "../../components/event-card"
+import Nav from "@/components/Nav"
+import DefaultLayout from "@/layouts/default-layout"
 
 export default function Home() {
   return (
-    <>
+    <DefaultLayout noHeader={true}>
       <main className="home h-[60vh]">
         <Nav />
         <Hero />
@@ -24,6 +23,6 @@ export default function Home() {
           <EventCard />
         </div>
       </div>
-    </>
+    </DefaultLayout>
   )
 }
