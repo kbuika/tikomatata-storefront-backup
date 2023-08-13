@@ -1,9 +1,14 @@
-import Hero from "@/components/Hero"
+import Hero from "@/components/hero"
 import EventCard from "../../components/event-card"
-import Nav from "@/components/Nav"
+import Nav from "@/components/nav"
 import DefaultLayout from "@/layouts/default-layout"
+import { EventDataType } from "@/types/event"
 
-export default function Home() {
+type Props = {
+  data: any
+}
+
+const Home: React.FC<Props> = ({ data }) => {
   return (
     <DefaultLayout noHeader={true}>
       <main className="home h-[60vh]">
@@ -13,16 +18,22 @@ export default function Home() {
       <div className="mx-12 my-[3em]">
         <h2 className="mt-2 text-2xl ml-[1em] font-medium">Upcoming Events</h2>
         <div className="flex flex-wrap items-start justify-evenly min-h-[50vh] my-[3em]">
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
+          {data?.data?.map((event: EventDataType) => (
+            <EventCard key={event?.eventId} event={event} />
+          ))}
         </div>
       </div>
     </DefaultLayout>
   )
+}
+
+export default Home
+
+export async function getServerSideProps() {
+  const res = await fetch("https://api.tikomatata.com/api/v1/event/all?size=10&page=0")
+  const data = await res.json()
+  console.log(data)
+  return {
+    props: { data },
+  }
 }

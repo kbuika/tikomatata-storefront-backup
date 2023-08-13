@@ -1,35 +1,48 @@
+import { truncateText } from "@/lib/utils"
+import { EventDataType } from "@/types/event"
+import moment from "moment"
 import Image from "next/image"
 import Link from "next/link"
+import { type } from "os"
 
-const EventCard = () => {
+type Props = {
+  event: EventDataType
+}
+
+const EventCard: React.FC<Props> = ({ event }) => {
+  const startDateTime = `${event?.startDate} ${event?.startTime}`
+  // const endDateTime = `${event?.endDate} ${event?.endTime}`
   return (
     <Link
       href={{
-        pathname: "/events/eventName",
+        pathname: `/events/eventName`,
         query: { eventName: "2020-national-championship", id: "1" },
       }}
     >
-      <div className="flex flex-col w-[20em] h-[28em] bg-white rounded shadow-lg mb-4 md:h-[30em] md:w-[21em] hover:cursor-pointer">
+      <div className="flex flex-col w-[21em] h-[24em] bg-transparent rounded mb-4 md:h-[26em] md:w-[20em] hover:cursor-pointer">
         <div
-          className="w-full h-[65%] bg-top bg-cover rounded-t"
+          className="w-full h-[70%] bg-top bg-cover rounded"
           style={{
-            backgroundImage:
-              "url(https://www.si.com/.image/t_share/MTY4MTkyMjczODM4OTc0ODQ5/cfp-trophy-deitschjpg.jpg)",
+            backgroundImage: `url(${event?.posterUrl})`,
+            border: "0.25rem",
           }}
         ></div>
-        <div className="flex flex-row w-full h-[35%]">
-          <div className="flex flex-col items-center justify-center w-1/4 font-bold leading-none text-gray-800 uppercase text-mainSecondary border-r-2">
-            <div className="md:text-md">Jan</div>
-            <div className="md:text-md mb-4">13</div>
-            <div className="md:text-md">7 pm</div>
+        <div className="flex flex-row w-full h-[30%]">
+          <div className="flex flex-col items-center justify-start pt-4 w-1/4 font-bold leading-none uppercase text-mainSecondary">
+            <div className="text-base">{moment(event?.startDate).format("ddd")}</div>
+            <div className="text-base mt-1">{moment(event?.startDate).format("do")}</div>
+            <div className="text-base mt-1">{moment(event?.startDate).format("MMM")}</div>
           </div>
-          <div className="pl-4 pr-4 pt-2 pb-4 font-normal text-gray-800">
-            <h1 className="mb-2 text-lg font-bold leading-none tracking-tight text-gray-800 md:text-xl">
-              2020 National Championship
+          <div className="pl-4 pr-4 pt-4 pb-2 font-normal text-gray-800">
+            <h1 className="mb-2 text-lg font-bold leading-none tracking-tight text-mainSecondary md:text-xl">
+              {truncateText(event?.name, 20)}
             </h1>
             <div className="flex flex-col items-start mt-2 text-gray-700">
-              <div className="text-base md:text-lg">United States International University</div>
-              <div className="">2:00 PM - 11:00 PM</div>
+              <div className="text-base">{truncateText(event?.location, 25)} </div>
+              <div className="text-base">
+                {moment(event?.startDate).format("ddd")}, {moment(event?.startDate).format("MMM")}{" "}
+                {moment(event?.startDate).format("do")}, {moment(startDateTime).format("LT")}
+              </div>
             </div>
           </div>
         </div>

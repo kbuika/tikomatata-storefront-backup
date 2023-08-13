@@ -1,6 +1,5 @@
 import React from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import MailLogo from "../images/logos/tikomatata.svg"
 import BrightLogo from "../images/logos/tikomatata-bright.svg"
 import StackedLogo from "../images/logos/tikomatata-stacked.svg"
@@ -38,9 +37,9 @@ const DefaultLayout: React.FC<Props> = ({ children, isMain = false, noHeader = f
         </div>
       </div>
       {children}
-      <footer className="bottom-0 h-[15vh] border-t-2 w-full py-4 px-2 md:px-36">
+      <footer className="bottom-0 h-[15vh] border-t-2 w-full py-4 px-[60px]">
         <div className="flex flex-row items-center justify-between h-full w-full max-[1300px]:flex-col max-[1300px]:justify-center">
-          <div className="flex flex-row w-full items-center justify-between text-neutralGrey max-[1300px]:w-[50%] md:w-[30%]">
+          <div className="flex flex-row w-[50%] bg-red-300 items-center justify-between text-neutralGrey max-[1300px]:w-[50%] md:w-[30%]">
             <div className="cursor-pointer text-stone-800 mr-4 hidden sm:flex">
               <Image src={StackedLogo} alt="tikomatata" width={40} height={30} />
             </div>
