@@ -3,12 +3,15 @@ import EventCard from "../../components/event-card"
 import Nav from "@/components/nav"
 import DefaultLayout from "@/layouts/default-layout"
 import { EventDataType } from "@/types/event"
+import { useEventsStore } from "@/stores/events-store"
 
 type Props = {
   data: any
 }
 
 const Home: React.FC<Props> = ({ data }) => {
+  const setAllEventsStore = useEventsStore((state) => state.setAllEvents)
+  setAllEventsStore(data?.data)
   return (
     <DefaultLayout noHeader={true}>
       <main className="home h-[60vh]">
@@ -32,7 +35,6 @@ export default Home
 export async function getServerSideProps() {
   const res = await fetch("https://api.tikomatata.com/api/v1/event/all?size=10&page=0")
   const data = await res.json()
-  console.log(data)
   return {
     props: { data },
   }
