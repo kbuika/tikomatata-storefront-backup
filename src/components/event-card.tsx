@@ -22,7 +22,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
   }
   return (
     <div
-      className="flex flex-col w-[21em] h-[24em] bg-transparent rounded mb-4 md:h-[26em] md:w-[20em] hover:cursor-pointer"
+      className="flex flex-col w-[21em] h-[24em] border rounded mb-4 md:h-[26em] md:w-[20em] hover:cursor-pointer"
       onClick={goToEvent}
     >
       <div
@@ -32,8 +32,8 @@ const EventCard: React.FC<Props> = ({ event }) => {
           border: "0.25rem",
         }}
       ></div>
-      <div className="flex flex-row w-full h-[30%]">
-        <div className="flex flex-col items-center justify-start pt-4 w-1/4 font-bold leading-none uppercase text-mainSecondary">
+      <div className="flex flex-row w-full h-[30%]"> 
+        <div className="flex flex-col items-center justify-start pt-4 w-1/4 font-bold leading-none uppercase text-mainSecondary border-r">
           <div className="text-base">{moment(event?.startDate).format("ddd")}</div>
           <div className="text-base mt-1">{moment(event?.startDate).format("do")}</div>
           <div className="text-base mt-1">{moment(event?.startDate).format("MMM")}</div>

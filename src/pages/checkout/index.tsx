@@ -62,7 +62,7 @@ export default function Checkout() {
                   id="name"
                   type="text"
                   required
-                  className="h-[50px] bg-white appearance-none rounded-sm block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                  className="h-[50px] bg-white appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                   placeholder="Name"
                 ></input>
               </div>
@@ -73,7 +73,7 @@ export default function Checkout() {
                   id="email"
                   type="email"
                   required
-                  className="h-[50px] bg-white appearance-none rounded-sm block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                  className="h-[50px] bg-white appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                   placeholder="Email Address"
                 ></input>
               </div>
@@ -81,7 +81,7 @@ export default function Checkout() {
             <div className="w-full mt-[16px]">
               <div>
                 <div className="flex items-center">
-                  <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l-sm border border-hidden-left border-gray-600">
+                  <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l border border-hidden-left border-gray-600">
                     <Image src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
                     +254
                   </span>
@@ -89,7 +89,7 @@ export default function Checkout() {
                     id="phone"
                     type="text"
                     required
-                    className="w-3/4 h-[50px] bg-white appearance-none rounded-r-sm block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                    className="w-3/4 h-[50px] bg-white appearance-none rounded-r block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                     placeholder="7XXXXXXXX"
                     autoComplete="nope"
                   ></input>
@@ -121,7 +121,7 @@ export default function Checkout() {
                       <div className="w-full mt-[16px]">
                         <div>
                           <div className="flex items-center">
-                            <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l-sm border border-hidden-left border-gray-600">
+                            <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l border border-hidden-left border-gray-600">
                               <Image src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
                               +254
                             </span>
@@ -129,7 +129,7 @@ export default function Checkout() {
                               id="phone"
                               type="text"
                               required
-                              className="w-3/4 h-[50px] bg-white appearance-none rounded-r-sm relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                              className="w-3/4 h-[50px] bg-white appearance-none rounded-r relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                               placeholder="7XXXXXXXX"
                               autoComplete="nope"
                             ></input>
@@ -145,7 +145,7 @@ export default function Checkout() {
                           <AlertDialogTrigger asChild>
                             <CustomButton
                               type="submit"
-                              className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded-sm text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
+                              className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
                             >
                               {false ? (
                                 <>
@@ -156,7 +156,7 @@ export default function Checkout() {
                               )}
                             </CustomButton>
                           </AlertDialogTrigger>
-                          <AlertDialogContent>
+                          <AlertDialogContent className="bg-white rounded">
                             <AlertDialogHeader>
                               <AlertDialogTitle>Confirm Email and Phone</AlertDialogTitle>
                               <AlertDialogDescription>
@@ -171,7 +171,7 @@ export default function Checkout() {
                                     id="email"
                                     type="email"
                                     required
-                                    className="h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                                    className="h-[50px] bg-white appearance-none rounded relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                                     placeholder="Email Address"
                                   ></input>
                                 </div>
@@ -179,7 +179,7 @@ export default function Checkout() {
                               <div className="w-full mt-[16px]">
                                 <div>
                                   <div className="flex items-center">
-                                    <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l-sm border border-hidden-left border-gray-600">
+                                    <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l border border-hidden-left border-gray-600">
                                       <Image src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
                                       +254
                                     </span>
@@ -187,7 +187,7 @@ export default function Checkout() {
                                       id="phone"
                                       type="text"
                                       required
-                                      className="w-3/4 h-[50px] bg-white appearance-none rounded-r-sm relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                                      className="w-3/4 h-[50px] bg-white appearance-none rounded-r relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                                       placeholder="7XXXXXXXX"
                                       autoComplete="nope"
                                     ></input>
@@ -196,10 +196,10 @@ export default function Checkout() {
                               </div>
                             </div>
                             <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogCancel className="rounded">Cancel</AlertDialogCancel>
                               <CustomButton
                                 type="submit"
-                                className="h-[40px] group relative w-[7em] flex justify-center items-center text-base font-medium rounded-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                className="h-[40px] group relative w-[7em] flex justify-center items-center text-base font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2"
                               >
                                 <AlertDialogAction className="bg-transparent w-full hover:bg-transparent">
                                   Confirm
@@ -234,7 +234,7 @@ export default function Checkout() {
                           )}
                         </CustomButton>
                       </AlertDialogTrigger>
-                      <AlertDialogContent>
+                      <AlertDialogContent className="bg-white">
                         <AlertDialogHeader>
                           <AlertDialogTitle>Confirm Email and Phone</AlertDialogTitle>
                           <AlertDialogDescription>
@@ -248,7 +248,7 @@ export default function Checkout() {
                                 id="email"
                                 type="email"
                                 required
-                                className="h-[50px] bg-white appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                                className="h-[50px] bg-white appearance-none rounded relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                                 placeholder="Email Address"
                               ></input>
                             </div>
@@ -256,7 +256,7 @@ export default function Checkout() {
                           <div className="w-full mt-[16px]">
                             <div>
                               <div className="flex items-center">
-                                <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l-sm border border-hidden-left border-gray-600">
+                                <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l border border-hidden-left border-gray-600">
                                   <Image src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
                                   +254
                                 </span>
@@ -264,7 +264,7 @@ export default function Checkout() {
                                   id="phone"
                                   type="text"
                                   required
-                                  className="w-3/4 h-[50px] bg-white appearance-none rounded-r-sm relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                                  className="w-3/4 h-[50px] bg-white appearance-none rounded-r relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                                   placeholder="Phone number"
                                   autoComplete="nope"
                                 ></input>
@@ -273,12 +273,12 @@ export default function Checkout() {
                           </div>
                         </div>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogCancel className="rounded">Cancel</AlertDialogCancel>
                           <CustomButton
                             type="submit"
-                            className="h-[40px] group relative w-[7em] flex justify-center items-center text-base font-medium rounded-sm text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
+                            className="h-[40px] group relative w-[7em] flex justify-center items-center text-base font-medium rounded text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
                           >
-                            <AlertDialogAction className="bg-transparent w-full hover:bg-transparent">
+                            <AlertDialogAction className="bg-transparent rounded w-full hover:bg-transparent">
                               Confirm
                             </AlertDialogAction>
                           </CustomButton>

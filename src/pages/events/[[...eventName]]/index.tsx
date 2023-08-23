@@ -20,13 +20,13 @@ export default function Events() {
         <div className="flex w-full flex-col items-center justify-between h-full sm:flex-row sm:items-start">
           <div className="w-full h-[50vh] px-6 pb-6 pt-8 flex items-start justify-center sm:w-[45%] sm:px-16 sm:pb-16 sm:pt-8 sm:min-h-screen">
             <div className="h-[22em] w-[25em] sm:h-[40em] sm:w-[35em]">
-              <Image
-                src={selectedEvent?.posterUrl ?? testImg}
-                width={100}
-                height={100}
-                alt="event poster"
-                className="h-[100%] w-[100%] object-cover"
-              />
+              <div
+                className="w-full h-[100%] bg-top bg-cover rounded"
+                style={{
+                  backgroundImage: `url(${selectedEvent?.posterUrl})`,
+                  border: "0.25rem",
+                }}
+              ></div>
             </div>
           </div>
           <div className="w-full p-8 border-t-2 sm:min-h-screen sm:w-[55%] sm:border-l-2 sm:border-t-0 sm:p-12">
@@ -64,6 +64,8 @@ export default function Events() {
                 </TabsList>
                 <TabsContent value="tickets">
                   <div className="flex flex-row flex-wrap items-center justify-between">
+                    <TicketCard title="title" date="date" location="lo" />
+                    <TicketCard title="title" date="date" location="lo" />
                     <TicketCard title="title" date="date" location="lo" />
                     <TicketCard title="title" date="date" location="lo" />
                   </div>
