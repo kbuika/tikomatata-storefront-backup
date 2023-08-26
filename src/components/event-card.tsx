@@ -2,10 +2,7 @@ import { truncateText } from "@/lib/utils"
 import { useEventsStore } from "@/stores/events-store"
 import { EventDataType } from "@/types/event"
 import moment from "moment"
-import Image from "next/image"
-import Link from "next/link"
 import { useRouter } from "next/router"
-import { type } from "os"
 
 type Props = {
   event: EventDataType
@@ -18,7 +15,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
   const router = useRouter()
   const goToEvent = () => {
     setSelectedEvent(event)
-    router.push(`/events/${event?.name}`)
+    router.push(`/events/${event?.name}?id=${event?.eventId}`)
   }
   return (
     <div

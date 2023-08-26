@@ -4,6 +4,7 @@ import Nav from "@/components/Nav"
 import DefaultLayout from "@/layouts/default-layout"
 import { EventDataType } from "@/types/event"
 import { useEventsStore } from "@/stores/events-store"
+import { API_BASE_URL } from "@/constants"
 
 type Props = {
   events: Array<EventDataType>
@@ -33,7 +34,7 @@ const Home: React.FC<Props> = ({ events }) => {
 export default Home
 
 export async function getServerSideProps() {
-  const res = await fetch("https://api.tikomatata.com/api/v1/event/all?size=10&page=0")
+  const res = await fetch(`${API_BASE_URL}/event/all?size=10&page=0`)
   const data = await res.json()
   const events = data?.data
   return {
