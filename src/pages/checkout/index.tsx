@@ -23,33 +23,46 @@ import { Button } from "../../components/ui/button"
 import PaymentSuccess from "../../components/payment-success"
 import PaymentFailure from "../../components/payment-failure"
 import DefaultLayout from "@/layouts/default-layout"
+import { useTicketsStore } from "@/stores/tickets-store"
+import { TicketPurchaseType } from "@/types/ticket"
+import { useEventsStore } from "@/stores/events-store"
+import moment from "moment"
 
 export default function Checkout() {
   const [paymentState, setPaymentState] = useState("none")
+  const selectedTickets = useTicketsStore((state) => state.selectedTickets)
+  const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
+  const selectedEvent = useEventsStore((state) => state.selectedEvent)
+  const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
+
   return (
     <DefaultLayout>
       <main className="flex min-h-screen flex-col items-center justify-center w-full sm:flex-row sm:items-start">
         <div className="w-[40%] p-8 flex flex-col items-center justify-start sm:border-l-2 sm:min-h-[50em]">
           <div className="h-[10em] w-[20em]">
-            <Image src={testImage} alt="" className="w-full h-full object-cover rounded-xl" />
+            <Image src={selectedEvent?.posterUrl ?? testImage} alt="" width={100} height={100} className="w-full h-full object-cover rounded-xl" />
           </div>
           <div className="mt-4 items-start w-[20em]">
-            <h2 className="text-xl font-semibold">Event Name</h2>
-            <p className="text-base mt-2 flex flex-row items-center">Sat July 6 at 12:00 PM</p>
-            <p className="text-base mt-2 flex flex-row items-center">Anzana Gardens</p>
+            <h2 className="text-xl font-semibold">{selectedEvent?.name}</h2>
+            <p className="text-base mt-2 flex flex-row items-center">{moment(selectedEvent?.startDate).format("ddd Do MMMM")} at {moment(startDateTime).format("LT")}
+</p>
+            <p className="text-base mt-2 flex flex-row items-center">{selectedEvent?.location}</p>
           </div>
           <div className="w-[20em]">
             <h2 className="text-xl font-semibold mt-6">Tickets</h2>
-            <div className="flex flex-row w-full items-center justify-between mt-2 mb-2">
+            {selectedTickets?.map((ticket: TicketPurchaseType) => (
+              <div key={ticket?.ticketId} className="flex flex-row w-full items-center justify-between mt-2 mb-2">
               <p>
-                <span className="text-gray-500">2 x </span>Early Bird
+                <span className="text-gray-500">{ticket?.totalQuantitySelected} x </span>{ticket?.name}
               </p>
-              <p>KES 2000</p>
+              <p>KES {ticket?.price}</p>
             </div>
+            ))}
+            
             <hr className="my-4" />
             <div className="flex flex-row w-full items-center justify-between mt-2 mb-2">
               <p>TOTAL</p>
-              <p>KES 2000</p>
+              <p>KES {totalTicketsPrice}</p>
             </div>
           </div>
         </div>
@@ -152,7 +165,7 @@ export default function Checkout() {
                                   Processing <Loader2 size={22} className="animate-spin ml-4" />
                                 </>
                               ) : (
-                                "Pay KES 2000"
+                                `Pay KES ${totalTicketsPrice}`
                               )}
                             </CustomButton>
                           </AlertDialogTrigger>
@@ -230,8 +243,8 @@ export default function Checkout() {
                               Processing <Loader2 size={22} className="animate-spin ml-4" />
                             </>
                           ) : (
-                            "Pay KES 2000"
-                          )}
+                            `Pay KES ${totalTicketsPrice}`
+                            )}
                         </CustomButton>
                       </AlertDialogTrigger>
                       <AlertDialogContent className="bg-white">

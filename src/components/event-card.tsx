@@ -43,7 +43,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
             <div className="text-base">{truncateText(event?.location, 25)} </div>
             <div className="text-base">
               {moment(event?.startDate).format("ddd")}, {moment(event?.startDate).format("MMM")}{" "}
-              {moment(event?.startDate).format("do")}, {moment(startDateTime).format("LT")}
+              {moment(event?.startDate).format("Do")}, {moment(startDateTime).format("LT")}
             </div>
           </div>
         </div>

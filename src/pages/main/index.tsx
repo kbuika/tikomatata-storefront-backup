@@ -5,6 +5,7 @@ import DefaultLayout from "@/layouts/default-layout"
 import { EventDataType } from "@/types/event"
 import { useEventsStore } from "@/stores/events-store"
 import { API_BASE_URL } from "@/constants"
+import { useTicketsStore } from "@/stores/tickets-store"
 
 type Props = {
   events: Array<EventDataType>
@@ -12,7 +13,9 @@ type Props = {
 
 const Home: React.FC<Props> = ({ events }) => {
   const setAllEventsStore = useEventsStore((state) => state.setAllEvents)
+  const resetAllTickets = useTicketsStore((state) => state.resetAllTickets)
   setAllEventsStore(events)
+  resetAllTickets()
   return (
     <DefaultLayout noHeader={true}>
       <main className="home h-[60vh]">
@@ -34,7 +37,7 @@ const Home: React.FC<Props> = ({ events }) => {
 export default Home
 
 export async function getServerSideProps() {
-  const res = await fetch(`${API_BASE_URL}/event/all?size=10&page=0`)
+  const res = await fetch(`${API_BASE_URL}/event/all?size=40&page=0`)
   const data = await res.json()
   const events = data?.data
   return {

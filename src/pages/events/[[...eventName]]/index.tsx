@@ -7,15 +7,20 @@ import DefaultLayout from "@/layouts/default-layout"
 import moment from "moment"
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { TicketDataType } from "@/types/ticket"
+import { TicketDataType, TicketPurchaseType } from "@/types/ticket"
 import { useRouter } from "next/router"
+import { useTicketsStore } from "@/stores/tickets-store"
+import { errorToast } from "@/lib/utils"
 
 export default function Events() {
+  const [totalPrice, setTotalPrice] = useState<number>(0)
   const [selectedEvent, setSelectedEvent] = useState<any>(null)
   const [eventError, setEventError] = useState<any>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
   const endDateTime = `${selectedEvent?.endDate} ${selectedEvent?.endTime}`
+  const selectedTickets = useTicketsStore((state) => state.selectedTickets)
+  const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const router = useRouter()
   useEffect(() => {
     const fetchSelectedEventFn = async () => {
@@ -42,6 +47,13 @@ export default function Events() {
     return () => {}
   }, [router?.query?.id])
 
+  const completeOrder = () => {
+    if(selectedTickets.length === 0) {
+      errorToast("Please select at least one ticket")
+      return;
+    }
+    router.push("/checkout")
+  }
   
   return (
     <DefaultLayout>
@@ -109,33 +121,19 @@ export default function Events() {
                             <TicketCard key={ticket?.ticketId} ticket={ticket} />
                           ))}
                           </>)}
-
-                          
                         </div>
                         {selectedEvent?.tickets?.length !== 0 && (
                           <div className="mt-8 flex flex-col sm:flex-row items-start justify-between w-full">
                           <div className="w-full bg-gray-100 p-2 h-10 rounded flex items-center justify-between text-lg mb-4 sm:mb-0 sm:w-[45%]">
                             TOTAL{" "}
                             <span className="text-stone-900 font-medium">
-                              KES <span className="font-semibold">0</span>
+                              KES <span className="font-semibold">{totalTicketsPrice}</span>
                             </span>
                           </div>
-                          <Link
-                            href={{
-                              pathname: "/checkout",
-                              query: {
-                                event: "2020-national-championship",
-                                id: "8932udkds",
-                                total: "1",
-                              },
-                            }}
-                            className="w-full sm:w-[45%]"
-                          >
-                            <CustomButton className="w-full">Complete Order</CustomButton>
-                          </Link>
+                          
+                            <CustomButton className="w-full sm:w-[45%]" onClick={completeOrder}>Complete Order</CustomButton>
                         </div>
                         )}
-                        
                       </TabsContent>
                       <TabsContent value="description">
                         <div className="pt-4">
