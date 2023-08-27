@@ -32,7 +32,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
       <div className="flex flex-row w-full h-[30%]"> 
         <div className="flex flex-col items-center justify-start pt-4 w-1/4 font-bold leading-none uppercase text-mainSecondary border-r">
           <div className="text-base">{moment(event?.startDate).format("ddd")}</div>
-          <div className="text-base mt-1">{moment(event?.startDate).format("do")}</div>
+          <div className="text-base mt-1">{moment(event?.startDate).format("Do")}</div>
           <div className="text-base mt-1">{moment(event?.startDate).format("MMM")}</div>
         </div>
         <div className="pl-4 pr-4 pt-4 pb-2 font-normal text-gray-800">
