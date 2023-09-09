@@ -1,4 +1,3 @@
-"use client"
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -27,6 +26,16 @@ import { useTicketsStore } from "@/stores/tickets-store"
 import { TicketPurchaseType } from "@/types/ticket"
 import { useEventsStore } from "@/stores/events-store"
 import moment from "moment"
+import * as yup from "yup"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+
+
+const schema = yup.object({
+  customerName: yup.string().required("Please enter your name"),  
+  customerEmail: yup.string().email("Please enter a valid email address").required("Please enter your email address"),
+  customerPhone: yup.string().length(9, "Please enter a valid phone number").required("Please enter your phone number"),
+})
 
 export default function Checkout() {
   const [paymentState, setPaymentState] = useState("none")
@@ -34,6 +43,23 @@ export default function Checkout() {
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch
+  } = useForm({
+    resolver: yupResolver(schema),
+  })
+  const customerPhone  = watch("customerPhone")
+  const customerEmail  = watch("customerEmail")
+
+  const PayViaMpesa: SubmitHandler<any> = async (data) => {
+    data = {...data, eventId: selectedEvent?.eventId, tickets: selectedTickets, totalPrice: totalTicketsPrice}
+    console.log(data)
+  }
 
   return (
     <DefaultLayout>
@@ -77,8 +103,10 @@ export default function Checkout() {
                   required
                   className="h-[50px] bg-white appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                   placeholder="Name"
+                  {...register("customerName", { required: true })}
                 ></input>
               </div>
+              {errors.customerName && <span className="text-criticalRed">{errors.customerName?.message}</span>}
             </div>
             <div className="w-full mt-[16px] text-neutralDark">
               <div>
@@ -88,8 +116,11 @@ export default function Checkout() {
                   required
                   className="h-[50px] bg-white appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                   placeholder="Email Address"
+                  value={customerEmail}
+                  {...register("customerEmail", { required: true })}
                 ></input>
               </div>
+              {errors.customerEmail && <span className="text-criticalRed">{errors.customerEmail?.message}</span>}
             </div>
             <div className="w-full mt-[16px]">
               <div>
@@ -99,14 +130,17 @@ export default function Checkout() {
                     +254
                   </span>
                   <input
-                    id="phone"
+                    id="customerPhone"
                     type="text"
                     required
                     className="w-3/4 h-[50px] bg-white appearance-none rounded-r block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                     placeholder="7XXXXXXXX"
                     autoComplete="nope"
+                    value={customerPhone}
+                    onChange={(e) => setValue("customerPhone", e.target.value)}
                   ></input>
                 </div>
+                {errors.customerPhone && <span className="text-criticalRed">{errors.customerPhone?.message}</span>}
               </div>
             </div>
           </div>
@@ -145,8 +179,11 @@ export default function Checkout() {
                               className="w-3/4 h-[50px] bg-white appearance-none rounded-r relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                               placeholder="7XXXXXXXX"
                               autoComplete="nope"
+                              value={customerPhone}
+                              onChange={(e) => setValue("customerPhone", e.target.value)}
                             ></input>
                           </div>
+                          {errors.customerPhone && <span className="text-criticalRed">{errors.customerPhone?.message}</span>}
                         </div>
                       </div>
                       <p className="mt-[20px] text-gray-500">
@@ -186,8 +223,11 @@ export default function Checkout() {
                                     required
                                     className="h-[50px] bg-white appearance-none rounded relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                                     placeholder="Email Address"
+                                    value={customerEmail}
+                                    {...register("customerEmail", { required: true })}
                                   ></input>
                                 </div>
+                                {errors.customerEmail && <span className="text-criticalRed">{errors.customerEmail?.message}</span>}
                               </div>
                               <div className="w-full mt-[16px]">
                                 <div>
@@ -203,8 +243,11 @@ export default function Checkout() {
                                       className="w-3/4 h-[50px] bg-white appearance-none rounded-r relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                                       placeholder="7XXXXXXXX"
                                       autoComplete="nope"
+                                      value={customerPhone}
+                                      {...register("customerPhone", { required: true })}
                                     ></input>
                                   </div>
+                                  {errors.customerPhone && <span className="text-criticalRed">{errors.customerPhone?.message}</span>}
                                 </div>
                               </div>
                             </div>
@@ -212,10 +255,11 @@ export default function Checkout() {
                               <AlertDialogCancel className="rounded">Cancel</AlertDialogCancel>
                               <CustomButton
                                 type="submit"
-                                className="h-[40px] group relative w-[7em] flex justify-center items-center text-base font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                className="h-[40px] group relative w-auto flex justify-center items-center text-base font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                onClick={handleSubmit(PayViaMpesa)}
                               >
                                 <AlertDialogAction className="bg-transparent w-full hover:bg-transparent">
-                                  Confirm
+                                  Complete Payment
                                 </AlertDialogAction>
                               </CustomButton>
                             </AlertDialogFooter>
@@ -236,7 +280,7 @@ export default function Checkout() {
                       <AlertDialogTrigger asChild>
                         <CustomButton
                           type="submit"
-                          className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded-sm text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
+                          className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
                         >
                           {false ? (
                             <>
@@ -263,8 +307,11 @@ export default function Checkout() {
                                 required
                                 className="h-[50px] bg-white appearance-none rounded relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                                 placeholder="Email Address"
+                                value={customerEmail}
+                                {...register("customerEmail", { required: true })}
                               ></input>
                             </div>
+                            {errors.customerEmail && <span className="text-criticalRed">{errors.customerEmail?.message}</span>}
                           </div>
                           <div className="w-full mt-[16px]">
                             <div>
@@ -280,8 +327,11 @@ export default function Checkout() {
                                   className="w-3/4 h-[50px] bg-white appearance-none rounded-r relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                                   placeholder="Phone number"
                                   autoComplete="nope"
+                                  value={customerPhone}
+                                  {...register("customerPhone", { required: true })}
                                 ></input>
                               </div>
+                              {errors.customerPhone && <span className="text-criticalRed">{errors.customerPhone?.message}</span>}
                             </div>
                           </div>
                         </div>
@@ -289,10 +339,10 @@ export default function Checkout() {
                           <AlertDialogCancel className="rounded">Cancel</AlertDialogCancel>
                           <CustomButton
                             type="submit"
-                            className="h-[40px] group relative w-[7em] flex justify-center items-center text-base font-medium rounded text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
+                            className="h-[40px] group relative w-auto flex justify-center items-center text-base font-medium rounded text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
                           >
                             <AlertDialogAction className="bg-transparent rounded w-full hover:bg-transparent">
-                              Confirm
+                              Complete Payment
                             </AlertDialogAction>
                           </CustomButton>
                         </AlertDialogFooter>
