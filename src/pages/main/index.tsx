@@ -10,7 +10,7 @@ import { useTicketsStore } from "@/stores/tickets-store"
 type Props = {
   events: Array<EventDataType>
 }
-
+// TODO: make the entire app CSR???
 const Home: React.FC<Props> = ({ events }) => {
   const setAllEventsStore = useEventsStore((state) => state.setAllEvents)
   const resetAllTickets = useTicketsStore((state) => state.resetAllTickets)

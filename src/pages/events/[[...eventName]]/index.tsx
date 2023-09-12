@@ -11,6 +11,7 @@ import { TicketDataType, TicketPurchaseType } from "@/types/ticket"
 import { useRouter } from "next/router"
 import { useTicketsStore } from "@/stores/tickets-store"
 import { errorToast } from "@/lib/utils"
+import { API_BASE_URL } from "@/constants"
 
 export default function Events() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
@@ -27,13 +28,14 @@ export default function Events() {
       setLoading(true)
       const config = {
         method: "get",
-        url: `https://api.tikomatata.com/api/v1/ticket/event?id=${router?.query?.id}`,
+        url: `https://api.tikomatata.co.ke/api/v1/ticket/event?id=${router?.query?.id}`,
       }
   
       try {
         const response = await axios.request(config)
         if (response.status === 200) {
           setSelectedEvent(response.data.data)
+          console.log(response.data.data)
         } else {
           setEventError(response.data.message)
         }
@@ -44,7 +46,7 @@ export default function Events() {
       }
     }
     fetchSelectedEventFn()
-    return () => {}
+    // return () => {}
   }, [router?.query?.id])
 
   const completeOrder = () => {

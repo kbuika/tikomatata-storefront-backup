@@ -29,18 +29,33 @@ import moment from "moment"
 import * as yup from "yup"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-
+import { PurchaseTicketsFn } from "@/api-calls"
+import { errorToast } from "@/lib/utils"
 
 const schema = yup.object({
-  customerName: yup.string().required("Please enter your name"),  
-  customerEmail: yup.string().email("Please enter a valid email address").required("Please enter your email address"),
-  customerPhone: yup.string().length(9, "Please enter a valid phone number").required("Please enter your phone number"),
+  customerName: yup.string().required("Please enter your name"),
+  customerEmail: yup
+    .string()
+    .email("Please enter a valid email address")
+    .matches(
+      /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/,
+      "Please enter a valid email address",
+    )
+    .required("Please enter your email address"),
+  customerPhone: yup
+    .string()
+    .length(9, "Please enter a valid phone number")
+    .required("Please enter your phone number"),
 })
 
 export default function Checkout() {
   const [paymentState, setPaymentState] = useState("none")
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
+  const serviceFee = useTicketsStore((state) => state.serviceFee)
+  const totalTicketsPriceWithServiceFee = useTicketsStore(
+    (state) => state.totalTicketsPriceWithServiceFee,
+  )
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
 
@@ -49,16 +64,29 @@ export default function Checkout() {
     handleSubmit,
     formState: { errors },
     setValue,
-    watch
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
   })
-  const customerPhone  = watch("customerPhone")
-  const customerEmail  = watch("customerEmail")
+  const customerPhone = watch("customerPhone")
+  const customerEmail = watch("customerEmail")
 
-  const PayViaMpesa: SubmitHandler<any> = async (data) => {
-    data = {...data, eventId: selectedEvent?.eventId, tickets: selectedTickets, totalPrice: totalTicketsPrice}
-    console.log(data)
+  const PayForTickets: SubmitHandler<any> = async (data) => {
+    data = {
+      ...data,
+      eventId: selectedEvent?.eventId,
+      tickets: selectedTickets,
+      totalPrice: totalTicketsPrice,
+    }
+    try {
+      const res = await PurchaseTicketsFn(data)
+      if (res.status === 200) {
+        // open a new tab with the payment url
+        window.open(res.data.data.authorization_url, "_blank")
+      }
+    } catch (error) {
+      errorToast("Something went wrong while processing your order, please try again.")
+    }
   }
 
   return (
@@ -66,29 +94,50 @@ export default function Checkout() {
       <main className="flex min-h-screen flex-col items-center justify-center w-full sm:flex-row sm:items-start">
         <div className="w-[40%] p-8 flex flex-col items-center justify-start sm:border-l-2 sm:min-h-[50em]">
           <div className="h-[10em] w-[20em]">
-            <Image src={selectedEvent?.posterUrl ?? testImage} alt="" width={100} height={100} className="w-full h-full object-cover rounded-xl" />
+            <Image
+              src={selectedEvent?.posterUrl ?? testImage}
+              alt=""
+              width={100}
+              height={100}
+              className="w-full h-full object-cover rounded-xl"
+            />
           </div>
           <div className="mt-4 items-start w-[20em]">
             <h2 className="text-xl font-semibold">{selectedEvent?.name}</h2>
-            <p className="text-base mt-2 flex flex-row items-center">{moment(selectedEvent?.startDate).format("ddd Do MMMM")} at {moment(startDateTime).format("LT")}
-</p>
+            <p className="text-base mt-2 flex flex-row items-center">
+              {moment(selectedEvent?.startDate).format("ddd Do MMMM")} at{" "}
+              {moment(startDateTime).format("LT")}
+            </p>
             <p className="text-base mt-2 flex flex-row items-center">{selectedEvent?.location}</p>
           </div>
           <div className="w-[20em]">
             <h2 className="text-xl font-semibold mt-6">Tickets</h2>
             {selectedTickets?.map((ticket: TicketPurchaseType) => (
-              <div key={ticket?.ticketId} className="flex flex-row w-full items-center justify-between mt-2 mb-2">
-              <p>
-                <span className="text-gray-500">{ticket?.totalQuantitySelected} x </span>{ticket?.name}
-              </p>
-              <p>KES {ticket?.price}</p>
-            </div>
+              <div
+                key={ticket?.ticketId}
+                className="flex flex-row w-full items-center justify-between mt-2 mb-2"
+              >
+                <p>
+                  <span className="text-gray-500">{ticket?.totalQuantitySelected} x </span>
+                  {ticket?.name}
+                </p>
+                <p>KES {ticket?.price}</p>
+              </div>
             ))}
-            
+
             <hr className="my-4" />
-            <div className="flex flex-row w-full items-center justify-between mt-2 mb-2">
-              <p>TOTAL</p>
+            <div className="flex flex-row w-full items-center justify-between mt-1 mb-2">
+              <p>Subtotal</p>
               <p>KES {totalTicketsPrice}</p>
+            </div>
+            <div className="flex flex-row w-full items-center justify-between mt-1 mb-1 text-neutralGrey">
+              <p>Service Fee</p>
+              <p>KES {serviceFee}</p>
+            </div>
+            <hr className="my-4" />
+            <div className="flex flex-row w-full items-center justify-between mt-1 mb-2">
+              <p>TOTAL</p>
+              <p>KES {totalTicketsPriceWithServiceFee}</p>
             </div>
           </div>
         </div>
@@ -106,7 +155,9 @@ export default function Checkout() {
                   {...register("customerName", { required: true })}
                 ></input>
               </div>
-              {errors.customerName && <span className="text-criticalRed">{errors.customerName?.message}</span>}
+              {errors.customerName && (
+                <span className="text-criticalRed">{errors.customerName?.message}</span>
+              )}
             </div>
             <div className="w-full mt-[16px] text-neutralDark">
               <div>
@@ -120,7 +171,9 @@ export default function Checkout() {
                   {...register("customerEmail", { required: true })}
                 ></input>
               </div>
-              {errors.customerEmail && <span className="text-criticalRed">{errors.customerEmail?.message}</span>}
+              {errors.customerEmail && (
+                <span className="text-criticalRed">{errors.customerEmail?.message}</span>
+              )}
             </div>
             <div className="w-full mt-[16px]">
               <div>
@@ -140,7 +193,9 @@ export default function Checkout() {
                     onChange={(e) => setValue("customerPhone", e.target.value)}
                   ></input>
                 </div>
-                {errors.customerPhone && <span className="text-criticalRed">{errors.customerPhone?.message}</span>}
+                {errors.customerPhone && (
+                  <span className="text-criticalRed">{errors.customerPhone?.message}</span>
+                )}
               </div>
             </div>
           </div>
@@ -183,7 +238,11 @@ export default function Checkout() {
                               onChange={(e) => setValue("customerPhone", e.target.value)}
                             ></input>
                           </div>
-                          {errors.customerPhone && <span className="text-criticalRed">{errors.customerPhone?.message}</span>}
+                          {errors.customerPhone && (
+                            <span className="text-criticalRed">
+                              {errors.customerPhone?.message}
+                            </span>
+                          )}
                         </div>
                       </div>
                       <p className="mt-[20px] text-gray-500">
@@ -196,13 +255,14 @@ export default function Checkout() {
                             <CustomButton
                               type="submit"
                               className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
+                              disabled={customerEmail === "" || customerPhone === ""}
                             >
                               {false ? (
                                 <>
                                   Processing <Loader2 size={22} className="animate-spin ml-4" />
                                 </>
                               ) : (
-                                `Pay KES ${totalTicketsPrice}`
+                                `Pay KES ${totalTicketsPriceWithServiceFee}`
                               )}
                             </CustomButton>
                           </AlertDialogTrigger>
@@ -227,7 +287,11 @@ export default function Checkout() {
                                     {...register("customerEmail", { required: true })}
                                   ></input>
                                 </div>
-                                {errors.customerEmail && <span className="text-criticalRed">{errors.customerEmail?.message}</span>}
+                                {errors.customerEmail && (
+                                  <span className="text-criticalRed">
+                                    {errors.customerEmail?.message}
+                                  </span>
+                                )}
                               </div>
                               <div className="w-full mt-[16px]">
                                 <div>
@@ -247,7 +311,11 @@ export default function Checkout() {
                                       {...register("customerPhone", { required: true })}
                                     ></input>
                                   </div>
-                                  {errors.customerPhone && <span className="text-criticalRed">{errors.customerPhone?.message}</span>}
+                                  {errors.customerPhone && (
+                                    <span className="text-criticalRed">
+                                      {errors.customerPhone?.message}
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -256,7 +324,7 @@ export default function Checkout() {
                               <CustomButton
                                 type="submit"
                                 className="h-[40px] group relative w-auto flex justify-center items-center text-base font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2"
-                                onClick={handleSubmit(PayViaMpesa)}
+                                onClick={handleSubmit(PayForTickets)}
                               >
                                 <AlertDialogAction className="bg-transparent w-full hover:bg-transparent">
                                   Complete Payment
@@ -268,7 +336,7 @@ export default function Checkout() {
                       </div>
                     </>
                   )}
-                  {paymentState === "success" && <PaymentSuccess email="kibuika@tikomatata.com" />}
+                  {paymentState === "success" && <PaymentSuccess email={customerEmail} />}
                   {paymentState === "failure" && <PaymentFailure />}
                 </div>
               </TabsContent>
@@ -281,14 +349,15 @@ export default function Checkout() {
                         <CustomButton
                           type="submit"
                           className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
+                          disabled={customerEmail === "" || customerPhone === ""}
                         >
                           {false ? (
                             <>
                               Processing <Loader2 size={22} className="animate-spin ml-4" />
                             </>
                           ) : (
-                            `Pay KES ${totalTicketsPrice}`
-                            )}
+                            `Pay KES ${totalTicketsPriceWithServiceFee}`
+                          )}
                         </CustomButton>
                       </AlertDialogTrigger>
                       <AlertDialogContent className="bg-white">
@@ -311,7 +380,11 @@ export default function Checkout() {
                                 {...register("customerEmail", { required: true })}
                               ></input>
                             </div>
-                            {errors.customerEmail && <span className="text-criticalRed">{errors.customerEmail?.message}</span>}
+                            {errors.customerEmail && (
+                              <span className="text-criticalRed">
+                                {errors.customerEmail?.message}
+                              </span>
+                            )}
                           </div>
                           <div className="w-full mt-[16px]">
                             <div>
@@ -331,7 +404,11 @@ export default function Checkout() {
                                   {...register("customerPhone", { required: true })}
                                 ></input>
                               </div>
-                              {errors.customerPhone && <span className="text-criticalRed">{errors.customerPhone?.message}</span>}
+                              {errors.customerPhone && (
+                                <span className="text-criticalRed">
+                                  {errors.customerPhone?.message}
+                                </span>
+                              )}
                             </div>
                           </div>
                         </div>
