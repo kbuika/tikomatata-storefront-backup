@@ -1,0 +1,266 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+/* @layer base {
+	:root {
+	  --background: 0 0% 100%;
+	  --foreground: 224 71.4% 4.1%;
+   
+	  --muted: 220 14.3% 95.9%;
+	  --muted-foreground: 220 8.9% 46.1%;
+   
+	  --popover: 0 0% 100%;
+	  --popover-foreground: 224 71.4% 4.1%;
+   
+	  --card: 0 0% 100%;
+	  --card-foreground: 224 71.4% 4.1%;
+   
+	  --border: 220 13% 91%;
+	  --input: 220 13% 91%;
+   
+	  --primary: 220.9 39.3% 11%;
+	  --primary-foreground: 210 20% 98%;
+   
+	  --secondary: 220 14.3% 95.9%;
+	  --secondary-foreground: 220.9 39.3% 11%;
+   
+	  --accent: 220 14.3% 95.9%;
+	  --accent-foreground: 220.9 39.3% 11%;
+   
+	  --destructive: 0 84.2% 60.2%;
+	  --destructive-foreground: 210 20% 98%;
+   
+	  --ring: 217.9 10.6% 64.9%;
+   
+	  --radius: 0.5rem;
+	}
+   
+	.dark {
+	  --background: 224 71.4% 4.1%;
+	  --foreground: 210 20% 98%;
+   
+	  --muted: 215 27.9% 16.9%;
+	  --muted-foreground: 217.9 10.6% 64.9%;
+   
+	  --popover: 224 71.4% 4.1%;
+	  --popover-foreground: 210 20% 98%;
+   
+	  --card: 224 71.4% 4.1%;
+	  --card-foreground: 210 20% 98%;
+   
+	  --border: 215 27.9% 16.9%;
+	  --input: 215 27.9% 16.9%;
+   
+	  --primary: 210 20% 98%;
+	  --primary-foreground: 220.9 39.3% 11%;
+   
+	  --secondary: 215 27.9% 16.9%;
+	  --secondary-foreground: 210 20% 98%;
+   
+	  --accent: 215 27.9% 16.9%;
+	  --accent-foreground: 210 20% 98%;
+   
+	  --destructive: 0 62.8% 30.6%;
+	  --destructive-foreground: 0 85.7% 97.3%;
+   
+	  --ring: 215 27.9% 16.9%;
+	}
+  } */
+   
+  /* @layer base {
+	* {
+	  @apply border-border;
+	}
+	body {
+	  @apply bg-background text-foreground;
+	}
+  } */
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+.home {
+	background-image: url("./../images/heroimage.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	background-blend-mode: multiply;
+}
+
+
+.ticket-image-card {
+	width: 100%;
+	color: black;
+	font-size: 14px;
+	letter-spacing: 0.1em;
+	margin: auto;
+	display: flex;
+	background: rgb(255, 255, 255);
+	box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+
+.ticket-image-left {
+	display: flex;
+}
+
+.ticket-card-image {
+	height: 250px;
+	width: 250px;
+	background-size: contain;
+	opacity: 0.85;
+}
+
+.ticket-card-admit-one {
+	position: absolute;
+	color: darkgray;
+	height: 250px;
+	padding: 0 10px;
+	letter-spacing: 0.15em;
+	display: flex;
+	text-align: center;
+	justify-content: space-around;
+	writing-mode: vertical-rl;
+	transform: rotate(-180deg);
+}
+
+.ticket-card-admit-one span:nth-child(2) {
+	color: white;
+	font-weight: 700;
+}
+
+.ticket-image-left .ticket-number {
+	height: 250px;
+	width: 250px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-end;
+	padding: 5px;
+}
+
+.ticket-info {
+	padding: 10px 30px;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.ticket-card-date {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+	padding: 5px 0;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	width: 100%;
+}
+
+.ticket-card-date span {
+	width: 100px;
+}
+
+.ticket-card-date span:first-child {
+	text-align: left;
+}
+
+.ticket-card-date span:last-child {
+	text-align: right;
+}
+
+.ticket-card-date .june-29 {
+	color: #d83565;
+	font-size: 18px;
+}
+
+.ticket-card-show-name {
+	font-size: 32px;
+	color: #d83565;
+}
+
+.ticket-card-show-name h1 {
+	font-size: 38px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	color: #4a437e;
+}
+
+.ticket-card-time {
+	padding: 10px 0;
+	color: #4a437e;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	font-weight: 700;
+}
+
+.ticket-card-time span {
+	font-weight: 400;
+	color: gray;
+}
+
+.ticket-image-left .ticket-card-time {
+	font-size: 16px;
+}
+
+
+.ticket-card-location {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	width: 100%;
+	padding-top: 8px;
+	border-top: 1px solid gray;
+}
+
+.ticket-card-location .separator {
+	font-size: 20px;
+}
+
+.ticket-card-right {
+	width: 180px;
+	border-left: 1px dashed #404040;
+}
+
+.ticket-card-right .ticket-card-admit-one {
+	color: darkgray;
+}
+
+.ticket-card-right .ticket-card-admit-one span:nth-child(2) {
+	color: gray;
+}
+
+.ticket-card-right .right-info-container {
+	height: 250px;
+	padding: 10px 10px 10px 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.ticket-card-right .ticket-card-show-name h1 {
+	font-size: 18px;
+}
+
+.barcode {
+	height: 200px;
+	width: 150px;
+}
+
+.barcode .barcode-image {
+	height: 100%;
+	width: 100%;
+}
+
+.ticket-card-right .ticket-number {
+	color: gray;
+}

@@ -10,7 +10,7 @@ const PaymentSuccess = ({ email }: PaymentSuccessProps) => {
         <BadgeCheck size={40} color="green" />
       </div>
       <p className="text-neutralGrey mt-4 text-lg text-center">
-        Yohoo! Check your email {email} for the tickets and see you at {"Event name"}
+        Yohoo! Check your email {email} for the tickets and see you at the event!
       </p>
     </div>
   )

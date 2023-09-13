@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async redirects() {
-    return [
-      {
-        source: "/renderconke",
-        destination: "http://localhost:3000/main",
-        permanent: true,
-      },
-    ]
+  reactStrictMode: true,
+  images: {
+    domains: [
+      "tm-poster-images.fra1.cdn.digitaloceanspaces.com",
+      "tm-poster-images.blr1.cdn.digitaloceanspaces.com",
+      "external-preview.redd.it",
+      "images.unsplash.com",
+    ],
   },
 }
 

@@ -1,11 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./src/pages/**/*.{js,ts,jsx,tsx,mdx}", "./src/components/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     container: {
       center: true,
@@ -18,6 +14,7 @@ module.exports = {
       colors: {
         mainPrimary: "#F28500",
         testPrimary: "#3C0862",
+        subtlePrimary: "#F7EDFF",
         mainSecondary: "#54318C",
         success: "#37356A2",
         successBg: "#F5EFFF",

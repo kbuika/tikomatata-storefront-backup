@@ -1,6 +1,6 @@
 import React from "react"
 import Link from "next/link"
-import CustomButton from "./ui/CustomButton"
+import CustomButton from "./ui/custom-button"
 import { usePathname } from "next/navigation"
 import MailLogo from "../images/logos/tikomatata.svg"
 import BrightLogo from "../images/logos/tikomatata-bright.svg"
