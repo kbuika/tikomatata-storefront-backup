@@ -3,13 +3,14 @@ import DefaultLayout from "@/layouts/default-layout"
 import axios from "axios"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 export default function TicketsOrder() {
   const [orderData, setOrderData] = useState<any>({})
   const [orderError, setOrderError] = useState<any>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const router = useRouter()
+  const ticketRef = useRef<any>(null)
   useEffect(() => {
     const fetchSelectedOrder = async () => {
       setLoading(true)
@@ -31,7 +32,7 @@ export default function TicketsOrder() {
       }
     }
     fetchSelectedOrder()
-    return () => {}
+    // return () => {}
   }, [router?.query?.orderId])
 
   
@@ -57,7 +58,7 @@ export default function TicketsOrder() {
                   </div>
                   <div className="flex flex-row flex-wrap items-start justify-start">
                   {orderData?.tickets?.map((ticket: any) => 
-                    <TicketToDownload key={ticket.ticketId} ticket={ticket} event={orderData}/>
+                    <TicketToDownload key={ticket.ticketId} ticket={ticket} event={orderData} ticketRef={ticketRef}/>
                   )}
                   </div>
                   

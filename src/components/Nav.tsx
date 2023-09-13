@@ -8,7 +8,7 @@ import Image from "next/image"
 
 const Nav = () => {
   const pathname = usePathname()
-  const isMain = pathname === "/main"
+  const isMain = pathname === "/"
   const titleVariants = {
     isNotMain: "text-black",
     isMain: "text-gray-300",
