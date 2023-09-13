@@ -35,7 +35,6 @@ export default function Events() {
         const response = await axios.request(config)
         if (response.status === 200) {
           setSelectedEvent(response.data.data)
-          console.log(response.data.data)
         } else {
           setEventError(response.data.message)
         }

@@ -49,6 +49,8 @@ const schema = yup.object({
 })
 
 export default function Checkout() {
+  const [openCardModal, setOpenCardModal] = useState(false)
+  const [openMpesaModal, setOpenMpesaModal] = useState(false)
   const [paymentState, setPaymentState] = useState("none")
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
@@ -82,11 +84,27 @@ export default function Checkout() {
       const res = await PurchaseTicketsFn(data)
       if (res.status === 200) {
         // open a new tab with the payment url
-        window.open(res.data.data.authorization_url, "_blank")
+        window.open(res.data.data.authorization_url)
       }
     } catch (error) {
       errorToast("Something went wrong while processing your order, please try again.")
     }
+  }
+
+  const validateCardForm = () => {
+    if (customerEmail === "" || customerPhone === "") {
+      errorToast("Please fill in your name, email and phone number")
+      return
+    }
+    setOpenCardModal(true)
+  }
+
+  const validateMpesaForm = () => {
+    if (customerEmail === "" || customerPhone === "") {
+      errorToast("Please fill in your name, email and phone number")
+      return
+    }
+    setOpenMpesaModal(true)
   }
 
   return (
@@ -127,17 +145,8 @@ export default function Checkout() {
 
             <hr className="my-4" />
             <div className="flex flex-row w-full items-center justify-between mt-1 mb-2">
-              <p>Subtotal</p>
-              <p>KES {totalTicketsPrice}</p>
-            </div>
-            <div className="flex flex-row w-full items-center justify-between mt-1 mb-1 text-neutralGrey">
-              <p>Service Fee</p>
-              <p>KES {serviceFee}</p>
-            </div>
-            <hr className="my-4" />
-            <div className="flex flex-row w-full items-center justify-between mt-1 mb-2">
               <p>TOTAL</p>
-              <p>KES {totalTicketsPriceWithServiceFee}</p>
+              <p>KES {totalTicketsPrice}</p>
             </div>
           </div>
         </div>
@@ -250,22 +259,22 @@ export default function Checkout() {
                         phone number you have provided above.
                       </p>
                       <div className="w-full mt-[20px]">
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
+                        <AlertDialog open={openMpesaModal} onOpenChange={setOpenMpesaModal}>
+                          {/* <AlertDialogTrigger asChild> */}
                             <CustomButton
                               type="submit"
                               className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
-                              disabled={customerEmail === "" || customerPhone === ""}
+                              onClick={validateMpesaForm}
                             >
                               {false ? (
                                 <>
                                   Processing <Loader2 size={22} className="animate-spin ml-4" />
                                 </>
                               ) : (
-                                `Pay KES ${totalTicketsPriceWithServiceFee}`
+                                `Pay KES ${totalTicketsPrice}`
                               )}
                             </CustomButton>
-                          </AlertDialogTrigger>
+                          {/* </AlertDialogTrigger> */}
                           <AlertDialogContent className="bg-white rounded">
                             <AlertDialogHeader>
                               <AlertDialogTitle>Confirm Email and Phone</AlertDialogTitle>
@@ -344,22 +353,22 @@ export default function Checkout() {
                 <div className="pt-4">
                   <p></p>
                   <div className="w-full mt-[20px]">
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
+                    <AlertDialog open={openCardModal} onOpenChange={setOpenCardModal}>
+                      {/* <AlertDialogTrigger asChild> */}
                         <CustomButton
                           type="submit"
                           className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
-                          disabled={customerEmail === "" || customerPhone === ""}
+                          onClick={validateCardForm}
                         >
                           {false ? (
                             <>
                               Processing <Loader2 size={22} className="animate-spin ml-4" />
                             </>
                           ) : (
-                            `Pay KES ${totalTicketsPriceWithServiceFee}`
+                            `Pay KES ${totalTicketsPrice}`
                           )}
                         </CustomButton>
-                      </AlertDialogTrigger>
+                      {/* </AlertDialogTrigger> */}
                       <AlertDialogContent className="bg-white">
                         <AlertDialogHeader>
                           <AlertDialogTitle>Confirm Email and Phone</AlertDialogTitle>
