@@ -45,7 +45,7 @@ const DefaultLayout: React.FC<Props> = ({ children, isMain = false, noHeader = f
             </div>
             <p className="cursor-pointer underline underline-offset-4" style={{marginRight: "20px", marginLeft:"20px"}}>Terms</p>
             <p className="cursor-pointer underline underline-offset-4 " style={{marginRight: "20px", marginLeft:"20px"}}>Privacy</p>
-            <p className="cursor-pointer underline underline-offset-4 ml-2"><a href="/contact">Talk to Us</a></p>
+            <p className="cursor-pointer underline underline-offset-4 ml-2"><Link href="/contact">Talk to Us</Link></p>
           </div>
           <div className="flex flex-row items-center justify-center text-testPrimary font-medium tracking-wide text-center max-[1300px]:mt-4 mb-4">
           © {new Date().getFullYear()} Tikomatata.
