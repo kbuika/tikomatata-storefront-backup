@@ -26,7 +26,6 @@ export const TicketToDownload = ({ ticket, event }: any) => {
           link.download = `${ticket?.name}-${event?.eventName}.png`
           link.href = dataUrl
           link.click()
-          setTicketImageUrl(dataUrl)
         })
         .catch((err) => {
           console.log(err)
@@ -34,7 +33,7 @@ export const TicketToDownload = ({ ticket, event }: any) => {
         .finally(() => {
           setOpen(false)
         })
-    }, 10)
+    }, 100)
   }
 
   return (
