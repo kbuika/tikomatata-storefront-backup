@@ -31,23 +31,23 @@ const DefaultLayout: React.FC<Props> = ({ children, isMain = false, noHeader = f
           )}
         </Link>
         <div className="md:flex items-center justify-between hidden space-x-8">
-          <Link href="/login" className=" text-gray-400 hover:text-white">
+          <Link href="https://app.tikomatata.com" target="_blank" rel="noopener noreferrer" className=" text-gray-400 hover:text-white">
             <CustomButton>Create Your Event</CustomButton>
           </Link>
         </div>
       </div>
       {children}
-      <footer className="bottom-0 h-[10vh] w-full border-t-2">
-        <div className="h-full flex flex-col items-center justify-between bg-testPrimary text-white px-[60px] md:flex-row">
-          <div className="flex flex-row items-center h-full mr-8">
+      <footer className="bottom-0 h-[15vh] w-full border-t-2">
+        <div className="h-full flex flex-col items-center justify-between bg-successBg text-testPrimary px-[60px] md:flex-row">
+          <div className="flex flex-row items-center h-full mr-8 mt-4">
             <div className="cursor-pointer text-stone-800 hidden mr-[20px] sm:flex">
               <Image src={StackedLogo} alt="tikomatata" width={40} height={30} />
             </div>
             <p className="cursor-pointer underline underline-offset-4" style={{marginRight: "20px", marginLeft:"20px"}}>Terms</p>
             <p className="cursor-pointer underline underline-offset-4 " style={{marginRight: "20px", marginLeft:"20px"}}>Privacy</p>
-            <p className="cursor-pointer underline underline-offset-4 ml-2">Talk to us</p>
+            <p className="cursor-pointer underline underline-offset-4 ml-2"><a href="/contact">Talk to Us</a></p>
           </div>
-          <div className="flex flex-row items-center justify-center text-white font-medium tracking-wide text-center max-[1300px]:mt-4 mb-4">
+          <div className="flex flex-row items-center justify-center text-testPrimary font-medium tracking-wide text-center max-[1300px]:mt-4 mb-4">
           © {new Date().getFullYear()} Tikomatata.
           </div>
         </div>
