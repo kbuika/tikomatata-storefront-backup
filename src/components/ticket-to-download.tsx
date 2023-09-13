@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { successToast } from "@/lib/utils"
+import { errorToast, successToast } from "@/lib/utils"
 import { toPng } from "html-to-image"
 import { DownloadIcon, Loader2 } from "lucide-react"
 import moment from "moment"
@@ -8,19 +8,17 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from "./ui/alert-dialog"
 import CustomButton from "./ui/custom-button"
 
-export const TicketToDownload = ({ ticket, event }: any) => {
+export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
   const [ticketImageUrl, setTicketImageUrl] = useState<string>("")
   const [open, setOpen] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const myTicket = useRef<any>(null)
+  //   const myTicket = useRef<any>(null)
   const startDateTime = `${event?.eventStartDate} ${event?.eventStartTime}`
   const endDateTime = `${event?.eventEndDate} ${event?.evenEndTime}`
 
-  const DownloadTicket = () => {
-    //set a delay
+  const downloadTicket = () => {
     setTimeout(() => {
-      console.log(myTicket.current, "myTicket")
-      toPng(myTicket.current, { cacheBust: false })
+      toPng(ticketRef.current, { cacheBust: false })
         .then((dataUrl) => {
           const link = document.createElement("a")
           link.download = `${ticket?.name}-${event?.eventName}.png`
@@ -28,7 +26,7 @@ export const TicketToDownload = ({ ticket, event }: any) => {
           link.click()
         })
         .catch((err) => {
-          console.log(err)
+          errorToast("An error occured while downloading your ticket. If the issue persists, please contact us.")
         })
         .finally(() => {
           setOpen(false)
@@ -46,7 +44,7 @@ export const TicketToDownload = ({ ticket, event }: any) => {
         <>
           <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogContent className="w-auto">
-              <div className="ticketDoc my-2" ref={myTicket}>
+              <div className="ticketDoc my-2" ref={ticketRef}>
                 <div className="ticket-image-card">
                   <div className="ticket-image-left">
                     <div className="ticket-card-image bg-[url('https://images.unsplash.com/photo-1545264835-3e14e4dae383?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9zdGVyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60')]">
@@ -102,51 +100,36 @@ export const TicketToDownload = ({ ticket, event }: any) => {
             </AlertDialogContent>
             <div className="w-full">
               <div className="h-auto w-full m-2 flex flex-row items-start justify-center">
-                {/* <div> */}
-                  <a
-                    className="delay-50 duration-100 bg-successBg p-5 rounded-lg w-60 group"
-                    href=""
-                  >
-                    <Image
-                      src="https://images.unsplash.com/photo-1545264835-3e14e4dae383?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9zdGVyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60"
-                      className="w-full rounded shadow"
-                      alt=""
-                      width={250}
-                      height={250}
-                    />
+                <a className="delay-50 duration-100 bg-successBg p-5 rounded-lg w-60 group" href="">
+                  <Image
+                    src="https://images.unsplash.com/photo-1545264835-3e14e4dae383?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9zdGVyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60"
+                    className="w-full rounded shadow"
+                    alt=""
+                    width={250}
+                    height={250}
+                  />
 
-                    <h3 className="text-dark-200 font-bold mt-5">{ticket?.name}-{event?.eventName}</h3>
+                  <h3 className="text-dark-200 font-bold mt-5">
+                    {ticket?.name}-{event?.eventName}
+                  </h3>
 
-                    {/* <p className="text-gray-400 font-light mt-2 text-xs">
+                  {/* <p className="text-gray-400 font-light mt-2 text-xs">
                       {" "}
                       Your daily update of the most played track from around the world...
                     </p> */}
-                    <CustomButton
-                    onClick={() => {
-                      setOpen(true)
-                      DownloadTicket()
-                    }}
-                    className="flex flex-row items-center justify-center mt-2 cursor-pointer"
-                  >
-                    <DownloadIcon className="mr-2" size={15}/>
-                    Download
-                  </CustomButton>
-                  </a>
-                {/* </div> */}
-
-                {/* <div>
-                  <button
-                    onClick={() => {
-                      setOpen(true)
-                      DownloadTicket()
-                    }}
-                    className="flex flex-col items-center justify-center ml-2 cursor-pointer"
-                  >
-                    <DownloadIcon />
-                    Download
-                  </button>
-                </div> */}
+                </a>
+                
               </div>
+              <CustomButton
+                  onClick={() => {
+                    setOpen(true)
+                    downloadTicket()
+                  }}
+                  className="flex flex-row items-center justify-center mt-2 ml-4 cursor-pointer"
+                >
+                  <DownloadIcon className="mr-2" size={15} />
+                  Download
+                </CustomButton>
             </div>
           </AlertDialog>
         </>
