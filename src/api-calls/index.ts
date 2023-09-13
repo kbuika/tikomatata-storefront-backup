@@ -42,7 +42,6 @@ export const PurchaseTicketsFn = async (checkoutData: checkoutDataType) => {
         return response.data
       }
     } catch (error: any) {
-        console.log("error", error)
       throw new Error(error)
     }
   }
