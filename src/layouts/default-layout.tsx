@@ -20,7 +20,7 @@ const DefaultLayout: React.FC<Props> = ({ children, isMain = false, noHeader = f
   return (
     <>
       <div
-        className={`h-[10vh] flex items-center justify-between px-[60px] sticky top-0 border-b-2 bg-white
+        className={`h-[10vh] flex items-center justify-between px-[60px] sticky top-0 border-b-2 bg-white z-50
          ${noHeader ? "hidden" : "md:flex"}`}
       >
         <Link href="/">
