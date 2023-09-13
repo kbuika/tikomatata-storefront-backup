@@ -6,6 +6,8 @@ import { TicketPurchaseType } from "@/types/ticket"
 interface TicketsState {
   selectedTickets: Array<TicketPurchaseType>
   totalTicketsPrice: number
+  serviceFee: number
+  totalTicketsPriceWithServiceFee: number
   setSelectedTickets: (selectedTickets: Array<TicketPurchaseType>) => void
   updateSelectedTickets: (selectedTickets: Array<TicketPurchaseType>) => void
   selectSingleTicket: (ticket: TicketPurchaseType) => void
@@ -19,10 +21,12 @@ export const useTicketsStore = create<TicketsState>()(
     (set, get) => ({
         selectedTickets: [],
         totalTicketsPrice: 0,
+        serviceFee: 0,
+        totalTicketsPriceWithServiceFee: 0,
         setSelectedTickets: (selectedTickets) => set(() => ({ selectedTickets })),
         updateSelectedTickets: (selectedTickets: Array<any>) => set(() => ({ selectedTickets })),
         selectSingleTicket: (ticket) => set((state) => ({ selectedTickets: [...state.selectedTickets, ticket] })),
-        setTotalTicketsPrice: (total) => set(() => ({ totalTicketsPrice: total })),
+        setTotalTicketsPrice: (total) => set(() => ({ totalTicketsPrice: total, serviceFee: Math.round(total*0.035), totalTicketsPriceWithServiceFee: Math.round(total+(total*0.035)) })),
         resetAllTickets: () => set(() => ({ selectedTickets: [], totalTicketsPrice: 0 })),
 
     }),

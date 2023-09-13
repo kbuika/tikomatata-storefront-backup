@@ -13,8 +13,10 @@ const TicketCard: React.FC<EventTicketProps> = ({ticket}) => {
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const updateSelectedTickets = useTicketsStore((state) => state.updateSelectedTickets)
   const setTotalPrice = useTicketsStore((state) => state.setTotalTicketsPrice)
-// create a ticket quantity value - it finds the ticket in the array and returns the totalQuantitySelected and if it doesn't find it, it returns 0
-  const ticketQuantity = selectedTickets.find((ticket) => ticket.ticketId === ticket?.ticketId)?.totalQuantitySelected || 0
+
+  // create a ticket quantity value - it finds the ticket in the array and returns the totalQuantitySelected and if it doesn't find it, it returns 0
+  const ticketQuantity = selectedTickets.find((ticketItem) => ticketItem.ticketId === ticket?.ticketId)?.totalQuantitySelected || 0
+  
   const addTicket = (selectedTicket:any) => {
     setTicketCount(ticketCount + 1)
     // check if the ticket is already in the array if it is, update the count, if not add it
@@ -30,6 +32,10 @@ const TicketCard: React.FC<EventTicketProps> = ({ticket}) => {
       setTotalPrice(totalPrice)
     }
     if (!ticket) {
+      if(selectedTickets.length !== 0) {
+        alert("Sorry, you can only select one ticket type")
+        return;
+      }
       selectedTicket = { ...selectedTicket, totalQuantitySelected: 1 }
       const updatedSelectedTickets = [...selectedTickets, selectedTicket]
       updateSelectedTickets(updatedSelectedTickets)
