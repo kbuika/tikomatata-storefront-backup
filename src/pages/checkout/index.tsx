@@ -54,7 +54,7 @@ export default function Checkout() {
   const [openCardModal, setOpenCardModal] = useState(false)
   const [openMpesaModal, setOpenMpesaModal] = useState(false)
   const [openVerifyDialog, setOpenVerifyDialog] = useState(false)
-  const [paymentState, setPaymentState] = useState("none")
+  const [paymentState, setPaymentState] = useState("pending")
   const [paymentUrl, setPaymentUrl] = useState<string>("")
   const [callbackData, setCallbackData] = useState<any>({})
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
@@ -388,6 +388,9 @@ export default function Checkout() {
                   {paymentState === "failure" && (
                     <PaymentFailure setPaymentState={setPaymentState} />
                   )}
+                  {paymentState === "pending" && (
+                    <PaymentPending setPaymentState={setPaymentState} paymentUrl={paymentUrl} />
+                  )}
                 </div>
               </TabsContent>
               <TabsContent value="card">
@@ -511,7 +514,7 @@ export default function Checkout() {
                   {paymentState === "failure" && (
                     <PaymentFailure setPaymentState={setPaymentState} fullWidth={true} />
                   )}
-                  {paymentState === "none" && (
+                  {paymentState === "pending" && (
                     <PaymentPending setPaymentState={setPaymentState} paymentUrl={paymentUrl} />
                   )}
                 </AlertDialogDescription>
