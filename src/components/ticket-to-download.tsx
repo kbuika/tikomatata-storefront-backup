@@ -48,17 +48,17 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
               <div className="ticketDoc my-2" ref={ticketRef}>
                 <div className="ticket-image-card">
                   <div className="ticket-image-left">
-                    <div className="ticket-card-image">
-                      <Image src={event?.posterUrl} alt="poster" className="h-full w-full bg-contain" width={100} height={100}/>
+                    {/* <div className="ticket-card-image"> */}
+                      {/* <Image src={event?.posterUrl} alt="poster" className="h-full w-full bg-contain" width={100} height={100}/> */}
                       {/* <p className="ticket-card-admit-one">
                             <span>ADMIT ONE</span>
                             <span>ADMIT ONE</span>
                             <span>ADMIT ONE</span>
                           </p> */}
-                      <div className="ticket-number">
+                      {/* <div className="ticket-number">
                         <p>#{event?.referenceId}</p>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="ticket-info">
                       <p className="ticket-card-date">
                         <span>{moment(event?.eventStartDate).format("dddd")}</span>
@@ -109,6 +109,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                     alt=""
                     width={250}
                     height={250}
+
                   />
 
                   <h3 className="text-dark-200 font-bold mt-5">
