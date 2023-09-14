@@ -37,7 +37,7 @@ const DefaultLayout: React.FC<Props> = ({ children, isMain = false, noHeader = f
         </div>
       </div>
       {children}
-      <footer className={`bottom-0 h-[15vh] w-full border-t-2 ${noFooter ? "hidden" : "md:flex"}`}>
+      <footer className={`bottom-0 h-[15vh] w-full border-t-2 ${noFooter ? "hidden" : ""}`}>
         <div className="h-full flex flex-col items-center justify-between bg-successBg text-testPrimary px-[60px] md:flex-row">
           <div className="flex flex-row items-center h-full mr-8 mt-4">
             <div className="cursor-pointer text-stone-800 hidden mr-[20px] sm:flex">
@@ -47,7 +47,7 @@ const DefaultLayout: React.FC<Props> = ({ children, isMain = false, noHeader = f
             <p className="cursor-pointer underline underline-offset-4 " style={{marginRight: "20px", marginLeft:"20px"}}>Privacy</p>
             <p className="cursor-pointer underline underline-offset-4 ml-2"><Link href="/contact">Talk to Us</Link></p>
           </div>
-          <div className="flex flex-row items-center justify-center text-testPrimary font-medium tracking-wide text-center max-[1300px]:mt-4 mb-4">
+          <div className="flex flex-row items-center justify-center text-testPrimary font-medium tracking-wide text-center mt-2 max-[1300px]:mt-4 mb-4">
           © {new Date().getFullYear()} Tikomatata.
           </div>
         </div>
