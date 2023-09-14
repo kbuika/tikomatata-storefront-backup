@@ -47,7 +47,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
               <div className="ticketDoc my-2" ref={ticketRef}>
                 <div className="ticket-image-card">
                   <div className="ticket-image-left">
-                    <div className="ticket-card-image bg-[url('https://images.unsplash.com/photo-1545264835-3e14e4dae383?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9zdGVyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60')]">
+                    <div style={{backgroundImage: `url(${event?.posterUrl})`}} className="ticket-card-image">
                       {/* <p className="ticket-card-admit-one">
                             <span>ADMIT ONE</span>
                             <span>ADMIT ONE</span>
@@ -76,7 +76,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                         </p>
                       </div>
                       <p className="ticket-card-location">
-                        <span>#LOCATION</span>
+                        <span>{event?.location}</span>
                       </p>
                     </div>
                   </div>
@@ -102,7 +102,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
               <div className="h-auto w-full m-2 flex flex-row items-start justify-center">
                 <a className="delay-50 duration-100 bg-successBg p-5 rounded-lg w-60 group" href="">
                   <Image
-                    src="https://images.unsplash.com/photo-1545264835-3e14e4dae383?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9zdGVyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60"
+                    src={event?.posterUrl}
                     className="w-full rounded shadow"
                     alt=""
                     width={250}
