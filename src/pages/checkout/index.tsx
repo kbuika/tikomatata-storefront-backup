@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 import TicketCard from "../../components/ticket-card"
 import CustomButton from "../../components/ui/custom-button"
-import testImage from "../../images/Chapo.jpg"
+import defaultImage from "../../images/default.jpg"
 import KenyaIcon from "../../images/kenya.png"
 import { Loader2, BadgeCheck } from "lucide-react"
 import {
@@ -148,7 +148,7 @@ export default function Checkout() {
         <div className="w-[40%] p-8 flex flex-col items-center justify-start sm:border-l-2 sm:min-h-[50em]">
           <div className="h-[10em] w-[20em]">
             <Image
-              src={selectedEvent?.posterUrl ?? testImage}
+              src={selectedEvent?.posterUrl ?? defaultImage}
               alt=""
               width={100}
               height={100}
