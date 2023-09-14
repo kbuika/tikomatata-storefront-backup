@@ -54,7 +54,7 @@ export default function Checkout() {
   const [openCardModal, setOpenCardModal] = useState(false)
   const [openMpesaModal, setOpenMpesaModal] = useState(false)
   const [openVerifyDialog, setOpenVerifyDialog] = useState(false)
-  const [paymentState, setPaymentState] = useState("pending")
+  const [paymentState, setPaymentState] = useState("none")
   const [paymentUrl, setPaymentUrl] = useState<string>("")
   const [callbackData, setCallbackData] = useState<any>({})
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
