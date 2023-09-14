@@ -16,7 +16,7 @@ type Props = {
   isMain?: boolean
 }
 
-const DefaultLayout: React.FC<Props> = ({ children, isMain = false, noHeader = false }) => {
+const DefaultLayout: React.FC<Props> = ({ children, isMain = false, noHeader = false, noFooter=false }) => {
   return (
     <>
       <div
@@ -37,7 +37,7 @@ const DefaultLayout: React.FC<Props> = ({ children, isMain = false, noHeader = f
         </div>
       </div>
       {children}
-      <footer className="bottom-0 h-[15vh] w-full border-t-2">
+      <footer className={`bottom-0 h-[15vh] w-full border-t-2 ${noFooter ? "hidden" : "md:flex"}`}>
         <div className="h-full flex flex-col items-center justify-between bg-successBg text-testPrimary px-[60px] md:flex-row">
           <div className="flex flex-row items-center h-full mr-8 mt-4">
             <div className="cursor-pointer text-stone-800 hidden mr-[20px] sm:flex">

@@ -1,14 +1,14 @@
 import { Loader2, XCircle } from "lucide-react"
 import CustomButton from "./ui/custom-button"
 
-const PaymentPending = ({setPaymentState, paymentUrl}: any) => {
+const PaymentPending = ({setPaymentState, paymentUrl, fullWidth=false}: any) => {
 
     const redirectForPayment = () => {
         window.open(paymentUrl)
         setPaymentState("pending")
     }
   return (
-    <div className="flex flex-col items-center justify-center w-[70%] mt-4">
+    <div className={`flex flex-col items-center justify-center w-[70%] mt-4 ${fullWidth ? "w-full": "w-[70%]"}`}>
       <div>
         <Loader2 size={40} color="green" className="animate-spin" />
       </div>

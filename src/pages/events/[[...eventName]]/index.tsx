@@ -65,7 +65,9 @@ export default function Events() {
       ) : (
         <>
           {eventError ? (
-            <p>Error. Could not fetch the selected event.</p>
+            <main className="flex min-h-screen flex-col items-start justify-start">
+              <p>Error. Could not fetch the selected event.</p>
+            </main>
           ) : (
             <main className="flex min-h-screen flex-col items-start justify-start">
               <div className="flex w-full flex-col items-center justify-between h-full sm:flex-row sm:items-start">
