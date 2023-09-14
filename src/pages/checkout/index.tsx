@@ -34,7 +34,6 @@ import { errorToast, successToast } from "@/lib/utils"
 import PaymentPending from "@/components/payment-pending"
 import { useSearchParams } from "next/navigation"
 
-
 const schema = yup.object({
   customerName: yup.string().required("Please enter your name"),
   customerEmail: yup
@@ -54,6 +53,7 @@ const schema = yup.object({
 export default function Checkout() {
   const [openCardModal, setOpenCardModal] = useState(false)
   const [openMpesaModal, setOpenMpesaModal] = useState(false)
+  const [openVerifyDialog, setOpenVerifyDialog] = useState(false)
   const [paymentState, setPaymentState] = useState("none")
   const [paymentUrl, setPaymentUrl] = useState<string>("")
   const [callbackData, setCallbackData] = useState<any>({})
@@ -67,8 +67,8 @@ export default function Checkout() {
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
 
   const searchParams = useSearchParams()
-  const referenceId = searchParams.get('reference')
-  const trxref = searchParams.get('trxref')
+  const referenceId = searchParams.get("reference")
+  const trxref = searchParams.get("trxref")
   useEffect(() => {
     const verifyTransactionFn = async (referenceId: string) => {
       try {
@@ -76,12 +76,16 @@ export default function Checkout() {
         if (res.status === 200) {
           setCallbackData(res.data)
           setPaymentState("success")
+          setOpenVerifyDialog(true)
           successToast("Payment successful. Check your email and phone for the tickets.")
-        }else{
+        } else {
           setCallbackData(res.data)
           setPaymentState("failure")
+          setOpenVerifyDialog(true)
         }
       } catch (error) {
+        setPaymentState("failure")
+        setOpenVerifyDialog(true)
         errorToast("Something went wrong while processing your payment, please try again.")
       }
     }
@@ -262,7 +266,7 @@ export default function Checkout() {
                 <div className="h-auto w-full flex flex-col items-center">
                   {paymentState === "none" && (
                     <>
-                      <div className="w-full mt-[16px]">
+                      {/* <div className="w-full mt-[16px]">
                         <div>
                           <div className="flex items-center">
                             <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l border border-hidden-left border-gray-600">
@@ -286,7 +290,7 @@ export default function Checkout() {
                             </span>
                           )}
                         </div>
-                      </div>
+                      </div> */}
                       <p className="mt-[20px] text-gray-500">
                         Please ensure you have your phone near you. You will receive a prompt on the
                         phone number you have provided above.
@@ -294,19 +298,19 @@ export default function Checkout() {
                       <div className="w-full mt-[20px]">
                         <AlertDialog open={openMpesaModal} onOpenChange={setOpenMpesaModal}>
                           {/* <AlertDialogTrigger asChild> */}
-                            <CustomButton
-                              type="submit"
-                              className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
-                              onClick={validateMpesaForm}
-                            >
-                              {false ? (
-                                <>
-                                  Processing <Loader2 size={22} className="animate-spin ml-4" />
-                                </>
-                              ) : (
-                                `Pay KES ${totalTicketsPrice}`
-                              )}
-                            </CustomButton>
+                          <CustomButton
+                            type="submit"
+                            className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
+                            onClick={validateMpesaForm}
+                          >
+                            {false ? (
+                              <>
+                                Processing <Loader2 size={22} className="animate-spin ml-4" />
+                              </>
+                            ) : (
+                              `Pay KES ${totalTicketsPrice}`
+                            )}
+                          </CustomButton>
                           {/* </AlertDialogTrigger> */}
                           <AlertDialogContent className="bg-white rounded">
                             <AlertDialogHeader>
@@ -378,17 +382,19 @@ export default function Checkout() {
                       </div>
                     </>
                   )}
-                  {paymentState === "success" && <PaymentSuccess email={customerEmail} callbackData={callbackData}/>}
-                  {paymentState === "failure" && <PaymentFailure setPaymentState={setPaymentState}/>}
-                  {paymentState === "pending" && <PaymentPending setPaymentState={setPaymentState} paymentUrl={paymentUrl}/>}
+                  {paymentState === "success" && (
+                    <PaymentSuccess email={customerEmail} callbackData={callbackData} />
+                  )}
+                  {paymentState === "failure" && (
+                    <PaymentFailure setPaymentState={setPaymentState} />
+                  )}
                 </div>
               </TabsContent>
               <TabsContent value="card">
                 <div className="pt-4">
-                  <p></p>
-                  <div className="w-full mt-[20px]">
-                    <AlertDialog open={openCardModal} onOpenChange={setOpenCardModal}>
-                      {/* <AlertDialogTrigger asChild> */}
+                  {paymentState === "none" && (
+                    <div className="w-full mt-[20px]">
+                      <AlertDialog open={openCardModal} onOpenChange={setOpenCardModal}>
                         <CustomButton
                           type="submit"
                           className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
@@ -402,77 +408,120 @@ export default function Checkout() {
                             `Pay KES ${totalTicketsPrice}`
                           )}
                         </CustomButton>
-                      {/* </AlertDialogTrigger> */}
-                      <AlertDialogContent className="bg-white">
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Confirm Email and Phone</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Confirm that the email and phone number are correct before proceeding.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <div className="h-auto w-full flex flex-col items-center">
-                          <div className="w-full mt-[4px] text-neutralDark">
-                            <div>
-                              <input
-                                id="email"
-                                type="email"
-                                required
-                                className="h-[50px] bg-white appearance-none rounded relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                                placeholder="Email Address"
-                                value={customerEmail}
-                                {...register("customerEmail", { required: true })}
-                              ></input>
-                            </div>
-                            {errors.customerEmail && (
-                              <span className="text-criticalRed">
-                                {errors.customerEmail?.message}
-                              </span>
-                            )}
-                          </div>
-                          <div className="w-full mt-[16px]">
-                            <div>
-                              <div className="flex items-center">
-                                <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l border border-hidden-left border-gray-600">
-                                  <Image src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
-                                  +254
-                                </span>
+                        <AlertDialogContent className="bg-white">
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Confirm Email and Phone</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Confirm that the email and phone number are correct before proceeding.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <div className="h-auto w-full flex flex-col items-center">
+                            <div className="w-full mt-[4px] text-neutralDark">
+                              <div>
                                 <input
-                                  id="phone"
-                                  type="text"
+                                  id="email"
+                                  type="email"
                                   required
-                                  className="w-3/4 h-[50px] bg-white appearance-none rounded-r relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                                  placeholder="Phone number"
-                                  autoComplete="nope"
-                                  value={customerPhone}
-                                  {...register("customerPhone", { required: true })}
+                                  className="h-[50px] bg-white appearance-none rounded relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                                  placeholder="Email Address"
+                                  value={customerEmail}
+                                  {...register("customerEmail", { required: true })}
                                 ></input>
                               </div>
-                              {errors.customerPhone && (
+                              {errors.customerEmail && (
                                 <span className="text-criticalRed">
-                                  {errors.customerPhone?.message}
+                                  {errors.customerEmail?.message}
                                 </span>
                               )}
                             </div>
+                            <div className="w-full mt-[16px]">
+                              <div>
+                                <div className="flex items-center">
+                                  <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l border border-hidden-left border-gray-600">
+                                    <Image src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
+                                    +254
+                                  </span>
+                                  <input
+                                    id="phone"
+                                    type="text"
+                                    required
+                                    className="w-3/4 h-[50px] bg-white appearance-none rounded-r relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                                    placeholder="Phone number"
+                                    autoComplete="nope"
+                                    value={customerPhone}
+                                    {...register("customerPhone", { required: true })}
+                                  ></input>
+                                </div>
+                                {errors.customerPhone && (
+                                  <span className="text-criticalRed">
+                                    {errors.customerPhone?.message}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel className="rounded">Cancel</AlertDialogCancel>
-                          <CustomButton
-                            type="submit"
-                            className="h-[40px] group relative w-auto flex justify-center items-center text-base font-medium rounded text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
-                          >
-                            <AlertDialogAction className="bg-transparent rounded w-full hover:bg-transparent">
-                              Complete Payment
-                            </AlertDialogAction>
-                          </CustomButton>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="rounded">Cancel</AlertDialogCancel>
+                            <CustomButton
+                              type="submit"
+                              className="h-[40px] group relative w-auto flex justify-center items-center text-base font-medium rounded text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
+                            >
+                              <AlertDialogAction
+                                className="bg-transparent rounded w-full hover:bg-transparent "
+                                onClick={handleSubmit(PayForTickets)}
+                              >
+                                Complete Payment
+                              </AlertDialogAction>
+                            </CustomButton>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  )}
+                  {paymentState === "success" && (
+                    <PaymentSuccess email={customerEmail} callbackData={callbackData} />
+                  )}
+                  {paymentState === "failure" && (
+                    <PaymentFailure setPaymentState={setPaymentState} />
+                  )}
+                  {paymentState === "pending" && (
+                    <PaymentPending setPaymentState={setPaymentState} paymentUrl={paymentUrl} />
+                  )}
                 </div>
               </TabsContent>
             </Tabs>
           </div>
+          <AlertDialog open={openVerifyDialog} onOpenChange={setOpenVerifyDialog}>
+            <AlertDialogContent className="bg-white rounded">
+              <AlertDialogHeader className="flex items-center">
+                {paymentState === "success" && (
+                  <AlertDialogTitle>Woot! 🎉 Payment Successful 🎉</AlertDialogTitle>
+                )}
+                {paymentState === "failure" && (
+                  <AlertDialogTitle>Ouch! Payment Failed </AlertDialogTitle>
+                )}
+                <AlertDialogDescription className="w-full flex items-center">
+                  {paymentState === "success" && (
+                    <PaymentSuccess
+                      email={customerEmail}
+                      callbackData={callbackData}
+                      fullWidth={true}
+                    />
+                  )}
+                  {paymentState === "failure" && (
+                    <PaymentFailure setPaymentState={setPaymentState} fullWidth={true} />
+                  )}
+                  {paymentState === "none" && (
+                    <PaymentPending setPaymentState={setPaymentState} paymentUrl={paymentUrl} />
+                  )}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+
+              <AlertDialogFooter className="mt-2">
+                <AlertDialogCancel className="rounded">Close</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </main>
     </DefaultLayout>
