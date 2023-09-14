@@ -26,6 +26,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
           link.click()
         })
         .catch((err) => {
+          console.log(err)
           errorToast("An error occured while downloading your ticket. If the issue persists, please contact us.")
         })
         .finally(() => {
@@ -47,7 +48,8 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
               <div className="ticketDoc my-2" ref={ticketRef}>
                 <div className="ticket-image-card">
                   <div className="ticket-image-left">
-                    <div style={{backgroundImage: `url(${event?.posterUrl})`}} className="ticket-card-image">
+                    <div className="ticket-card-image">
+                      <Image src={event?.posterUrl} alt="poster" className="h-full w-full bg-contain" width={100} height={100}/>
                       {/* <p className="ticket-card-admit-one">
                             <span>ADMIT ONE</span>
                             <span>ADMIT ONE</span>
