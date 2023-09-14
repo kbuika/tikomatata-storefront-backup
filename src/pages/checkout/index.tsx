@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
@@ -27,10 +27,12 @@ import { TicketPurchaseType } from "@/types/ticket"
 import { useEventsStore } from "@/stores/events-store"
 import moment from "moment"
 import * as yup from "yup"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { SubmitHandler, set, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { PurchaseTicketsFn } from "@/api-calls"
+import { PurchaseTicketsFn, VerifyPayment } from "@/api-calls"
 import { errorToast } from "@/lib/utils"
+import PaymentPending from "@/components/payment-pending"
+import { useSearchParams } from "next/navigation"
 
 const schema = yup.object({
   customerName: yup.string().required("Please enter your name"),
@@ -52,6 +54,7 @@ export default function Checkout() {
   const [openCardModal, setOpenCardModal] = useState(false)
   const [openMpesaModal, setOpenMpesaModal] = useState(false)
   const [paymentState, setPaymentState] = useState("none")
+  const [paymentUrl, setPaymentUrl] = useState<string>("")
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const serviceFee = useTicketsStore((state) => state.serviceFee)
@@ -60,6 +63,28 @@ export default function Checkout() {
   )
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
+
+  const searchParams = useSearchParams()
+  const referenceId = searchParams.get('reference')
+  const trxref = searchParams.get('trxref')
+  useEffect(() => {
+    const verifyTransactionFn = async (referenceId: string) => {
+      try {
+        const res = await VerifyPayment(referenceId)
+        if (res.status === 200) {
+          console.log(res.data)
+          setPaymentState("success")
+        }else{
+          setPaymentState("failure")
+        }
+      } catch (error) {
+        errorToast("Something went wrong while processing your payment, please try again.")
+      }
+    }
+    if (referenceId && trxref) {
+      verifyTransactionFn(referenceId)
+    }
+  }, [referenceId, trxref])
 
   const {
     register,
@@ -74,6 +99,7 @@ export default function Checkout() {
   const customerEmail = watch("customerEmail")
 
   const PayForTickets: SubmitHandler<any> = async (data) => {
+    setPaymentState("pending")
     data = {
       ...data,
       eventId: selectedEvent?.eventId,
@@ -83,6 +109,7 @@ export default function Checkout() {
     try {
       const res = await PurchaseTicketsFn(data)
       if (res.status === 200) {
+        setPaymentUrl(res.data.data.authorization_url)
         // open a new tab with the payment url
         window.open(res.data.data.authorization_url)
       }
@@ -346,7 +373,8 @@ export default function Checkout() {
                     </>
                   )}
                   {paymentState === "success" && <PaymentSuccess email={customerEmail} />}
-                  {paymentState === "failure" && <PaymentFailure />}
+                  {paymentState === "failure" && <PaymentFailure setPaymentState={setPaymentState}/>}
+                  {paymentState === "pending" && <PaymentPending setPaymentState={setPaymentState} paymentUrl={paymentUrl}/>}
                 </div>
               </TabsContent>
               <TabsContent value="card">
