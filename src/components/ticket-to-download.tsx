@@ -26,6 +26,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
           link.click()
         })
         .catch((err) => {
+          console.log(err)
           errorToast("An error occured while downloading your ticket. If the issue persists, please contact us.")
         })
         .finally(() => {
@@ -47,16 +48,17 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
               <div className="ticketDoc my-2" ref={ticketRef}>
                 <div className="ticket-image-card">
                   <div className="ticket-image-left">
-                    <div className="ticket-card-image bg-[url('https://images.unsplash.com/photo-1545264835-3e14e4dae383?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9zdGVyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60')]">
+                    {/* <div className="ticket-card-image"> */}
+                      {/* <Image src={event?.posterUrl} alt="poster" className="h-full w-full bg-contain" width={100} height={100}/> */}
                       {/* <p className="ticket-card-admit-one">
                             <span>ADMIT ONE</span>
                             <span>ADMIT ONE</span>
                             <span>ADMIT ONE</span>
                           </p> */}
-                      <div className="ticket-number">
+                      {/* <div className="ticket-number">
                         <p>#{event?.referenceId}</p>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="ticket-info">
                       <p className="ticket-card-date">
                         <span>{moment(event?.eventStartDate).format("dddd")}</span>
@@ -76,7 +78,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                         </p>
                       </div>
                       <p className="ticket-card-location">
-                        <span>#LOCATION</span>
+                        <span>{event?.location}</span>
                       </p>
                     </div>
                   </div>
@@ -102,11 +104,12 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
               <div className="h-auto w-full m-2 flex flex-row items-start justify-center">
                 <a className="delay-50 duration-100 bg-successBg p-5 rounded-lg w-60 group" href="">
                   <Image
-                    src="https://images.unsplash.com/photo-1545264835-3e14e4dae383?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9zdGVyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60"
+                    src={event?.posterUrl}
                     className="w-full rounded shadow"
                     alt=""
                     width={250}
                     height={250}
+
                   />
 
                   <h3 className="text-dark-200 font-bold mt-5">

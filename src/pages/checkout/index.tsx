@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
@@ -27,10 +27,13 @@ import { TicketPurchaseType } from "@/types/ticket"
 import { useEventsStore } from "@/stores/events-store"
 import moment from "moment"
 import * as yup from "yup"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { SubmitHandler, set, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { PurchaseTicketsFn } from "@/api-calls"
-import { errorToast } from "@/lib/utils"
+import { PurchaseTicketsFn, VerifyPayment } from "@/api-calls"
+import { errorToast, successToast } from "@/lib/utils"
+import PaymentPending from "@/components/payment-pending"
+import { useSearchParams } from "next/navigation"
+
 
 const schema = yup.object({
   customerName: yup.string().required("Please enter your name"),
@@ -44,7 +47,7 @@ const schema = yup.object({
     .required("Please enter your email address"),
   customerPhone: yup
     .string()
-    .length(9, "Please enter a valid phone number")
+    .length(9, "Number should start with 7XXX.. or 1XXX.. and be 9 digits long")
     .required("Please enter your phone number"),
 })
 
@@ -52,6 +55,8 @@ export default function Checkout() {
   const [openCardModal, setOpenCardModal] = useState(false)
   const [openMpesaModal, setOpenMpesaModal] = useState(false)
   const [paymentState, setPaymentState] = useState("none")
+  const [paymentUrl, setPaymentUrl] = useState<string>("")
+  const [callbackData, setCallbackData] = useState<any>({})
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const serviceFee = useTicketsStore((state) => state.serviceFee)
@@ -60,6 +65,30 @@ export default function Checkout() {
   )
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
+
+  const searchParams = useSearchParams()
+  const referenceId = searchParams.get('reference')
+  const trxref = searchParams.get('trxref')
+  useEffect(() => {
+    const verifyTransactionFn = async (referenceId: string) => {
+      try {
+        const res = await VerifyPayment(referenceId)
+        if (res.status === 200) {
+          setCallbackData(res.data)
+          setPaymentState("success")
+          successToast("Payment successful. Check your email and phone for the tickets.")
+        }else{
+          setCallbackData(res.data)
+          setPaymentState("failure")
+        }
+      } catch (error) {
+        errorToast("Something went wrong while processing your payment, please try again.")
+      }
+    }
+    if (referenceId && trxref) {
+      verifyTransactionFn(referenceId)
+    }
+  }, [referenceId, trxref])
 
   const {
     register,
@@ -74,6 +103,7 @@ export default function Checkout() {
   const customerEmail = watch("customerEmail")
 
   const PayForTickets: SubmitHandler<any> = async (data) => {
+    setPaymentState("pending")
     data = {
       ...data,
       eventId: selectedEvent?.eventId,
@@ -83,6 +113,7 @@ export default function Checkout() {
     try {
       const res = await PurchaseTicketsFn(data)
       if (res.status === 200) {
+        setPaymentUrl(res.data.data.authorization_url)
         // open a new tab with the payment url
         window.open(res.data.data.authorization_url)
       }
@@ -150,9 +181,9 @@ export default function Checkout() {
             </div>
           </div>
         </div>
-        <div className="w-full px-12 min-h-[50em] border-t-2 sm:border-t-0 sm:border-l-2 sm:w-[50%] sm:p-8 sm:pl-36 sm:px-0">
+        <div className="w-full px-12 min-h-[50em] border-t-2 sm:border-t-0 sm:border-l-2 sm:w-[50%] sm:p-8 sm:pl-36 sm:px-0 max-[600px]:px-6">
           <h2 className="text-lg font-medium mt-6 sm:mt-0">Where do we send your tickets?</h2>
-          <div className="h-auto w-full flex flex-col items-center">
+          <div className="h-auto w-full flex flex-col items-center max-[600px]:mt-2">
             <div className="w-full mt-[4px] text-neutralDark sm:mt-[16px]">
               <div>
                 <input
@@ -161,6 +192,7 @@ export default function Checkout() {
                   required
                   className="h-[50px] bg-white appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                   placeholder="Name"
+                  defaultValue={callbackData?.recipientName ?? ""}
                   {...register("customerName", { required: true })}
                 ></input>
               </div>
@@ -176,7 +208,8 @@ export default function Checkout() {
                   required
                   className="h-[50px] bg-white appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                   placeholder="Email Address"
-                  value={customerEmail}
+                  // value={customerEmail ?? callbackData?.recipientEmail ?? ""}
+                  defaultValue={callbackData?.recipientEmail ?? ""}
                   {...register("customerEmail", { required: true })}
                 ></input>
               </div>
@@ -345,8 +378,9 @@ export default function Checkout() {
                       </div>
                     </>
                   )}
-                  {paymentState === "success" && <PaymentSuccess email={customerEmail} />}
-                  {paymentState === "failure" && <PaymentFailure />}
+                  {paymentState === "success" && <PaymentSuccess email={customerEmail} callbackData={callbackData}/>}
+                  {paymentState === "failure" && <PaymentFailure setPaymentState={setPaymentState}/>}
+                  {paymentState === "pending" && <PaymentPending setPaymentState={setPaymentState} paymentUrl={paymentUrl}/>}
                 </div>
               </TabsContent>
               <TabsContent value="card">
