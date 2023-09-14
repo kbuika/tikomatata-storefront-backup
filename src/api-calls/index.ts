@@ -47,7 +47,7 @@ export const PurchaseTicketsFn = async (checkoutData: checkoutDataType) => {
 
 export const VerifyPayment = async (referenceId: string) => {
   const config = {
-    method: "post",
+    method: "get",
     maxBodyLength: Infinity,
     url: `https://api.tikomatata.co.ke/api/v1/ticket/verify/${referenceId}`,
     headers: {
