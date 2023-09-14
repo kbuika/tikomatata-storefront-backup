@@ -76,7 +76,7 @@ const TicketCard: React.FC<EventTicketProps> = ({ticket}) => {
   }
   return (
     <>
-      <div className="flex flex-col items-center justify-center bg-center bg-cover h-full w-[90%] sm:w-[45%] m-2 max-[640px]:w-[80%]">
+      <div className="flex flex-col items-center justify-center bg-center bg-cover h-full w-[90%] sm:w-[45%] m-2 max-[640px]:w-[90%]">
         <div className="w-full mx-auto z-10 rounded">
           <div className="flex flex-col">
             <div className="bg-white relative border-2 shadow-sm rounded p-4 m-2 w-full">
