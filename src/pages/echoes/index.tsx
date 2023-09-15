@@ -84,11 +84,11 @@ export default function Echoes() {
                   <div className="h-[22em] w-[25em] sm:h-[40em] sm:w-[35em]">
                   <div
                       className="w-full h-[100%] bg-top bg-cover rounded"
-                      // style={{
-                      //   backgroundImage: `url(${selectedEvent?.posterUrl})`,
-                      //   border: "0.25rem",
-                      // }}
-                    ><Image src={selectedEvent?.posterUrl} alt="poster" width={100} height={100} className="w-full h-full object-contain"></Image>
+                      style={{
+                        backgroundImage: `url(${selectedEvent?.posterUrl})`,
+                        border: "0.25rem",
+                      }}
+                    >
                   </div>
                   </div>
                 </div>

@@ -52,7 +52,7 @@ const Home: React.FC<Props> = () => {
       </main>
       <div className="mx-12 my-[3em]">
         <h2 className="mt-2 text-2xl ml-[1em] font-medium">Upcoming Events</h2>
-        <div className="flex flex-wrap items-start justify-evenly min-h-[50vh] my-[3em]">
+        <div className="flex flex-wrap items-start justify-start min-h-[50vh] my-[3em]">
           {events?.map((event: EventDataType) => (
             <EventCard key={event?.eventId} event={event} />
           ))}
