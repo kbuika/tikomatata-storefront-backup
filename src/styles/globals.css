@@ -150,6 +150,7 @@
 	text-align: center;
 	justify-content: space-between;
 	align-items: center;
+	border-left: 1px dashed #404040;
 }
 
 .ticket-card-date {
@@ -228,6 +229,7 @@
 .ticket-card-right {
 	width: 180px;
 	border-left: 1px dashed #404040;
+	border-right: 1px dashed #404040;
 }
 
 .ticket-card-right .ticket-card-admit-one {
