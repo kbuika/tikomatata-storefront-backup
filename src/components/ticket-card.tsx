@@ -32,10 +32,10 @@ const TicketCard: React.FC<EventTicketProps> = ({ticket}) => {
       setTotalPrice(totalPrice)
     }
     if (!ticket) {
-      if(selectedTickets.length !== 0) {
-        alert("Sorry, you can only select one ticket type")
-        return;
-      }
+      // if(selectedTickets.length !== 0) {
+      //   alert("Sorry, you can only select one ticket type")
+      //   return;
+      // }
       selectedTicket = { ...selectedTicket, totalQuantitySelected: 1 }
       const updatedSelectedTickets = [...selectedTickets, selectedTicket]
       updateSelectedTickets(updatedSelectedTickets)
