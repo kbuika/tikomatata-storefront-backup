@@ -64,7 +64,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                         <span>{moment(event?.eventStartDate).format("dddd")}</span>
                         <span className="june-29">
                           {moment(event?.eventStartDate).format("Do")}{" "}
-                          {moment(event?.startDate).format("MMM")}
+                          {moment(event?.eventStartDate).format("MMM")}
                         </span>
                         <span>{moment(event?.startDate).format("YYYY")}</span>
                       </p>
