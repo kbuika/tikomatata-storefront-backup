@@ -12,6 +12,7 @@ import { useRouter } from "next/router"
 import { useTicketsStore } from "@/stores/tickets-store"
 import { errorToast } from "@/lib/utils"
 import { API_BASE_URL } from "@/constants"
+import Head from "next/head"
 
 export default function Echoes() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
@@ -65,11 +66,18 @@ export default function Echoes() {
       ) : (
         <>
           {eventError ? (
-            <main className="flex min-h-screen flex-col items-start justify-start">
+            <main className="flex min-h-screen flex-col items-center justify-center">
               <p>Error. Could not fetch the selected event.</p>
+              <CustomButton className="mt-4">
+                <Link href="/">Go Back</Link>
+              </CustomButton>
             </main>
           ) : (
             <main className="flex min-h-screen flex-col items-start justify-start">
+            <Head>
+              <title>Echoes: City of Love</title>
+              <meta property="og:title" content="Echoes: City of Love" key="title" />
+            </Head>
               <div className="flex w-full flex-col items-center justify-between h-full sm:flex-row sm:items-start">
                 <div className="w-full h-[50vh] px-6 pb-6 pt-8 flex items-start justify-center sm:w-[45%] sm:px-16 sm:pb-16 sm:pt-8 sm:min-h-screen">
                   <div className="h-[22em] w-[25em] sm:h-[40em] sm:w-[35em]">
