@@ -2,10 +2,10 @@ import React, { useState } from "react"
 import { Minus, Plus } from "lucide-react"
 import { Button } from "./ui/button"
 import { useTicketsStore } from "@/stores/tickets-store"
-import { TicketDataType } from "@/types/ticket"
+import { TicketDataType, TicketDataTypeTest } from "@/types/ticket"
 
 interface EventTicketProps {
-  ticket: TicketDataType
+  ticket: TicketDataTypeTest
 }
 
 const TicketCard: React.FC<EventTicketProps> = ({ticket}) => {
@@ -95,13 +95,20 @@ const TicketCard: React.FC<EventTicketProps> = ({ticket}) => {
                         <span className="text-gray-600">KES </span>{ticket?.price}
                       </p>
                       <div className="flex flex-row mt-4 items-center justify-center">
-                        <Button className="border rounded" onClick={() => removeTicket(ticket)} disabled={ticketQuantity === 0}>
+                        {ticket?.quantity === 0 ? (
+                          <p className="font-bold text-red-600">Sold Out</p>
+                        ): (
+                          <>
+                          <Button className="border rounded" onClick={() => removeTicket(ticket)} disabled={ticketQuantity === 0}>
                           <Minus className="cursor-pointer" size={13} />
                         </Button>
                         <p className="flex items-center justify-center w-[2em] text-base">{ticketQuantity}</p>{" "}
                         <Button className="bg-neutralDark rounded focus-visible:bg-neutralDark" onClick={() => addTicket(ticket)}>
                           <Plus className="cursor-pointer" size={13} color="white" />
                         </Button>
+                          </>
+                        )}
+                        
                       </div>
                     </div>
                   </div>

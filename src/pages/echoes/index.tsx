@@ -1,7 +1,7 @@
 import Link from "next/link"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
-import TicketCard from "../../../components/ticket-card"
-import CustomButton from "../../../components/ui/custom-button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
+import TicketCard from "../../components/ticket-card"
+import CustomButton from "../../components/ui/custom-button"
 import { Calendar, Clock2, Loader2, Map } from "lucide-react"
 import DefaultLayout from "@/layouts/default-layout"
 import moment from "moment"
@@ -13,7 +13,7 @@ import { useTicketsStore } from "@/stores/tickets-store"
 import { errorToast } from "@/lib/utils"
 import { API_BASE_URL } from "@/constants"
 
-export default function Events() {
+export default function Echoes() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
   const [selectedEvent, setSelectedEvent] = useState<any>(null)
   const [eventError, setEventError] = useState<any>(null)
@@ -28,7 +28,7 @@ export default function Events() {
       setLoading(true)
       const config = {
         method: "get",
-        url: `https://api.tikomatata.co.ke/api/v1/ticket/event?id=${router?.query?.id}`,
+        url: `https://api.tikomatata.co.ke/api/v1/ticket/event?id=1`,
       }
   
       try {

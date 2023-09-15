@@ -17,3 +17,15 @@ export interface TicketPurchaseType {
     saleStartTime: string
     saleEndTime: string
   }
+
+  export interface TicketDataTypeTest {
+    eventId: number
+    ticketId?: number
+    name: string
+    price: string
+    quantity: number
+    saleStartDate: string
+    saleEndDate: string
+    saleStartTime: string
+    saleEndTime: string
+  }
