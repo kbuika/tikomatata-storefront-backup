@@ -12,6 +12,7 @@ import { useRouter } from "next/router"
 import { useTicketsStore } from "@/stores/tickets-store"
 import { errorToast } from "@/lib/utils"
 import { API_BASE_URL } from "@/constants"
+import Image from "next/image"
 
 export default function Events() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
@@ -78,11 +79,11 @@ export default function Events() {
                   <div className="h-[22em] w-[25em] sm:h-[40em] sm:w-[35em]">
                     <div
                       className="w-full h-[100%] bg-top bg-cover rounded"
-                      style={{
-                        backgroundImage: `url(${selectedEvent?.posterUrl})`,
-                        border: "0.25rem",
-                      }}
-                    ></div>
+                      // style={{
+                      //   backgroundImage: `url(${selectedEvent?.posterUrl})`,
+                      //   border: "0.25rem",
+                      // }}
+                    ><Image src={selectedEvent?.posterUrl} alt="poster" width={100} height={100} className="w-full h-full object-contain"></Image></div>
                   </div>
                 </div>
                 <div className="w-full p-8 border-t-2 sm:min-h-screen sm:w-[55%] sm:border-l-2 sm:border-t-0 sm:p-12">
