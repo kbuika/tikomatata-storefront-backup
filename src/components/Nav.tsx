@@ -31,7 +31,7 @@ const Nav = () => {
         )}
       </Link>
       <div className="md:flex items-center justify-between hidden space-x-8">
-        <Link href="/login" className=" text-gray-400 hover:text-white">
+        <Link href="https://app.tikomatata.com" target="_blank" rel="noopener noreferrer" className=" text-gray-400 hover:text-white">
           <CustomButton>Create Your Event</CustomButton>
         </Link>
       </div>
