@@ -33,6 +33,7 @@ import { PurchaseTicketsFn, VerifyPayment } from "@/api-calls"
 import { errorToast, successToast } from "@/lib/utils"
 import PaymentPending from "@/components/payment-pending"
 import { useSearchParams } from "next/navigation"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 
 const schema = yup.object({
   customerName: yup.string().required("Please enter your name"),
@@ -54,6 +55,7 @@ export default function Checkout() {
   const [openCardModal, setOpenCardModal] = useState(false)
   const [openMpesaModal, setOpenMpesaModal] = useState(false)
   const [openVerifyDialog, setOpenVerifyDialog] = useState(false)
+  const [openPaymentDialog, setOpenPaymentDialog] = useState(false)
   const [paymentState, setPaymentState] = useState("none")
   const [paymentUrl, setPaymentUrl] = useState<string>("")
   const [callbackData, setCallbackData] = useState<any>({})
@@ -76,15 +78,18 @@ export default function Checkout() {
         if (res.status === 200) {
           setCallbackData(res.data)
           setPaymentState("success")
+          setOpenPaymentDialog(false)
           setOpenVerifyDialog(true)
           successToast("Payment successful. Check your email and phone for the tickets.")
         } else {
           setCallbackData(res.data)
           setPaymentState("failure")
+          setOpenPaymentDialog(false)
           setOpenVerifyDialog(true)
         }
       } catch (error) {
         setPaymentState("failure")
+        setOpenPaymentDialog(false)
         setOpenVerifyDialog(true)
         errorToast("Something went wrong while processing your payment, please try again.")
       }
@@ -119,7 +124,8 @@ export default function Checkout() {
       if (res.status === 200) {
         setPaymentUrl(res.data.data.authorization_url)
         // open a new tab with the payment url
-        window.open(res.data.data.authorization_url)
+        // window.open(res.data.data.authorization_url)
+        setOpenPaymentDialog(true)
       }
     } catch (error) {
       errorToast("Something went wrong while processing your order, please try again.")
@@ -525,6 +531,11 @@ export default function Checkout() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
+          <Dialog open={openPaymentDialog} onOpenChange={setOpenPaymentDialog}>
+            <DialogContent className="w-[100vw] h-[100vh]">
+              <iframe src={paymentUrl} className="w-full h-full" />
+            </DialogContent>
+          </Dialog>
         </div>
       </main>
     </DefaultLayout>
