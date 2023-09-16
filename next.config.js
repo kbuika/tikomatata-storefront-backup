@@ -9,6 +9,20 @@ const nextConfig = {
       "images.unsplash.com",
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/echoes",
+        destination: "https://echoes.hustlesasa.shop/",
+        permanent: true,
+      },
+      {
+        source: "/",
+        destination: "https://echoes.hustlesasa.shop/",
+        permanent: true,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
