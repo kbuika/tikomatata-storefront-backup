@@ -8,6 +8,7 @@ import { API_BASE_URL } from "@/constants"
 import { useTicketsStore } from "@/stores/tickets-store"
 import axios from "axios"
 import { useEffect, useState } from "react"
+import Link from "next/link"
 
 type Props = {
   events: Array<EventDataType>
@@ -53,6 +54,9 @@ const Home: React.FC<Props> = () => {
       <div className="mx-12 my-[3em]">
         <h2 className="mt-2 text-2xl ml-[1em] font-medium">Upcoming Events</h2>
         <div className="flex flex-wrap items-start justify-start min-h-[50vh] my-[3em]">
+        <div className="ml-2">
+          <p className="text-lg">Have an issue? <Link href="/contact" className="underline">Contact Us</Link></p>
+        </div>
           {events?.map((event: EventDataType) => (
             <EventCard key={event?.eventId} event={event} />
           ))}

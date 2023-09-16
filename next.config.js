@@ -16,11 +16,6 @@ const nextConfig = {
         destination: "https://echoes.hustlesasa.shop/",
         permanent: true,
       },
-      {
-        source: "/",
-        destination: "https://echoes.hustlesasa.shop/",
-        permanent: true,
-      },
     ]
   },
 }
