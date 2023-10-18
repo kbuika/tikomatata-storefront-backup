@@ -52,7 +52,11 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                       
                       <div className="">
                         <p style={{fontWeight: "bold"}}>{event?.recipientName}</p>
-                        <p style={{marginTop: "2em"}}>{event?.recipientPhoneNumber}</p>
+                        {ticket?.ticketType === "COMPLIMENTARY" ? (
+                          <p>{ticket?.ticketType}</p>
+                        ) : (
+                          <p style={{marginTop: "2em"}}>{event?.recipientPhoneNumber}</p>
+                        )}
                       </div>
                     </div>
                     <div className="ticket-info">
@@ -109,7 +113,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                   />
 
                   <h3 className="text-dark-200 font-bold mt-5">
-                    {ticket?.name}-{event?.eventName}
+                    {ticket?.name || ticket?.ticketType}-{event?.eventName}
                   </h3>
 
                   {/* <p className="text-gray-400 font-light mt-2 text-xs">

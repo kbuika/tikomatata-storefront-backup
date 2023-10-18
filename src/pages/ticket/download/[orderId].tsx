@@ -22,6 +22,7 @@ export default function TicketsOrder() {
       try {
         const response = await axios.request(config)
         if (response.status === 200) {
+          console.log(response.data.data)
           setOrderData(response.data.data)
         } else {
           setOrderError(response.data)
