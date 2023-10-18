@@ -21,7 +21,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
       toPng(ticketRef.current, { cacheBust: false })
         .then((dataUrl) => {
           const link = document.createElement("a")
-          link.download = `${ticket?.name}-${event?.eventName}.png`
+          link.download = `${ticket?.name || ticket?.ticketType}-${event?.eventName}.png`
           link.href = dataUrl
           link.click()
         })
