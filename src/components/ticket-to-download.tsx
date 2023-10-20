@@ -104,7 +104,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
               <div className="h-auto w-full m-2 flex flex-row items-start justify-center">
                 <a className="delay-50 duration-100 bg-successBg p-5 rounded-lg w-60 group" href="">
                   <Image
-                    src={event?.posterUrl}
+                    src={ticket?.ticketUrl}
                     className="w-full rounded shadow"
                     alt=""
                     width={250}
