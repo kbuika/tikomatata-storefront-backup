@@ -28,7 +28,7 @@ export const PurchaseTicketsFn = async (checkoutData: checkoutDataType) => {
   const config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: "https://api.tikomatata.co.ke/api/v1/ticket/pay",
+    url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/pay`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -49,7 +49,7 @@ export const VerifyPayment = async (referenceId: string) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `https://api.tikomatata.co.ke/api/v1/ticket/verify/${referenceId}`,
+    url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/verify/${referenceId}`,
     headers: {
       "Content-Type": "application/json",
     },

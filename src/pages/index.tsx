@@ -9,6 +9,7 @@ import { useTicketsStore } from "@/stores/tickets-store"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import SellOutEventBanner from "@/components/sell-out-event-banner"
 
 type Props = {
   events: Array<EventDataType>
@@ -25,7 +26,7 @@ const Home: React.FC<Props> = () => {
       setLoading(true)
       const config = {
         method: "get",
-        url: `https://api.tikomatata.co.ke/api/v1/event/all?size=40&page=0`,
+        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/event/all?size=40&page=0`,
       }
       try {
         const response = await axios.request(config)
@@ -47,7 +48,7 @@ const Home: React.FC<Props> = () => {
   resetAllTickets()
   return (
     <DefaultLayout noHeader={true} isMain={true}>
-      <main className="home h-[60vh]">
+      <main className="home h-[60vh] bg-beigeLight">
         <Nav />
         <Hero />
       </main>
@@ -61,6 +62,7 @@ const Home: React.FC<Props> = () => {
           ))}
         </div>
       </div>
+      <SellOutEventBanner />
     </DefaultLayout>
   )
 }

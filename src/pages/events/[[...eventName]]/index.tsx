@@ -29,7 +29,7 @@ export default function Events() {
       setLoading(true)
       const config = {
         method: "get",
-        url: `https://api.tikomatata.co.ke/api/v1/ticket/event?id=${router?.query?.id}`,
+        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/event?id=${router?.query?.id}`,
       }
   
       try {
