@@ -1,11 +1,12 @@
 import React from "react"
 import Link from "next/link"
-import MailLogo from "../images/logos/tikomatata.svg"
+import MainLogo from "../images/logos/tikomatata.svg"
 import BrightLogo from "../images/logos/tikomatata-bright.svg"
 import StackedLogo from "../images/logos/tikomatata-stacked.svg"
 import Image from "next/image"
 import CustomButton from "../components/ui/custom-button"
 import { Copyright } from "lucide-react"
+import Header from "./Header"
 
 type Props = {
   children: React.ReactNode
@@ -16,43 +17,62 @@ type Props = {
   isMain?: boolean
 }
 
-const DefaultLayout: React.FC<Props> = ({ children, isMain = false, noHeader = false, noFooter=false }) => {
+const DefaultLayout: React.FC<Props> = ({
+  children,
+  isMain = false,
+  noHeader = false,
+  noFooter = false,
+}) => {
   return (
-    <>
+    <div className="bg-beigeLight">
       <div
-        className={`h-[10vh] flex items-center justify-between px-[60px] sticky top-0 border-b-2 bg-white z-50
+        className={`h-[10vh] flex items-center justify-between w-full px-[60px] sticky top-0 border-b-2 bg-white z-50
          ${noHeader ? "hidden" : "md:flex"}`}
       >
         <Link href="/">
           {isMain ? (
             <Image src={BrightLogo} alt="logo" height={35} width={105} />
           ) : (
-            <Image src={MailLogo} alt="logo" height={35} width={105} />
+            <Image src={MainLogo} alt="logo" height={35} width={105} />
           )}
         </Link>
         <div className="md:flex items-center justify-between hidden space-x-8">
-          <Link href="https://app.tikomatata.com" target="_blank" rel="noopener noreferrer" className=" text-gray-400 hover:text-white">
+          <Link
+            href="https://app.tikomatata.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className=" text-gray-400 hover:text-white"
+          >
             <CustomButton>Create Your Event</CustomButton>
           </Link>
         </div>
       </div>
-      {children}
-      <footer className={`bottom-0 h-[15vh] w-full border-t-2 ${noFooter ? "hidden" : ""}`}>
-        <div className="h-full flex flex-col items-center justify-between bg-successBg text-testPrimary px-[60px] md:flex-row">
-          <div className="flex flex-row items-center h-full mr-8 mt-4">
-            <div className="cursor-pointer text-stone-800 hidden mr-[20px] sm:flex">
-              <Image src={StackedLogo} alt="tikomatata" width={40} height={30} />
+      <main>{children}</main>
+      <footer className={`h-[40vh] w-full ${noFooter ? "hidden" : ""}`}>
+        <div className="p-8 w-full h-full text-dark flex flex-col items-center justify-center">
+          <div className="w-full flex flex-row items-start justify-between mb-4">
+            <div>
+              <h2 className="font-bold text-xl">Resources</h2>
+              <p className="mt-4 text-lg">Terms</p>
+              <p className="mt-4 text-lg">Privacy</p>
+              <p className="mt-4 text-lg">Talk to Us</p>
+              <p className="mt-4 text-lg">Have an issue? Contact Us</p>
             </div>
-            <p className="cursor-pointer underline underline-offset-4" style={{marginRight: "20px", marginLeft:"20px"}}>Terms</p>
-            <p className="cursor-pointer underline underline-offset-4 " style={{marginRight: "20px", marginLeft:"20px"}}>Privacy</p>
-            <p className="cursor-pointer underline underline-offset-4 ml-2"><Link href="/contact">Talk to Us</Link></p>
+            <div>
+              <h2 className="font-bold text-xl">Socials</h2>
+              <p className="mt-4 text-lg">Instagram</p>
+              <p className="mt-4 text-lg">X</p>
+              <p className="mt-4 text-lg">LinkedIn</p>
+              <p className="mt-4 text-lg">Facebook</p>
+            </div>
           </div>
-          <div className="flex flex-row items-center justify-center text-testPrimary font-medium tracking-wide text-center mt-2 max-[1300px]:mt-4 mb-4">
-          © {new Date().getFullYear()} Tikomatata.
+          <div className="mt-8 flex flex-row w-full items-center justify-between">
+            <Image src={MainLogo} alt="tikomatata" width={100} height={100} />
+            <p className="text-lg">© {new Date().getFullYear()} Tikomatata.</p>
           </div>
         </div>
       </footer>
-    </>
+    </div>
   )
 }
 
