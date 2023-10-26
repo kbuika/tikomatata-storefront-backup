@@ -29,7 +29,7 @@ export default function Events() {
       setLoading(true)
       const config = {
         method: "get",
-        url: `https://api.tikomatata.co.ke/api/v1/ticket/event?id=${router?.query?.id}`,
+        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/event?id=${router?.query?.id}`,
       }
   
       try {
@@ -89,7 +89,7 @@ export default function Events() {
                 </div>
                 <div className="w-full p-8 border-t-2 sm:min-h-screen sm:w-[55%] sm:border-l-2 sm:border-t-0 sm:p-12">
                   <div className="flex flex-col">
-                    <h2 className="text-2xl font-semibold text-testPrimary sm:text-4xl">
+                    <h2 className="text-2xl font-semibold text-mainPrimary sm:text-4xl">
                       {selectedEvent?.name}
                     </h2>
                     <p className="text-lg mt-4 flex flex-row items-center text-neutralDark">
@@ -109,13 +109,13 @@ export default function Events() {
                       <TabsList className="bg-none w-full flex justify-start">
                         <TabsTrigger
                           value="tickets"
-                          className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-testPrimary"
+                          className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-mainPrimary"
                         >
                           Tickets
                         </TabsTrigger>
                         <TabsTrigger
                           value="description"
-                          className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-testPrimary"
+                          className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-mainPrimary"
                         >
                           Description
                         </TabsTrigger>

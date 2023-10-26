@@ -4,11 +4,11 @@ import Nav from "@/components/Nav"
 import DefaultLayout from "@/layouts/default-layout"
 import { EventDataType } from "@/types/event"
 import { useEventsStore } from "@/stores/events-store"
-import { API_BASE_URL } from "@/constants"
 import { useTicketsStore } from "@/stores/tickets-store"
 import axios from "axios"
 import { useEffect, useState } from "react"
-import Link from "next/link"
+import SellOutEventBanner from "@/components/sell-out-event-banner"
+import { useOrderStore } from "@/stores/order-store"
 
 type Props = {
   events: Array<EventDataType>
@@ -20,12 +20,13 @@ const Home: React.FC<Props> = () => {
   const [eventsError, setEventsError] = useState<any>(null)
   const setAllEventsStore = useEventsStore((state) => state.setAllEvents)
   const resetAllTickets = useTicketsStore((state) => state.resetAllTickets)
+  const resetOrderDetails = useOrderStore((state) => state.resetOrderDetails)
   useEffect(() => {
     const fetchAllEvents = async () => {
       setLoading(true)
       const config = {
         method: "get",
-        url: `https://api.tikomatata.co.ke/api/v1/event/all?size=40&page=0`,
+        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/event/all?size=40&page=0`,
       }
       try {
         const response = await axios.request(config)
@@ -45,9 +46,10 @@ const Home: React.FC<Props> = () => {
     // return () => {}
   }, [setAllEventsStore])
   resetAllTickets()
+  resetOrderDetails()
   return (
     <DefaultLayout noHeader={true} isMain={true}>
-      <main className="home h-[60vh]">
+      <main className="home h-[60vh] bg-beigeLight">
         <Nav />
         <Hero />
       </main>
@@ -61,6 +63,7 @@ const Home: React.FC<Props> = () => {
           ))}
         </div>
       </div>
+      <SellOutEventBanner />
     </DefaultLayout>
   )
 }

@@ -17,7 +17,7 @@ export default function TicketsOrder() {
       setLoading(true)
       const config = {
         method: "get",
-        url: `https://api.tikomatata.co.ke/api/v1/ticket/download/${router?.query?.orderId}`,
+        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/download/${router?.query?.orderId}`,
       }
       try {
         const response = await axios.request(config)

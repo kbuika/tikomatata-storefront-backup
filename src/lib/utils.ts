@@ -26,3 +26,15 @@ export const successToast = (message: string) => {
     position: toast.POSITION.TOP_RIGHT,
   })
 }
+
+export const generateReferenceCode = (length=12) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let referenceCode = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    referenceCode += characters[randomIndex];
+  }
+
+  return referenceCode;
+}

@@ -17,17 +17,17 @@ export default function Contact() {
                 Email
               </h3>
               <p className="mb-4 font-light text-gray-500 dark:text-gray-400 sm:text-xl">
-                Send us an email at{" "}
-                <a
-                  href="mailto:info@tikomatata.com">support@tikomatata.com</a></p></li>
-                  <li className="mb-8 flex flex-col items-center justify-center">
+                Send us an email at <a href="mailto:info@tikomatata.com">support@tikomatata.com</a>
+              </p>
+            </li>
+            <li className="mb-8 flex flex-col items-center justify-center">
               <h3 className="mb-4 text-xl tracking-tight font-extrabold text-gray-900 dark:text-white">
                 Phone
               </h3>
               <p className="mb-4 font-light text-gray-500 dark:text-gray-400 sm:text-xl">
-                Call us at{" "}
-                <a
-                  href="phone:+254740459940">0740459940</a></p></li>
+                Call us at <a href="phone:+254740459940">0740459940</a>
+              </p>
+            </li>
           </ul>
         </div>
       </section>
