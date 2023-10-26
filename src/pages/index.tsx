@@ -4,12 +4,11 @@ import Nav from "@/components/Nav"
 import DefaultLayout from "@/layouts/default-layout"
 import { EventDataType } from "@/types/event"
 import { useEventsStore } from "@/stores/events-store"
-import { API_BASE_URL } from "@/constants"
 import { useTicketsStore } from "@/stores/tickets-store"
 import axios from "axios"
 import { useEffect, useState } from "react"
-import Link from "next/link"
 import SellOutEventBanner from "@/components/sell-out-event-banner"
+import { useOrderStore } from "@/stores/order-store"
 
 type Props = {
   events: Array<EventDataType>
@@ -21,6 +20,7 @@ const Home: React.FC<Props> = () => {
   const [eventsError, setEventsError] = useState<any>(null)
   const setAllEventsStore = useEventsStore((state) => state.setAllEvents)
   const resetAllTickets = useTicketsStore((state) => state.resetAllTickets)
+  const resetOrderDetails = useOrderStore((state) => state.resetOrderDetails)
   useEffect(() => {
     const fetchAllEvents = async () => {
       setLoading(true)
@@ -46,6 +46,7 @@ const Home: React.FC<Props> = () => {
     // return () => {}
   }, [setAllEventsStore])
   resetAllTickets()
+  resetOrderDetails()
   return (
     <DefaultLayout noHeader={true} isMain={true}>
       <main className="home h-[60vh] bg-beigeLight">

@@ -1,26 +1,9 @@
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
-import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import TicketCard from "../../components/ticket-card"
 import CustomButton from "../../components/ui/custom-button"
 import defaultImage from "../../images/default.jpg"
 import KenyaIcon from "../../images/kenya.png"
-import { Loader2, BadgeCheck } from "lucide-react"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "../../components/ui/alert-dialog"
-import { Button } from "../../components/ui/button"
-import PaymentSuccess from "../../components/payment-success"
-import PaymentFailure from "../../components/payment-failure"
 import DefaultLayout from "@/layouts/default-layout"
 import { useTicketsStore } from "@/stores/tickets-store"
 import { TicketPurchaseType } from "@/types/ticket"
@@ -29,11 +12,12 @@ import moment from "moment"
 import * as yup from "yup"
 import { SubmitHandler, set, useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { PurchaseTicketsFn, VerifyPayment } from "@/api-calls"
-import { errorToast, successToast } from "@/lib/utils"
-import PaymentPending from "@/components/payment-pending"
-import { useSearchParams } from "next/navigation"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { PurchaseTicketsFn } from "@/api-calls"
+import { errorToast, generateReferenceCode } from "@/lib/utils"
+import { usePaystackPayment } from "react-paystack"
+import { PaystackHookType } from "@/types"
+import { useRouter } from "next/navigation"
+import { useOrderStore } from "@/stores/order-store"
 
 const schema = yup.object({
   customerName: yup.string().required("Please enter your name"),
@@ -51,53 +35,26 @@ const schema = yup.object({
     .required("Please enter your phone number"),
 })
 
+type Currency = "KES"
+type phone = number | string
+
+const config = {
+  publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+}
+
 export default function Checkout() {
-  const [openCardModal, setOpenCardModal] = useState(false)
-  const [openMpesaModal, setOpenMpesaModal] = useState(false)
-  const [openVerifyDialog, setOpenVerifyDialog] = useState(false)
-  const [openPaymentDialog, setOpenPaymentDialog] = useState(false)
-  const [paymentState, setPaymentState] = useState("none")
-  const [paymentUrl, setPaymentUrl] = useState<string>("")
-  const [callbackData, setCallbackData] = useState<any>({})
+  const [paymentReference, setPaymentReference] = useState("")
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
-  const serviceFee = useTicketsStore((state) => state.serviceFee)
-  const totalTicketsPriceWithServiceFee = useTicketsStore(
-    (state) => state.totalTicketsPriceWithServiceFee,
-  )
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
+  const setOrderDetails = useOrderStore((state) => state.setOrderDetails)
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
+  const router = useRouter()
 
-  const searchParams = useSearchParams()
-  const referenceId = searchParams.get("reference")
-  const trxref = searchParams.get("trxref")
   useEffect(() => {
-    const verifyTransactionFn = async (referenceId: string) => {
-      try {
-        const res = await VerifyPayment(referenceId)
-        if (res.status === 200) {
-          setCallbackData(res.data)
-          setPaymentState("success")
-          setOpenPaymentDialog(false)
-          setOpenVerifyDialog(true)
-          successToast("Payment successful. Check your email and phone for the tickets.")
-        } else {
-          setCallbackData(res.data)
-          setPaymentState("failure")
-          setOpenPaymentDialog(false)
-          setOpenVerifyDialog(true)
-        }
-      } catch (error) {
-        setPaymentState("failure")
-        setOpenPaymentDialog(false)
-        setOpenVerifyDialog(true)
-        errorToast("Something went wrong while processing your payment, please try again.")
-      }
-    }
-    if (referenceId && trxref) {
-      verifyTransactionFn(referenceId)
-    }
-  }, [referenceId, trxref])
+    const paymentRef = generateReferenceCode()
+    setPaymentReference(paymentRef)
+  },[])
 
   const {
     register,
@@ -112,40 +69,59 @@ export default function Checkout() {
   const customerEmail = watch("customerEmail")
 
   const PayForTickets: SubmitHandler<any> = async (data) => {
-    setPaymentState("pending")
     data = {
       ...data,
       eventId: selectedEvent?.eventId,
       tickets: selectedTickets,
       totalPrice: totalTicketsPrice,
+      orderReference: paymentReference,
     }
+    setOrderDetails({...data, datePaid: `${moment().format("Do MMM YY")}`})
     try {
       const res = await PurchaseTicketsFn(data)
       if (res.status === 200) {
-        setPaymentUrl(res.data.data.authorization_url)
-        // open a new tab with the payment url
-        // window.open(res.data.data.authorization_url)
-        setOpenPaymentDialog(true)
+        // TODO: Nothing here since we are using paystack popup
       }
     } catch (error) {
       errorToast("Something went wrong while processing your order, please try again.")
     }
   }
 
-  const validateCardForm = () => {
+  const validateForm = () => {
     if (customerEmail === "" || customerPhone === "") {
       errorToast("Please fill in your name, email and phone number")
-      return
+      return false
     }
-    setOpenCardModal(true)
+    return true
   }
 
-  const validateMpesaForm = () => {
-    if (customerEmail === "" || customerPhone === "") {
-      errorToast("Please fill in your name, email and phone number")
-      return
+  const handlePaystackSuccess = (reference: any) => {
+    if(reference.status === "success"){
+      router.push("/order/success")
     }
-    setOpenMpesaModal(true)
+  }
+
+  const handlePaystackClose = () => {
+    errorToast("Payment was cancelled! Please confirm your details and try again.")
+  }
+
+  const triggerPayment = () => {
+    validateForm()
+    handleSubmit(PayForTickets)()
+  }
+
+  const componentProps = {
+    ...config,
+    reference: paymentReference,
+    text: `Confirm and Pay KES ${totalTicketsPrice}`,
+    onSuccess: (reference: any) => handlePaystackSuccess(reference),
+    onClose: handlePaystackClose,
+    currency: "KES" as Currency | undefined,
+    amount: totalTicketsPrice * 100,
+    email: customerEmail,
+    label: `Confirm and Pay KES ${totalTicketsPrice}`,
+    phone: `0${customerPhone}` as phone,
+    "data-custom-button": "something something",
   }
 
   return (
@@ -202,7 +178,6 @@ export default function Checkout() {
                   required
                   className="h-[50px] bg-white appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                   placeholder="Name"
-                  defaultValue={callbackData?.recipientName ?? ""}
                   {...register("customerName", { required: true })}
                 ></input>
               </div>
@@ -218,8 +193,6 @@ export default function Checkout() {
                   required
                   className="h-[50px] bg-white appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                   placeholder="Email Address"
-                  // value={customerEmail ?? callbackData?.recipientEmail ?? ""}
-                  defaultValue={callbackData?.recipientEmail ?? ""}
                   {...register("customerEmail", { required: true })}
                 ></input>
               </div>
@@ -257,22 +230,20 @@ export default function Checkout() {
               <TabsList className="bg-none w-full flex justify-start">
                 <TabsTrigger
                   value="mpesa"
-                  className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-testPrimary"
+                  className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-mainPrimary"
                 >
                   Mpesa
                 </TabsTrigger>
                 <TabsTrigger
                   value="card"
-                  className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-testPrimary"
+                  className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-mainPrimary"
                 >
                   Card
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="mpesa">
                 <div className="h-auto w-full flex flex-col items-center">
-                  {paymentState === "none" && (
-                    <>
-                      {/* <div className="w-full mt-[16px]">
+                  {/* <div className="w-full mt-[16px]">
                         <div>
                           <div className="flex items-center">
                             <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l border border-hidden-left border-gray-600">
@@ -297,247 +268,61 @@ export default function Checkout() {
                           )}
                         </div>
                       </div> */}
-                      <p className="mt-[20px] text-gray-500">
-                        Please ensure you have your phone near you. You will receive a prompt on the
-                        phone number you have provided above.
-                      </p>
-                      <div className="w-full mt-[20px]">
-                        <AlertDialog open={openMpesaModal} onOpenChange={setOpenMpesaModal}>
-                          {/* <AlertDialogTrigger asChild> */}
-                          <CustomButton
-                            type="submit"
-                            className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
-                            onClick={validateMpesaForm}
-                          >
-                            {false ? (
-                              <>
-                                Processing <Loader2 size={22} className="animate-spin ml-4" />
-                              </>
-                            ) : (
-                              `Pay KES ${totalTicketsPrice}`
-                            )}
-                          </CustomButton>
-                          {/* </AlertDialogTrigger> */}
-                          <AlertDialogContent className="bg-white rounded">
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Confirm Email and Phone</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Confirm that the email and phone number are correct before
-                                proceeding.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <div className="h-auto w-full flex flex-col items-center">
-                              <div className="w-full mt-[4px] text-neutralDark">
-                                <div>
-                                  <input
-                                    id="email"
-                                    type="email"
-                                    required
-                                    className="h-[50px] bg-white appearance-none rounded relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                                    placeholder="Email Address"
-                                    value={customerEmail}
-                                    {...register("customerEmail", { required: true })}
-                                  ></input>
-                                </div>
-                                {errors.customerEmail && (
-                                  <span className="text-criticalRed">
-                                    {errors.customerEmail?.message}
-                                  </span>
-                                )}
-                              </div>
-                              <div className="w-full mt-[16px]">
-                                <div>
-                                  <div className="flex items-center">
-                                    <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l border border-hidden-left border-gray-600">
-                                      <Image src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
-                                      +254
-                                    </span>
-                                    <input
-                                      id="phone"
-                                      type="text"
-                                      required
-                                      className="w-3/4 h-[50px] bg-white appearance-none rounded-r relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                                      placeholder="7XXXXXXXX"
-                                      autoComplete="nope"
-                                      value={customerPhone}
-                                      {...register("customerPhone", { required: true })}
-                                    ></input>
-                                  </div>
-                                  {errors.customerPhone && (
-                                    <span className="text-criticalRed">
-                                      {errors.customerPhone?.message}
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel className="rounded">Cancel</AlertDialogCancel>
-                              <CustomButton
-                                type="submit"
-                                className="h-[40px] group relative w-auto flex justify-center items-center text-base font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2"
-                                onClick={handleSubmit(PayForTickets)}
-                              >
-                                <AlertDialogAction className="bg-transparent w-full hover:bg-transparent">
-                                  Complete Payment
-                                </AlertDialogAction>
-                              </CustomButton>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    </>
-                  )}
-                  {paymentState === "success" && (
-                    <PaymentSuccess email={customerEmail} callbackData={callbackData} />
-                  )}
-                  {paymentState === "failure" && (
-                    <PaymentFailure setPaymentState={setPaymentState} />
-                  )}
-                  {paymentState === "pending" && (
-                    <PaymentPending setPaymentState={setPaymentState} paymentUrl={paymentUrl} />
-                  )}
+                  <p className="mt-[20px] text-gray-500">
+                    Please ensure you have your phone near you. You will receive a prompt on the
+                    phone number you have provided above.
+                  </p>
+                  <div className="w-full mt-[20px]">
+                    <PaystackHookExample
+                      payForTickets={triggerPayment}
+                      onSuccess={handlePaystackSuccess}
+                      onClose={handlePaystackClose}
+                      config={componentProps}
+                      validateForm={validateForm}
+                      paymentMethod="mobile_money"
+                    />
+                  </div>
                 </div>
               </TabsContent>
               <TabsContent value="card">
                 <div className="pt-4">
-                  {paymentState === "none" && (
-                    <div className="w-full mt-[20px]">
-                      <AlertDialog open={openCardModal} onOpenChange={setOpenCardModal}>
-                        <CustomButton
-                          type="submit"
-                          className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
-                          onClick={validateCardForm}
-                        >
-                          {false ? (
-                            <>
-                              Processing <Loader2 size={22} className="animate-spin ml-4" />
-                            </>
-                          ) : (
-                            `Pay KES ${totalTicketsPrice}`
-                          )}
-                        </CustomButton>
-                        <AlertDialogContent className="bg-white">
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Confirm Email and Phone</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Confirm that the email and phone number are correct before proceeding.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <div className="h-auto w-full flex flex-col items-center">
-                            <div className="w-full mt-[4px] text-neutralDark">
-                              <div>
-                                <input
-                                  id="email"
-                                  type="email"
-                                  required
-                                  className="h-[50px] bg-white appearance-none rounded relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                                  placeholder="Email Address"
-                                  value={customerEmail}
-                                  {...register("customerEmail", { required: true })}
-                                ></input>
-                              </div>
-                              {errors.customerEmail && (
-                                <span className="text-criticalRed">
-                                  {errors.customerEmail?.message}
-                                </span>
-                              )}
-                            </div>
-                            <div className="w-full mt-[16px]">
-                              <div>
-                                <div className="flex items-center">
-                                  <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l border border-hidden-left border-gray-600">
-                                    <Image src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
-                                    +254
-                                  </span>
-                                  <input
-                                    id="phone"
-                                    type="text"
-                                    required
-                                    className="w-3/4 h-[50px] bg-white appearance-none rounded-r relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                                    placeholder="Phone number"
-                                    autoComplete="nope"
-                                    value={customerPhone}
-                                    {...register("customerPhone", { required: true })}
-                                  ></input>
-                                </div>
-                                {errors.customerPhone && (
-                                  <span className="text-criticalRed">
-                                    {errors.customerPhone?.message}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel className="rounded">Cancel</AlertDialogCancel>
-                            <CustomButton
-                              type="submit"
-                              className="h-[40px] group relative w-auto flex justify-center items-center text-base font-medium rounded text-black bg-mainPrimary focus:outline-none focus:ring-2 focus:ring-offset-2"
-                            >
-                              <AlertDialogAction
-                                className="bg-transparent rounded w-full hover:bg-transparent "
-                                onClick={handleSubmit(PayForTickets)}
-                              >
-                                Complete Payment
-                              </AlertDialogAction>
-                            </CustomButton>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  )}
-                  {paymentState === "success" && (
-                    <PaymentSuccess email={customerEmail} callbackData={callbackData} />
-                  )}
-                  {paymentState === "failure" && (
-                    <PaymentFailure setPaymentState={setPaymentState} />
-                  )}
-                  {paymentState === "pending" && (
-                    <PaymentPending setPaymentState={setPaymentState} paymentUrl={paymentUrl} />
-                  )}
+                  <div className="w-full mt-[20px]">
+                  <PaystackHookExample
+                      payForTickets={triggerPayment}
+                      onSuccess={handlePaystackSuccess}
+                      onClose={handlePaystackClose}
+                      config={componentProps}
+                      validateForm={validateForm}
+                      paymentMethod="card"
+
+                    />
+                  </div>
                 </div>
               </TabsContent>
             </Tabs>
           </div>
-          <AlertDialog open={openVerifyDialog} onOpenChange={setOpenVerifyDialog}>
-            <AlertDialogContent className="bg-white rounded">
-              <AlertDialogHeader className="flex items-center">
-                {paymentState === "success" && (
-                  <AlertDialogTitle>Woot! 🎉 Payment Successful 🎉</AlertDialogTitle>
-                )}
-                {paymentState === "failure" && (
-                  <AlertDialogTitle>Ouch! Payment Failed </AlertDialogTitle>
-                )}
-                <AlertDialogDescription className="w-full flex items-center">
-                  {paymentState === "success" && (
-                    <PaymentSuccess
-                      email={customerEmail}
-                      callbackData={callbackData}
-                      fullWidth={true}
-                    />
-                  )}
-                  {paymentState === "failure" && (
-                    <PaymentFailure setPaymentState={setPaymentState} fullWidth={true} />
-                  )}
-                  {paymentState === "pending" && (
-                    <PaymentPending setPaymentState={setPaymentState} paymentUrl={paymentUrl} />
-                  )}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-
-              <AlertDialogFooter className="mt-2">
-                <AlertDialogCancel className="rounded">Close</AlertDialogCancel>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-          <Dialog open={openPaymentDialog} onOpenChange={setOpenPaymentDialog}>
-            <DialogContent className="w-[100vw] h-[100vh]">
-              <iframe src={paymentUrl} className="w-full h-full" />
-            </DialogContent>
-          </Dialog>
         </div>
       </main>
     </DefaultLayout>
+  )
+}
+
+const PaystackHookExample = ({ onSuccess, onClose, config, payForTickets, validateForm, paymentMethod }: PaystackHookType) => {
+  const initializePayment = usePaystackPayment({...config, channels: [paymentMethod]})
+  return (
+    <div>
+      <CustomButton
+        type="submit"
+        className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
+        onClick={() => {
+          payForTickets()
+          if(validateForm()){
+            initializePayment(onSuccess, onClose)
+          }
+        }}
+      >
+        Confirm and Pay {config.amount / 100}
+      </CustomButton>
+    </div>
   )
 }
