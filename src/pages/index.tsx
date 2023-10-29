@@ -49,15 +49,13 @@ const Home: React.FC<Props> = () => {
   resetOrderDetails()
   return (
     <DefaultLayout noHeader={true} isMain={true}>
-      <main className="home h-[60vh] bg-beigeLight">
+      <main className="home h-[414px] bg-beigeLight">
         <Nav />
         <Hero />
       </main>
-      <div className="mx-12 my-[3em]">
-        <h2 className="mt-2 text-2xl ml-[1em] font-medium">Upcoming Events</h2>
-        <div className="flex flex-wrap items-start justify-start min-h-[50vh] my-[3em]">
-        <div className="ml-2">
-        </div>
+      <div className="mx-8">
+        <h2 className="my-[24px] text-2xl ml-[1em] font-bold">Upcoming Events</h2>
+        <div className="flex w-full flex-wrap items-start justify-start min-h-[50vh] mb-[3em]">
           {events?.map((event: EventDataType) => (
             <EventCard key={event?.eventId} event={event} />
           ))}
@@ -69,5 +67,3 @@ const Home: React.FC<Props> = () => {
 }
 
 export default Home
-
-

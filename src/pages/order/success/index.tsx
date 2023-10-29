@@ -30,7 +30,7 @@ export default function SuccessOrder() {
               className="w-full h-full object-cover rounded-xl"
             />
           </div>
-          <div className="mt-4 items-start w-[20em] hidden sm:flex">
+          <div className="mt-4 items-start w-[20em] hidden sm:flex sm:flex-col">
             <h2 className="text-xl font-semibold">{selectedEvent?.name}</h2>
             <p className="text-base mt-2 flex flex-row items-center">
               {moment(selectedEvent?.startDate).format("ddd Do MMMM")} at{" "}

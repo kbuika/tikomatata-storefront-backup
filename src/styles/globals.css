@@ -86,11 +86,25 @@
 }
 
 .home {
-	background-image: url("./../images/heroimage.jpg");
+	background-image: url("./../images/echoes-banner.png");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
 	background-blend-mode: multiply;
+	height: 414px;
+}
+
+.hero-text {
+	color: 'white';
+	font-size: 48px;
+	font-family: 'Trade Winds';
+	font-weight: '400';
+	word-wrap: 'break-word';
+	text-align: center;
+
+	@media (min-width: 768px) { 
+		font-size: 60px;
+	 }
 }
 
 
