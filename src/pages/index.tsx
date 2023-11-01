@@ -49,7 +49,7 @@ const Home: React.FC<Props> = () => {
   resetOrderDetails()
   return (
     <DefaultLayout noHeader={true} isMain={true}>
-      <main className="home h-[414px] bg-beigeLight">
+      <main className="home h-[414px] bg-beigeLight md:h-[65vh]">
         <Nav />
         <Hero />
       </main>

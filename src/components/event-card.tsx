@@ -25,7 +25,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
     >
       <div className="w-full h-[70%] rounded pt-[8px] px-[8px]">
         <div
-          className="w-full h-full bg-cover bg-top rounded-[8px]"
+          className="w-full h-full bg-cover bg-top rounded-t-[8px]"
           style={{
             backgroundImage: `url(${event?.posterUrl})`,
             border: "0.25rem",
