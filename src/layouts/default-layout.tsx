@@ -26,7 +26,7 @@ const DefaultLayout: React.FC<Props> = ({
   return (
     <div className="bg-beigeLight">
       <div
-        className={`h-[10vh] flex items-center justify-between w-full px-[60px] sticky top-0 border-b-2 bg-white z-50
+        className={`h-[10vh] flex items-center justify-between w-full px-[24px] sticky top-0 border-b-2 bg-white z-50
          ${noHeader ? "hidden" : "md:flex"}`}
       >
         <Link href="/">
@@ -48,7 +48,7 @@ const DefaultLayout: React.FC<Props> = ({
         </div>
       </div>
       <main>{children}</main>
-      <footer className={`footer-container md:hidden h-[40vh] w-full flex items-center justify-center min-[768px]:hidden  ${noFooter ? "hidden" : ""}`}>
+      <footer className={`footer-container h-[40vh] w-full flex items-center justify-center min-[768px]:hidden  ${noFooter ? "hidden" : ""}`}>
         <div className="main-footer-div p-8 w-full h-full text-dark flex flex-col items-center justify-center md:w-[50%]">
           <div className="w-full flex flex-row items-start justify-between mb-4">
             <div>
