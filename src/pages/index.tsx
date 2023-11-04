@@ -9,6 +9,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import SellOutEventBanner from "@/components/sell-out-event-banner"
 import { useOrderStore } from "@/stores/order-store"
+import Head from "next/head"
 
 type Props = {
   events: Array<EventDataType>
@@ -49,6 +50,29 @@ const Home: React.FC<Props> = () => {
   resetOrderDetails()
   return (
     <DefaultLayout noHeader={true} isMain={true}>
+      <Head>
+        <title>Tikomatata | touch grass!</title>
+        <meta
+          name="description"
+          content="Where Every Event is an Experience, and Every Experience is Extraordinary "
+        />
+        <link rel="icon" href="/favicon.ico" />
+        <meta property="og:title" content="Tikomatata | touch grass!" />
+        <meta
+          property="og:description"
+          content="Where Every Event is an Experience, and Every Experience is Extraordinary"
+        />
+        <meta
+          property="og:image"
+          content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
+        />
+        <meta property="twitter:title" content="Tikomatata | touch grass!" />
+        <meta property="twitter:description" content="Where Every Event is an Experience, and Every Experience is Extraordinary" />
+        <meta
+          property="twitter:image"
+          content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
+        />
+      </Head>
       <main className="home h-[414px] bg-beigeLight md:h-[65vh]">
         <Nav />
         <Hero />
