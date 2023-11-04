@@ -19,6 +19,7 @@ import CustomButton from "../../components/ui/custom-button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 import defaultImage from "../../images/default.jpg"
 import KenyaIcon from "../../images/kenya.png"
+import { PaystackProps } from "react-paystack/dist/types";
 
 const schema = yup.object({
   customerName: yup.string().required("Please enter your name"),
@@ -96,13 +97,12 @@ export default function Checkout() {
     text: `Confirm and Pay KES ${totalTicketsPrice}`,
     onSuccess: (reference: any) => handlePaystackSuccess(reference),
     onClose: handlePaystackClose,
-    currency: "KES" as Currency | undefined,
+    currency: "KES" as Currency,
     amount: totalTicketsPrice * 100,
     email: customerEmail,
     label: `Confirm and Pay KES ${totalTicketsPrice}`,
     phone: `0${customerPhone}` as phone,
-    publicKey: "pk_test_e84aeac507b09226460794410772ade3aad4574c",
-  }
+  } as PaystackProps
 
   return (
     <DefaultLayout>
