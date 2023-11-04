@@ -1,23 +1,25 @@
-import { useState, useEffect } from "react"
+"use client"
+import { PurchaseTicketsFn } from "@/api-calls"
+import DefaultLayout from "@/layouts/default-layout"
+import { errorToast, generateReferenceCode } from "@/lib/utils"
+import { useEventsStore } from "@/stores/events-store"
+import { useOrderStore } from "@/stores/order-store"
+import { useTicketsStore } from "@/stores/tickets-store"
+import { PaystackHookType } from "@/types"
+import { TicketPurchaseType } from "@/types/ticket"
+import { yupResolver } from "@hookform/resolvers/yup"
+import moment from "moment"
 import Image from "next/image"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { usePaystackPayment } from "react-paystack"
+import * as yup from "yup"
 import CustomButton from "../../components/ui/custom-button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 import defaultImage from "../../images/default.jpg"
 import KenyaIcon from "../../images/kenya.png"
-import DefaultLayout from "@/layouts/default-layout"
-import { useTicketsStore } from "@/stores/tickets-store"
-import { TicketPurchaseType } from "@/types/ticket"
-import { useEventsStore } from "@/stores/events-store"
-import moment from "moment"
-import * as yup from "yup"
-import { SubmitHandler, set, useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { PurchaseTicketsFn } from "@/api-calls"
-import { errorToast, generateReferenceCode } from "@/lib/utils"
-import { usePaystackPayment } from "react-paystack"
-import { PaystackHookType } from "@/types"
-import { useRouter } from "next/navigation"
-import { useOrderStore } from "@/stores/order-store"
+import { PaystackProps } from "react-paystack/dist/types";
 
 const schema = yup.object({
   customerName: yup.string().required("Please enter your name"),
@@ -39,15 +41,15 @@ type Currency = "KES"
 type phone = number | string
 
 const config = {
-  publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+  publicKey: "pk_test_e84aeac507b09226460794410772ade3aad4574c",
 }
 
 export default function Checkout() {
-  const [paymentReference, setPaymentReference] = useState("")
+  const [paymentReference, setPaymentReference] = useState<string>("")
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
-  const setOrderDetails = useOrderStore((state) => state.setOrderDetails)
+  const [initialized, setInitialized] = useState<boolean>(false)
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
   const router = useRouter()
 
@@ -68,24 +70,6 @@ export default function Checkout() {
   const customerPhone = watch("customerPhone")
   const customerEmail = watch("customerEmail")
 
-  const PayForTickets: SubmitHandler<any> = async (data) => {
-    data = {
-      ...data,
-      eventId: selectedEvent?.eventId,
-      tickets: selectedTickets,
-      totalPrice: totalTicketsPrice,
-      orderReference: paymentReference,
-    }
-    setOrderDetails({...data, datePaid: `${moment().format("Do MMM YY")}`})
-    try {
-      const res = await PurchaseTicketsFn(data)
-      if (res.status === 200) {
-        // TODO: Nothing here since we are using paystack popup
-      }
-    } catch (error) {
-      errorToast("Something went wrong while processing your order, please try again.")
-    }
-  }
 
   const validateForm = () => {
     if (customerEmail === "" || customerPhone === "") {
@@ -96,18 +80,15 @@ export default function Checkout() {
   }
 
   const handlePaystackSuccess = (reference: any) => {
+    setInitialized(false)
     if(reference.status === "success"){
       router.push("/order/success")
     }
   }
 
   const handlePaystackClose = () => {
+    setInitialized(false)
     errorToast("Payment was cancelled! Please confirm your details and try again.")
-  }
-
-  const triggerPayment = () => {
-    validateForm()
-    handleSubmit(PayForTickets)()
   }
 
   const componentProps = {
@@ -116,13 +97,12 @@ export default function Checkout() {
     text: `Confirm and Pay KES ${totalTicketsPrice}`,
     onSuccess: (reference: any) => handlePaystackSuccess(reference),
     onClose: handlePaystackClose,
-    currency: "KES" as Currency | undefined,
+    currency: "KES" as Currency,
     amount: totalTicketsPrice * 100,
     email: customerEmail,
     label: `Confirm and Pay KES ${totalTicketsPrice}`,
     phone: `0${customerPhone}` as phone,
-    "data-custom-button": "something something",
-  }
+  } as PaystackProps
 
   return (
     <DefaultLayout>
@@ -274,12 +254,16 @@ export default function Checkout() {
                   </p>
                   <div className="w-full mt-[20px]">
                     <PaystackHookExample
-                      payForTickets={triggerPayment}
+                      // payForTickets={triggerPayment}
                       onSuccess={handlePaystackSuccess}
                       onClose={handlePaystackClose}
                       config={componentProps}
                       validateForm={validateForm}
                       paymentMethod="mobile_money"
+                      paymentReference={paymentReference}
+                      handleSubmit={handleSubmit}
+                      initialized={initialized}
+                      setInitialized={setInitialized}
                     />
                   </div>
                 </div>
@@ -288,13 +272,16 @@ export default function Checkout() {
                 <div className="pt-4">
                   <div className="w-full mt-[20px]">
                   <PaystackHookExample
-                      payForTickets={triggerPayment}
+                      // payForTickets={triggerPayment}
                       onSuccess={handlePaystackSuccess}
                       onClose={handlePaystackClose}
                       config={componentProps}
                       validateForm={validateForm}
                       paymentMethod="card"
-
+                      paymentReference={paymentReference}
+                      handleSubmit={handleSubmit}
+                      initialized={initialized}
+                      setInitialized={setInitialized}
                     />
                   </div>
                 </div>
@@ -307,21 +294,42 @@ export default function Checkout() {
   )
 }
 
-const PaystackHookExample = ({ onSuccess, onClose, config, payForTickets, validateForm, paymentMethod }: PaystackHookType) => {
-  const initializePayment = usePaystackPayment({...config, channels: [paymentMethod]})
+const PaystackHookExample = ({ onSuccess, onClose, config, payForTickets, validateForm, paymentMethod, paymentReference, handleSubmit, initialized, setInitialized }: PaystackHookType) => {
+  const selectedTickets = useTicketsStore((state) => state.selectedTickets)
+  const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
+  const selectedEvent = useEventsStore((state) => state.selectedEvent)
+  const setOrderDetails = useOrderStore((state) => state.setOrderDetails)
+  const initializePayment = usePaystackPayment({...config})
+
+  const PayForTickets: SubmitHandler<any> = async (data) => {
+    setInitialized(true)
+    data = {
+      ...data,
+      eventId: selectedEvent?.eventId,
+      tickets: selectedTickets,
+      totalPrice: totalTicketsPrice,
+      orderReference: paymentReference,
+    }
+    setOrderDetails({...data, datePaid: `${moment().format("Do MMM YY")}`})
+    try {
+      const res = await PurchaseTicketsFn(data)
+      if(res.status === 200){
+        initializePayment(onSuccess, onClose)
+      }
+    } catch (error) {
+      errorToast("Something went wrong while processing your order, please try again.")
+    }
+  }
+
   return (
     <div>
       <CustomButton
         type="submit"
         className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
-        onClick={() => {
-          payForTickets()
-          if(validateForm()){
-            initializePayment(onSuccess, onClose)
-          }
-        }}
+        onClick={handleSubmit(PayForTickets)}
       >
-        Confirm and Pay {config.amount / 100}
+        {initialized ? "Processing..." : <>Confirm and Pay KES {config.amount / 100}</>}
+        
       </CustomButton>
     </div>
   )

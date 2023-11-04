@@ -1,3 +1,4 @@
+"use client"
 import DefaultLayout from "@/layouts/default-layout"
 import { errorToast } from "@/lib/utils"
 import { useTicketsStore } from "@/stores/tickets-store"
