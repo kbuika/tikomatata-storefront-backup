@@ -9,6 +9,7 @@ interface checkoutDataType {
   customerPhone: string
   eventId?: string
   totalPrice?: number
+  orderReference: string
 }
 
 export const PurchaseTicketsFn = async (checkoutData: checkoutDataType) => {
@@ -23,6 +24,7 @@ export const PurchaseTicketsFn = async (checkoutData: checkoutDataType) => {
     email: checkoutData?.customerEmail,
     name: checkoutData?.customerName,
     phoneNumber: `254${checkoutData?.customerPhone}`,
+    reference: checkoutData?.orderReference,
   }
 
   const config = {
