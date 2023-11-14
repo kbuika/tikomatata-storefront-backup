@@ -34,7 +34,7 @@ export default function TicketsOrder() {
       }
     }
     fetchSelectedOrder()
-    // return () => {}
+    return () => {}
   }, [router?.query?.orderId])
 
   return (
@@ -68,7 +68,6 @@ export default function TicketsOrder() {
                         key={ticket.ticketId}
                         ticket={ticket}
                         event={orderData}
-                        ticketRef={ticketRef}
                       />
                     ))}
                   </div>
