@@ -6,6 +6,7 @@ import moment from "moment"
 import Image from "next/image"
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from "./ui/alert-dialog"
+import { Avatar, AvatarImage } from "./ui/avatar"
 import CustomButton from "./ui/custom-button"
 
 export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
@@ -27,7 +28,9 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
         })
         .catch((err) => {
           console.log(err)
-          errorToast("An error occured while downloading your ticket. If the issue persists, please contact us.")
+          errorToast(
+            "An error occured while downloading your ticket. If the issue persists, please contact us.",
+          )
         })
         .finally(() => {
           setOpen(false)
@@ -48,14 +51,21 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
               <div className="ticketDoc my-2" ref={ticketRef}>
                 <div className="ticket-image-card">
                   <div className="ticket-image-left">
-                    <div style={{padding: "2em", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
-                      
+                    <div
+                      style={{
+                        padding: "2em",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
                       <div className="">
-                        <p style={{fontWeight: "bold"}}>{event?.recipientName}</p>
+                        <p style={{ fontWeight: "bold" }}>{event?.recipientName}</p>
                         {ticket?.ticketType === "COMPLIMENTARY" ? (
                           <p>{ticket?.ticketType}</p>
                         ) : (
-                          <p style={{marginTop: "2em"}}>{event?.recipientPhoneNumber}</p>
+                          <p style={{ marginTop: "2em" }}>{event?.recipientPhoneNumber}</p>
                         )}
                       </div>
                     </div>
@@ -86,13 +96,19 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                     <div className="right-info-container">
                       <p className="ticket-number">{ticket?.name}</p>
                       <div className="barcode">
-                        <Image
+                        {/* <img
                           src={ticket?.ticketUrl}
                           alt="QR code"
                           width={100}
                           height={100}
                           className="barcode-image object-contain bg-no-repeat"
-                        ></Image>
+                          crossOrigin="anonymous"
+                          
+                        /> */}
+                        <picture>
+                          <source srcSet={ticket?.ticketUrl} media="(orientation: portrait)" />
+                          <img src={ticket?.ticketUrl} alt="A beautiful labrador" loading="lazy" />
+                        </picture>
                       </div>
                       <p className="ticket-number text-[.8em]">sold by tikomatata.com</p>
                     </div>
@@ -109,7 +125,6 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                     alt=""
                     width={250}
                     height={250}
-
                   />
 
                   <h3 className="text-dark-200 font-bold mt-5">
@@ -121,18 +136,17 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                       Your daily update of the most played track from around the world...
                     </p> */}
                 </a>
-                
               </div>
               <CustomButton
-                  onClick={() => {
-                    setOpen(true)
-                    downloadTicket()
-                  }}
-                  className="flex flex-row items-center justify-center mt-2 ml-4 cursor-pointer"
-                >
-                  <DownloadIcon className="mr-2" size={15} />
-                  Download
-                </CustomButton>
+                onClick={() => {
+                  setOpen(true)
+                  downloadTicket()
+                }}
+                className="flex flex-row items-center justify-center mt-2 ml-4 cursor-pointer"
+              >
+                <DownloadIcon className="mr-2" size={15} />
+                Download
+              </CustomButton>
             </div>
           </AlertDialog>
         </>

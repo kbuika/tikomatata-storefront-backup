@@ -20,7 +20,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
   }
   return (
     <div
-      className="flex flex-col w-[24em] h-[25em] border rounded-[16px] mb-4 md:h-[26em] md:w-[20em] hover:cursor-pointer"
+      className="flex flex-col w-[24em] h-[25em] border rounded-[16px] mb-4 md:h-[26em] md:w-[20em] md:mr-4 hover:cursor-pointer"
       onClick={goToEvent}
     >
       <div className="w-full h-[70%] rounded pt-[8px] px-[8px]">

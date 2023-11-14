@@ -77,8 +77,8 @@ const Home: React.FC<Props> = () => {
         <Nav />
         <Hero />
       </main>
-      <div className="mx-8">
-        <h2 className="my-[24px] text-2xl ml-[1em] font-bold">Upcoming Events</h2>
+      <div className="mx-8 md:mx-0 md:px-[40px]">
+        <h2 className="my-[24px] text-2xl font-bold">Upcoming Events</h2>
         <div className="flex w-full flex-wrap items-start justify-start min-h-[50vh] mb-[3em]">
           {events?.map((event: EventDataType) => (
             <EventCard key={event?.eventId} event={event} />
