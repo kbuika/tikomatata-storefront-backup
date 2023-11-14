@@ -105,7 +105,7 @@ export default function Checkout() {
   } as PaystackProps
 
   return (
-    <DefaultLayout>
+    <DefaultLayout noFooter>
       <main className="flex min-h-screen flex-col items-center justify-center w-full sm:flex-row sm:items-start">
         <div className="w-[40%] p-8 flex flex-col items-center justify-start sm:border-l-2 sm:min-h-[50em]">
           <div className="h-[10em] w-[20em]">

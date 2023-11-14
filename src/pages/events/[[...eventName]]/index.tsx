@@ -1,4 +1,3 @@
-"use client"
 import DefaultLayout from "@/layouts/default-layout"
 import { errorToast } from "@/lib/utils"
 import { useTicketsStore } from "@/stores/tickets-store"
@@ -57,7 +56,7 @@ export default function Events() {
   }
 
   return (
-    <DefaultLayout>
+    <DefaultLayout noFooter={true}>
       {loading ? (
         <main className="min-h-screen flex items-center justify-center">
           <Loader2 className="mx-auto animate-spin" size={64} color="#3C0862" />
