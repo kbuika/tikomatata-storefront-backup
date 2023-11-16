@@ -216,9 +216,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   </html>
   
   `
-    const imgName = generateReferenceCode()
-    const pathToImage = path.join("/tmp", `${imgName}.png`)
-    console.log("pathToImage", pathToImage)
     const startDateTime = `${event?.eventStartDate} ${event?.eventStartTime}`
 
     let template = ticketTemplate.replaceAll(
