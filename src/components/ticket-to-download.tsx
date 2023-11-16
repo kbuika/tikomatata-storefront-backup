@@ -22,7 +22,7 @@ export const TicketToDownload = ({ ticket, event }: any) => {
         }),
       })
 
-      const response = await fetch(request)
+      const response = await fetch(request, {cache: "no-cache"})
       console.log(response, "response from download ticket")
 
       if (response.status === 200) {
