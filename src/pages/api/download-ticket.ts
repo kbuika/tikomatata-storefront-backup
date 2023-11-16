@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import nodeHtmlToImage from "node-html-to-image"
 import fs from "fs"
 import moment from "moment"
+import path from "path"
 
 type Data = {
   name?: string
@@ -216,7 +217,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   
   `
     const imgName = generateReferenceCode()
-    const path = `/tmp/${imgName}.png`
+    const pathToImage = path.join('/tmp', `${imgName}.png`);
+    console.log("pathToImage", pathToImage)
     const startDateTime = `${event?.eventStartDate} ${event?.eventStartTime}`
 
     let template = ticketTemplate.replaceAll(
@@ -232,13 +234,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     template = template.replace("#TIME", `${moment(startDateTime).format("HH:mm")}`)
 
     nodeHtmlToImage({
-      output: path,
+      output: pathToImage,
       html: template,
       quality: 100,
     })
       .then(() => {
         // Read the image file
-        const image = fs.readFileSync(path)
+        const image = fs.readFileSync(pathToImage)
         res.setHeader("Content-Type", "image/png")
         res.setHeader("Content-Disposition", "attachment; filename=image.png")
 
@@ -252,7 +254,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       })
       .finally(() => {
         // Delete the image file after sending the response
-        fs.unlinkSync(path)
+        // fs.unlinkSync(pathToImage)
       })
   } else {
     res.status(405)
