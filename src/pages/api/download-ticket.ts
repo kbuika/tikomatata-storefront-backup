@@ -11,7 +11,7 @@ type Data = {
   image?: Buffer
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+export async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   const {ticket, event} = req.body
   const ticketTemplate = `<html lang="en">
   <head>
