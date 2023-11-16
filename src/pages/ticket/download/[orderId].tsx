@@ -34,7 +34,7 @@ export default function TicketsOrder() {
       }
     }
     fetchSelectedOrder()
-    return () => {}
+    // return () => {}
   }, [router?.query?.orderId])
 
   return (

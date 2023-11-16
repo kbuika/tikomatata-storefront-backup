@@ -233,28 +233,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     template = template.replace("#TIME", `${moment(startDateTime).format("HH:mm")}`)
 
     try {
-      let image
-      if (process.env.NODE_ENV === "development") {
-        image = await nodeHtmlToImage({
-          html: template,
-          quality: 100,
+      console.log("template here here")
+      nodeHtmlToImage({
+        html: template,
+        output: "./public/ticket.png",
+        puppeteerArgs: {
+          headless: true,
+          args: chrome.args,
+          executablePath: await chrome.executablePath,
+          ignoreHTTPSErrors: true,
+        },
+      })
+        .then(() => {
+          res.setHeader("Content-Type", "image/png")
+          res.setHeader("Content-Disposition", "attachment; filename=image.png")
+          const image = fs.readFileSync("./public/ticket.png")
+          res.status(200).send(image)
+          return
         })
-      } else {
-        image = await nodeHtmlToImage({
-          html: template,
-          quality: 100,
-          puppeteer: puppeteerCore,
-          puppeteerArgs: {
-            args: chrome.args,
-            executablePath: await chrome.executablePath,
-          },
-        })
-      }
-
-      res.setHeader("Content-Type", "image/png")
-      res.setHeader("Content-Disposition", "attachment; filename=image.png")
-      res.status(200).send(image)
-      return
+        .catch((e) => {})
     } catch (e) {
       console.log("e", e)
       res.status(500).send(e)
