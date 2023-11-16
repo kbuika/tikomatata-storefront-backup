@@ -240,12 +240,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     })
       .then(() => {
         // Read the image file
-        const image = fs.readFileSync(pathToImage)
         res.setHeader("Content-Type", "image/png")
         res.setHeader("Content-Disposition", "attachment; filename=image.png")
+        const fileStream = fs.createReadStream(pathToImage)
+        fileStream.pipe(res)
+
+        res.on("finish", () => {
+          fileStream.close()
+        })
 
         // Read the image file and send it as the response
-        res.status(200).send(image)
+        // res.status(200).send(image)
         return
       })
       .catch((err) => {
