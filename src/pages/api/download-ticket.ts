@@ -12,6 +12,7 @@ type Data = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+  console.log("req.method", req.method)
   if (req.method === "POST") {
     const { ticket, event } = req.body
     const ticketTemplate = `<html lang="en">
