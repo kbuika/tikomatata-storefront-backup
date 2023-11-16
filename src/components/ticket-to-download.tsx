@@ -23,6 +23,7 @@ export const TicketToDownload = ({ ticket, event }: any) => {
       })
 
       const response = await fetch(request)
+      console.log(response, "response from download ticket")
 
       if (response.status === 200) {
         const blob = await response.blob()

@@ -217,7 +217,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   
   `
     const imgName = generateReferenceCode()
-    const pathToImage = path.join('/tmp', `${imgName}.png`);
+    const pathToImage = path.join("/tmp", `${imgName}.png`)
     console.log("pathToImage", pathToImage)
     const startDateTime = `${event?.eventStartDate} ${event?.eventStartTime}`
 
@@ -233,35 +233,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     template = template.replace("#DATE", `${moment(startDateTime).format("DD MMM YYYY")}`)
     template = template.replace("#TIME", `${moment(startDateTime).format("HH:mm")}`)
 
-    nodeHtmlToImage({
-      output: pathToImage,
-      html: template,
-      quality: 100,
-    })
-      .then(() => {
-        // Read the image file
-        res.setHeader("Content-Type", "image/png")
-        res.setHeader("Content-Disposition", "attachment; filename=image.png")
-        const fileStream = fs.createReadStream(pathToImage)
-        fileStream.pipe(res)
-
-        res.on("finish", () => {
-          fileStream.close()
-        })
-
-        // Read the image file and send it as the response
-        // res.status(200).send(image)
-        return
+    try {
+      const image = await nodeHtmlToImage({
+        html: template,
+        quality: 100,
       })
-      .catch((err) => {
-        console.log("err", err)
-        res.status(500).json({ error: `Error generating ticket - ${err}` })
-        return
-      })
-      .finally(() => {
-        // Delete the image file after sending the response
-        // fs.unlinkSync(pathToImage)
-      })
+      res.setHeader("Content-Type", "image/png")
+      res.setHeader("Content-Disposition", "attachment; filename=image.png")
+      res.status(200).send(image)
+      return
+    } catch (e) {
+      console.log("e", e)
+      res.status(500).send(e)
+      return
+    }
   } else {
     res.status(405)
     return
