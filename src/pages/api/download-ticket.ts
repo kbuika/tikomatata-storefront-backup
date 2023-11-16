@@ -249,6 +249,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         return
       })
       .catch((err) => {
+        console.log("err", err)
         res.status(500).json({ error: `Error generating ticket - ${err}` })
         return
       })
