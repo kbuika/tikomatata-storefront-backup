@@ -5,6 +5,8 @@ import nodeHtmlToImage from "node-html-to-image"
 import fs from "fs"
 import moment from "moment"
 import path from "path"
+import puppeteerCore from "puppeteer-core"
+import chrome from "chrome-aws-lambda"
 
 type Data = {
   name?: string
@@ -231,10 +233,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     template = template.replace("#TIME", `${moment(startDateTime).format("HH:mm")}`)
 
     try {
-      const image = await nodeHtmlToImage({
-        html: template,
-        quality: 100,
-      })
+      let image
+      if (process.env.NODE_ENV === "development") {
+        image = await nodeHtmlToImage({
+          html: template,
+          quality: 100,
+        })
+      } else {
+        image = await nodeHtmlToImage({
+          html: template,
+          quality: 100,
+          puppeteer: puppeteerCore,
+          puppeteerArgs: {
+            args: chrome.args,
+            executablePath: await chrome.executablePath,
+          },
+        })
+      }
+
       res.setHeader("Content-Type", "image/png")
       res.setHeader("Content-Disposition", "attachment; filename=image.png")
       res.status(200).send(image)
