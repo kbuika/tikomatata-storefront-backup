@@ -11,7 +11,7 @@ type Data = {
   image?: Buffer
 }
 
-export async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   const {ticket, event} = req.body
   const ticketTemplate = `<html lang="en">
   <head>
@@ -214,7 +214,7 @@ export async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   
   `
   const imgName = generateReferenceCode()
-  const path = `./${imgName}.png`
+  const path = `/tmp/${imgName}.png`
   const startDateTime = `${event?.eventStartDate} ${event?.eventStartTime}`
 
   let template = ticketTemplate.replaceAll(
