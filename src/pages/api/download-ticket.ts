@@ -12,8 +12,9 @@ type Data = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
-  const {ticket, event} = req.body
-  const ticketTemplate = `<html lang="en">
+  if (req.method === "POST") {
+    const { ticket, event } = req.body
+    const ticketTemplate = `<html lang="en">
   <head>
     <style>
       * {
@@ -213,41 +214,47 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   </html>
   
   `
-  const imgName = generateReferenceCode()
-  const path = `/tmp/${imgName}.png`
-  const startDateTime = `${event?.eventStartDate} ${event?.eventStartTime}`
+    const imgName = generateReferenceCode()
+    const path = `/tmp/${imgName}.png`
+    const startDateTime = `${event?.eventStartDate} ${event?.eventStartTime}`
 
-  let template = ticketTemplate.replaceAll(
-    "#IMAGE",
-    `<img alt="qr-code" class="qr-code-image" id="qr_code_image" src="${ticket?.ticketUrl}"/>`,
-  )
-  template = template.replace("#EVENTNAME", event?.eventName)
-  template = template.replace("#TICKETNAME", ticket?.name || ticket?.ticketType)
-  template = template.replace("#PERSONNAME", event?.recipientName)
-  template = template.replace("#PHONE", event?.recipientPhoneNumber)
-  template = template.replace("#LOCATION", event?.location)
-  template = template.replace("#DATE", `${moment(startDateTime).format("DD MMM YYYY")}`)
-  template = template.replace("#TIME", `${moment(startDateTime).format("HH:mm")}`)
-  
-  nodeHtmlToImage({
-    output: path,
-    html: template,
-    quality: 100,
-  })
-    .then(() => {
-      // Read the image file
-      const image = fs.readFileSync(path)
-      res.setHeader("Content-Type", "image/png")
-      res.setHeader("Content-Disposition", "attachment; filename=image.png")
+    let template = ticketTemplate.replaceAll(
+      "#IMAGE",
+      `<img alt="qr-code" class="qr-code-image" id="qr_code_image" src="${ticket?.ticketUrl}"/>`,
+    )
+    template = template.replace("#EVENTNAME", event?.eventName)
+    template = template.replace("#TICKETNAME", ticket?.name || ticket?.ticketType)
+    template = template.replace("#PERSONNAME", event?.recipientName)
+    template = template.replace("#PHONE", event?.recipientPhoneNumber)
+    template = template.replace("#LOCATION", event?.location)
+    template = template.replace("#DATE", `${moment(startDateTime).format("DD MMM YYYY")}`)
+    template = template.replace("#TIME", `${moment(startDateTime).format("HH:mm")}`)
 
-      // Read the image file and send it as the response
-      res.status(200).send(image)
+    nodeHtmlToImage({
+      output: path,
+      html: template,
+      quality: 100,
     })
-    .catch((err) => {
-      res.status(500).send("Image not created")
-    })
-    .finally(() => {
-      // Delete the image file after sending the response
-      fs.unlinkSync(path)
-    })
+      .then(() => {
+        // Read the image file
+        const image = fs.readFileSync(path)
+        res.setHeader("Content-Type", "image/png")
+        res.setHeader("Content-Disposition", "attachment; filename=image.png")
+
+        // Read the image file and send it as the response
+        res.status(200).send(image)
+        return
+      })
+      .catch((err) => {
+        res.status(500).json({ error: `Error generating ticket - ${err}` })
+        return
+      })
+      .finally(() => {
+        // Delete the image file after sending the response
+        fs.unlinkSync(path)
+      })
+  } else {
+    res.status(405)
+    return
+  }
 }
