@@ -11,7 +11,7 @@ export const TicketToDownload = ({ ticket, event }: any) => {
   const downloadticketFromAPI = async () => {
     setDownloading(true)
     try {
-      const request = new Request("/api/download-ticket", {
+      const request = new Request("https://elec-shop.onrender.com/api/v1/sales/test", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
