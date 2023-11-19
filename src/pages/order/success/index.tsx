@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image"
 import CustomButton from "../../../components/ui/custom-button"
 import defaultImage from "../../../images/default.jpg"

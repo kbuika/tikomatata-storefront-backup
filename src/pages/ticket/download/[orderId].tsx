@@ -1,3 +1,4 @@
+"use client"
 import TicketToDownload from "@/components/ticket-to-download"
 import DefaultLayout from "@/layouts/default-layout"
 import axios from "axios"
