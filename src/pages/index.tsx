@@ -32,8 +32,8 @@ const Home: React.FC<Props> = () => {
       try {
         const response = await axios.request(config)
         if (response.status === 200) {
-          setEvents(response.data.data)
-          setAllEventsStore(response.data.data)
+          setEvents(response.data.data.events)
+          setAllEventsStore(response.data.data.events)
         } else {
           setEventsError(response.data)
         }

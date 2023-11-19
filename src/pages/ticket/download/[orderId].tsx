@@ -5,37 +5,39 @@ import { Loader2 } from "lucide-react"
 import { useRouter } from "next/router"
 import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
+import { errorToast } from "@/lib/utils"
 
 export default function TicketsOrder() {
   const [orderData, setOrderData] = useState<any>({})
   const [orderError, setOrderError] = useState<any>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const router = useRouter()
-  const ticketRef = useRef<any>(null)
+  const {orderId} = router?.query
   useEffect(() => {
     const fetchSelectedOrder = async () => {
+      if(!orderId) return
       setLoading(true)
       const config = {
         method: "get",
-        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/download/${router?.query?.orderId}`,
+        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/download/${orderId}`,
       }
       try {
         const response = await axios.request(config)
         if (response.status === 200) {
-          console.log(response.data.data)
           setOrderData(response.data.data)
         } else {
           setOrderError(response.data)
+          errorToast("Could not fetch purchased ticket! If this persists, please contact support")
         }
       } catch (error) {
         setOrderError(error)
+        errorToast("Could not fetch purchased ticket! If this persists, please contact support")
       } finally {
         setLoading(false)
       }
     }
     fetchSelectedOrder()
-    // return () => {}
-  }, [router?.query?.orderId])
+  }, [orderId])
 
   return (
     <DefaultLayout noFooter={true}>

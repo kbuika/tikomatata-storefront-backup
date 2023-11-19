@@ -45,7 +45,7 @@ const config = {
 }
 
 export default function Checkout() {
-  const [paymentReference, setPaymentReference] = useState<string>("")
+  const [paymentReference, setPaymentReference] = useState<string>(generateReferenceCode())
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)

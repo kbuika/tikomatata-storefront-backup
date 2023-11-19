@@ -9,6 +9,7 @@ import { useEventsStore } from "@/stores/events-store"
 import moment from "moment"
 import Link from "next/link"
 import { useOrderStore } from "@/stores/order-store"
+import { maskEmail } from "@/lib/utils"
 
 export default function SuccessOrder() {
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
@@ -86,12 +87,12 @@ export default function SuccessOrder() {
               Your payment has been processed!
             </p>
             <p className="mt-[24px] text-dark text-[17px] leading-8 tricking-wide text-center">
-              Your ticket has been sent to your email
-              <span className="text-[16px] font-bold">{" "}{orderDetails?.customerEmail}</span>!
+              Your ticket for {selectedEvent?.name} has been sent to your email
+              <span className="text-[16px] font-bold">{" "}{maskEmail(orderDetails?.customerEmail)}</span>!
             </p>
-            <p className="mt-[32px] text-dark text-[16px] font-bold leading-8 tricking-wide">
+            {/* <p className="mt-[32px] text-dark text-[16px] font-bold leading-8 tricking-wide">
               Transaction ID: {orderDetails?.orderReference}
-            </p>
+            </p> */}
             <Link href="/" className="hidden sm:flex">
               <CustomButton className="mt-[40px] px-[100px] py-[14px] sm:px-[120px]">Go Back Home</CustomButton>
             </Link>
