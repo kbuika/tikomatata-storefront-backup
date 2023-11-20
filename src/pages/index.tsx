@@ -22,6 +22,7 @@ const Home: React.FC<Props> = () => {
   const setAllEventsStore = useEventsStore((state) => state.setAllEvents)
   const resetAllTickets = useTicketsStore((state) => state.resetAllTickets)
   const resetOrderDetails = useOrderStore((state) => state.resetOrderDetails)
+  const resetSelectedEvent = useEventsStore((state) => state.resetSelectedEvent)
   useEffect(() => {
     const fetchAllEvents = async () => {
       setLoading(true)
@@ -32,8 +33,8 @@ const Home: React.FC<Props> = () => {
       try {
         const response = await axios.request(config)
         if (response.status === 200) {
-          setEvents(response.data.data)
-          setAllEventsStore(response.data.data)
+          setEvents(response.data.data.events)
+          setAllEventsStore(response.data.data.events)
         } else {
           setEventsError(response.data)
         }
@@ -48,6 +49,8 @@ const Home: React.FC<Props> = () => {
   }, [setAllEventsStore])
   resetAllTickets()
   resetOrderDetails()
+  resetSelectedEvent()
+  
   return (
     <DefaultLayout noHeader={true} isMain={true}>
       <Head>

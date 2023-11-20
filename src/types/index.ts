@@ -10,7 +10,7 @@ export interface PaystackHookType {
     payForTickets?: () => void;
     validateForm: () => true | false;
     paymentMethod: PaymentChannels;
-    paymentReference: string;
+    paymentReference?: string;
     handleSubmit: (e: any) => void;
     initialized: boolean;
     setInitialized: (value: boolean) => void;

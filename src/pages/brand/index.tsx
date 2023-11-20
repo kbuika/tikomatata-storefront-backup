@@ -1,3 +1,4 @@
+"use client"
 import DefaultLayout from "@/layouts/default-layout"
 import facebook from "@/images/logos/facebook.png"
 import instagram from "@/images/logos/instagram.png"

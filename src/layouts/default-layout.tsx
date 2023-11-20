@@ -38,7 +38,7 @@ const DefaultLayout: React.FC<Props> = ({
         </Link>
         <div className="md:flex items-center justify-between hidden space-x-8">
           <Link
-            href="https://app.tikomatata.com"
+            href={process.env.ENV == "production" ? "https://app.tikomatata.com" : "https://dev-app.tikomatata.com"}
             target="_blank"
             rel="noopener noreferrer"
             className=" text-gray-400 hover:text-white"

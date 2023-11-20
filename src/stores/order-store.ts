@@ -24,7 +24,7 @@ export const useOrderStore = create<OrderState>()(
       setReferenceObject: (referenceObject) => set(() => ({ referenceObject: referenceObject })),
       setCustomerDetails: (customerDetails) => set(() => ({ customerDetails: customerDetails })),
       setOrderDetails: (orderDetails) => set(() => ({ orderDetails: orderDetails })),
-      resetOrderDetails: () => set(() => ({ referenceObject: {}, customerDetails: {} })),
+      resetOrderDetails: () => set(() => ({ referenceObject: {}, customerDetails: {}, orderDetails: {} })),
     }),
     {
       name: "order-storage", // name of the item in the storage (must be unique)

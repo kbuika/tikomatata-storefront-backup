@@ -23,7 +23,6 @@ export const TicketToDownload = ({ ticket, event }: any) => {
       })
 
       const response = await fetch(request, {cache: "no-cache"})
-      console.log(response, "response from download ticket")
 
       if (response.status === 200) {
         const blob = await response.blob()
@@ -54,7 +53,7 @@ export const TicketToDownload = ({ ticket, event }: any) => {
         <div className="h-auto w-full m-2 flex flex-row items-start justify-center">
           <a className="delay-50 duration-100 bg-successBg p-5 rounded-lg w-60 group" href="">
             <Image
-              src={ticket?.ticketUrl}
+              src={event?.posterUrl}
               className="w-full rounded shadow"
               alt=""
               width={250}

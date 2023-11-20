@@ -1,3 +1,4 @@
+"use client"
 import DefaultLayout from "@/layouts/default-layout"
 import { errorToast } from "@/lib/utils"
 import { useTicketsStore } from "@/stores/tickets-store"
@@ -22,12 +23,14 @@ export default function Events() {
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const router = useRouter()
+  const {id: eventId} = router?.query
   useEffect(() => {
     const fetchSelectedEventFn = async () => {
+      if(!eventId) return
       setLoading(true)
       const config = {
         method: "get",
-        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/event?id=${router?.query?.id}`,
+        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/event?id=${eventId}`,
       }
 
       try {
@@ -45,7 +48,7 @@ export default function Events() {
     }
     fetchSelectedEventFn()
     // return () => {}
-  }, [router?.query?.id])
+  }, [eventId])
 
   const completeOrder = () => {
     if (selectedTickets.length === 0) {
