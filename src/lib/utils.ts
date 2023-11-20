@@ -40,7 +40,8 @@ export const generateReferenceCode = (length=12) => {
 }
 
 export const maskEmail = (email: string): string  => {
-  const [localPart, domain] = email.split('@');
+  if(!email) return ""
+  const [localPart, domain] = email?.split('@');
 
   const maskedLocalPart =
     localPart.length > 2
