@@ -40,8 +40,13 @@ const schema = yup.object({
 type Currency = "KES"
 type phone = number | string
 
+//FIXME: Restore this before going to prod
+// const config = {
+//   publicKey: process.env.NODE_ENV == "production" ? "pk_live_3bea2977c46c8983037962814a70136130768b2b" : "pk_test_e84aeac507b09226460794410772ade3aad4574c",
+// }
+
 const config = {
-  publicKey: process.env.NODE_ENV == "production" ? "pk_live_3bea2977c46c8983037962814a70136130768b2b" : "pk_test_e84aeac507b09226460794410772ade3aad4574c",
+  publicKey: "pk_test_e84aeac507b09226460794410772ade3aad4574c"
 }
 
 export default function Checkout() {

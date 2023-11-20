@@ -1,6 +1,6 @@
 "use client"
 import DefaultLayout from "@/layouts/default-layout"
-import { errorToast } from "@/lib/utils"
+import { errorToast, truncateText } from "@/lib/utils"
 import { useTicketsStore } from "@/stores/tickets-store"
 import { TicketDataTypeTest } from "@/types/ticket"
 import axios from "axios"
@@ -12,6 +12,7 @@ import { useEffect, useState } from "react"
 import TicketCard from "../../../components/ticket-card"
 import CustomButton from "../../../components/ui/custom-button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
+import Head from "next/head"
 
 export default function Events() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
@@ -23,10 +24,10 @@ export default function Events() {
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const router = useRouter()
-  const {id: eventId} = router?.query
+  const { id: eventId } = router?.query
   useEffect(() => {
     const fetchSelectedEventFn = async () => {
-      if(!eventId) return
+      if (!eventId) return
       setLoading(true)
       const config = {
         method: "get",
@@ -60,6 +61,37 @@ export default function Events() {
 
   return (
     <DefaultLayout noFooter={true}>
+      {selectedEvent !== null && (
+        <Head>
+          <title>{selectedEvent?.name} | Tikomatata | touch grass!</title>
+          <meta name="description" content={`${truncateText(selectedEvent?.description, 15)}...`} />
+          <link rel="icon" href="/favicon.ico" />
+          <meta
+            property="og:title"
+            content={`${selectedEvent?.name} | Tikomatata | touch grass!`}
+          />
+          <meta property="og:description" content={`${truncateText(selectedEvent?.description, 15)}...`} />
+          {selectedEvent?.posterUrl && (
+            <meta
+              property="og:image"
+              content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
+            />
+          )}
+
+          <meta
+            property="twitter:title"
+            content={`${selectedEvent?.name} | Tikomatata | touch grass!`}
+          />
+          <meta
+            property="twitter:description"
+            content={`${truncateText(selectedEvent?.description, 15)}...`}
+          />
+          {selectedEvent?.posterUrl && (
+            <meta property="twitter:image" content={selectedEvent?.posterUrl} />
+          )}
+        </Head>
+      )}
+
       {loading ? (
         <main className="min-h-screen flex items-center justify-center">
           <Loader2 className="mx-auto animate-spin" size={64} color="#3C0862" />
