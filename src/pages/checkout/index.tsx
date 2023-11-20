@@ -13,13 +13,13 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { usePaystackPayment } from "react-paystack"
 import * as yup from "yup"
 import CustomButton from "../../components/ui/custom-button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 import defaultImage from "../../images/default.jpg"
 import KenyaIcon from "../../images/kenya.png"
 import { PaystackProps } from "react-paystack/dist/types";
+import useCustomPaystackPayment from "@/hooks/useCustomPaystackPayment"
 
 const schema = yup.object({
   customerName: yup.string().required("Please enter your name"),
@@ -41,7 +41,7 @@ type Currency = "KES"
 type phone = number | string
 
 const config = {
-  publicKey: "pk_test_e84aeac507b09226460794410772ade3aad4574c",
+  publicKey: process.env.NODE_ENV == "production" ? "pk_live_3bea2977c46c8983037962814a70136130768b2b" : "pk_test_e84aeac507b09226460794410772ade3aad4574c",
 }
 
 export default function Checkout() {
@@ -93,7 +93,7 @@ export default function Checkout() {
 
   const componentProps = {
     ...config,
-    reference: paymentReference,
+    reference: undefined,
     text: `Confirm and Pay KES ${totalTicketsPrice}`,
     onSuccess: (reference: any) => handlePaystackSuccess(reference),
     onClose: handlePaystackClose,
@@ -254,7 +254,6 @@ export default function Checkout() {
                   </p>
                   <div className="w-full mt-[20px]">
                     <PaystackHookExample
-                      // payForTickets={triggerPayment}
                       onSuccess={handlePaystackSuccess}
                       onClose={handlePaystackClose}
                       config={componentProps}
@@ -272,7 +271,6 @@ export default function Checkout() {
                 <div className="pt-4">
                   <div className="w-full mt-[20px]">
                   <PaystackHookExample
-                      // payForTickets={triggerPayment}
                       onSuccess={handlePaystackSuccess}
                       onClose={handlePaystackClose}
                       config={componentProps}
@@ -294,12 +292,12 @@ export default function Checkout() {
   )
 }
 
-const PaystackHookExample = ({ onSuccess, onClose, config, payForTickets, validateForm, paymentMethod, paymentReference, handleSubmit, initialized, setInitialized }: PaystackHookType) => {
+const PaystackHookExample = ({ onSuccess, onClose, config, validateForm, paymentMethod, paymentReference, handleSubmit, initialized, setInitialized }: PaystackHookType) => {
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const setOrderDetails = useOrderStore((state) => state.setOrderDetails)
-  const initializePayment = usePaystackPayment({...config})
+  const { handlePayment } = useCustomPaystackPayment({config, onSuccess, onClose})
 
   const PayForTickets: SubmitHandler<any> = async (data) => {
     setInitialized(true)
@@ -310,11 +308,11 @@ const PaystackHookExample = ({ onSuccess, onClose, config, payForTickets, valida
       totalPrice: totalTicketsPrice,
       orderReference: paymentReference,
     }
-    setOrderDetails({...data, datePaid: `${moment().format("Do MMM YY")}`})
     try {
       const res = await PurchaseTicketsFn(data)
       if(res.status === 200){
-        initializePayment(onSuccess, onClose)
+        setOrderDetails({...data, orderReference: res.data.reference, datePaid: `${moment().format("Do MMM YY")}`})
+        handlePayment(res.data.reference)
       }
     } catch (error) {
       errorToast("Something went wrong while processing your order, please try again.")
