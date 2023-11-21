@@ -7,6 +7,7 @@ import { useRouter } from "next/router"
 import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
 import { errorToast } from "@/lib/utils"
+import * as Sentry from "@sentry/nextjs";
 
 export default function TicketsOrder() {
   const [orderData, setOrderData] = useState<any>({})
@@ -29,10 +30,14 @@ export default function TicketsOrder() {
         } else {
           setOrderError(response.data)
           errorToast("Could not fetch purchased ticket! If this persists, please contact support")
+          Sentry.captureException(response.data);
+          Sentry.captureMessage("View tickets error")
         }
       } catch (error) {
         setOrderError(error)
         errorToast("Could not fetch purchased ticket! If this persists, please contact support")
+        Sentry.captureException(error);
+        Sentry.captureMessage("View tickets error")
       } finally {
         setLoading(false)
       }

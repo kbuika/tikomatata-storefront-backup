@@ -10,6 +10,7 @@ import { useEffect, useState } from "react"
 import SellOutEventBanner from "@/components/sell-out-event-banner"
 import { useOrderStore } from "@/stores/order-store"
 import Head from "next/head"
+import * as Sentry from "@sentry/nextjs";
 
 type Props = {
   events: Array<EventDataType>
@@ -32,13 +33,15 @@ const Home: React.FC<Props> = () => {
       }
       try {
         const response = await axios.request(config)
-        if (response.status === 200) {
+        if (response.data.status === 200) {
           setEvents(response.data.data.events)
           setAllEventsStore(response.data.data.events)
         } else {
+          Sentry.captureException(response.data);
           setEventsError(response.data)
         }
       } catch (error) {
+        Sentry.captureException(error);
         setEventsError(error)
       } finally {
         setLoading(false)
