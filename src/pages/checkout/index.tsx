@@ -20,6 +20,7 @@ import defaultImage from "../../images/default.jpg"
 import KenyaIcon from "../../images/kenya.png"
 import { PaystackProps } from "react-paystack/dist/types";
 import useCustomPaystackPayment from "@/hooks/useCustomPaystackPayment"
+import * as Sentry from "@sentry/nextjs";
 
 const schema = yup.object({
   customerName: yup.string().required("Please enter your name"),
@@ -318,9 +319,14 @@ const PaystackHookExample = ({ onSuccess, onClose, config, validateForm, payment
       if(res.status === 200){
         setOrderDetails({...data, orderReference: res.data.reference, datePaid: `${moment().format("Do MMM YY")}`})
         handlePayment(res.data.reference)
+      } else {
+        Sentry.captureException(res.data);
+        Sentry.captureMessage("Reserve ticket error")
       }
     } catch (error) {
       errorToast("Something went wrong while processing your order, please try again.")
+      Sentry.captureException(error);
+      Sentry.captureMessage("Initiate payment error!!")
     }
   }
 

@@ -4,6 +4,8 @@ import { DownloadIcon, Loader2 } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
 import CustomButton from "./ui/custom-button"
+import * as Sentry from "@sentry/nextjs";
+
 
 export const TicketToDownload = ({ ticket, event }: any) => {
   const [downloading, setDownloading] = useState<boolean>(false)
@@ -37,11 +39,14 @@ export const TicketToDownload = ({ ticket, event }: any) => {
         errorToast(
           "An error occured while downloading your ticket. If the issue persists, please contact us.",
         )
+        Sentry.captureMessage("Download tickets error!!!")
       }
     } catch (error) {
       errorToast(
         "An error occured while downloading your ticket. If the issue persists, please contact us.",
       )
+      Sentry.captureException(error);
+      Sentry.captureMessage("Download tickets error!!!")
     } finally {
       setDownloading(false)
     }

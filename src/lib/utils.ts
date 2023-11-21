@@ -7,8 +7,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const truncateText = (text: string, length: number) => {
-  if (text.length <= length) return text
-  return text.slice(0, length) + "..."
+  if (text?.length <= length) return text
+  return text?.slice(0, length) + "..."
 }
 
 export const errorToast = (message: string | unknown) => {

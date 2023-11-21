@@ -13,6 +13,7 @@ import TicketCard from "../../../components/ticket-card"
 import CustomButton from "../../../components/ui/custom-button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
 import Head from "next/head"
+import * as Sentry from "@sentry/nextjs";
 
 export default function Events() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
@@ -36,12 +37,14 @@ export default function Events() {
 
       try {
         const response = await axios.request(config)
-        if (response.status === 200) {
+        if (response.data.status === 200) {
           setSelectedEvent(response.data.data)
         } else {
+          Sentry.captureException(response.data);
           setEventError(response.data.message)
         }
       } catch (error) {
+        Sentry.captureException(error);
         setEventError(error)
       } finally {
         setLoading(false)
