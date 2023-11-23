@@ -13,7 +13,7 @@ export const TicketToDownload = ({ ticket, event }: any) => {
   const downloadticketFromAPI = async () => {
     setDownloading(true)
     try {
-      const request = new Request("https://elec-shop.onrender.com/api/v1/sales/test", {
+      const request = new Request("https://download.tikomatata.co.ke/api/v1/ticket/download", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -7,11 +7,12 @@ import { callback } from '@/types';
 interface CustomPaymentProps {
     config: PaystackProps,
     onSuccess: callback,
-    onClose: () => void
+    onClose: () => void,
+    setCheckoutProgressText: (value: string) => void
 }
 
 // TODO: Post-mortem this solution
-const useCustomPaystackPayment = ({config, onSuccess, onClose}: CustomPaymentProps) => {
+const useCustomPaystackPayment = ({config, onSuccess, onClose, setCheckoutProgressText}: CustomPaymentProps) => {
   const [paymentReference, setPaymentReference] = useState(config.reference);
 
   const initializePayment = usePaystackPayment({
@@ -28,6 +29,7 @@ const useCustomPaystackPayment = ({config, onSuccess, onClose}: CustomPaymentPro
 
   const handlePayment = (newReference: string) => {
     if (newReference) {
+      setCheckoutProgressText("Initializing Payment")
       setPaymentReference(newReference);
     } else {
       errorToast('Invalid payment reference.');
