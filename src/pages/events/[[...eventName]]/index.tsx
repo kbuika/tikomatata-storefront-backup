@@ -1,6 +1,6 @@
 "use client"
 import DefaultLayout from "@/layouts/default-layout"
-import { errorToast, truncateText } from "@/lib/utils"
+import { errorToast, truncateText, warningToast } from "@/lib/utils"
 import { useTicketsStore } from "@/stores/tickets-store"
 import { TicketDataTypeTest } from "@/types/ticket"
 import axios from "axios"
@@ -56,7 +56,7 @@ export default function Events() {
 
   const completeOrder = () => {
     if (selectedTickets.length === 0) {
-      errorToast("Please select at least one ticket")
+      warningToast("Please select at least one ticket")
       return
     }
     router.push("/checkout")
