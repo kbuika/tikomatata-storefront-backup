@@ -1,7 +1,7 @@
 "use client"
 import { PurchaseTicketsFn } from "@/api-calls"
 import DefaultLayout from "@/layouts/default-layout"
-import { errorToast, generateReferenceCode } from "@/lib/utils"
+import { errorToast, generateReferenceCode, warningToast } from "@/lib/utils"
 import { useEventsStore } from "@/stores/events-store"
 import { useOrderStore } from "@/stores/order-store"
 import { useTicketsStore } from "@/stores/tickets-store"
@@ -18,9 +18,9 @@ import CustomButton from "../../components/ui/custom-button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 import defaultImage from "../../images/default.jpg"
 import KenyaIcon from "../../images/kenya.png"
-import { PaystackProps } from "react-paystack/dist/types";
+import { PaystackProps } from "react-paystack/dist/types"
 import useCustomPaystackPayment from "@/hooks/useCustomPaystackPayment"
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/nextjs"
 
 const schema = yup.object({
   customerName: yup.string().required("Please enter your name"),
@@ -53,7 +53,7 @@ export default function Checkout() {
   useEffect(() => {
     const paymentRef = generateReferenceCode()
     setPaymentReference(paymentRef)
-  },[])
+  }, [])
 
   const {
     register,
@@ -67,7 +67,6 @@ export default function Checkout() {
   const customerPhone = watch("customerPhone")
   const customerEmail = watch("customerEmail")
 
-
   const validateForm = () => {
     if (customerEmail === "" || customerPhone === "") {
       errorToast("Please fill in your name, email and phone number")
@@ -78,14 +77,14 @@ export default function Checkout() {
 
   const handlePaystackSuccess = (reference: any) => {
     setInitialized(false)
-    if(reference.status === "success"){
+    if (reference.status === "success") {
       router.push("/order/success")
     }
   }
 
   const handlePaystackClose = () => {
     setInitialized(false)
-    errorToast("Payment was cancelled! Please confirm your details and try again.")
+    warningToast("Payment not completed! Please try again.")
   }
 
   const componentProps = {
@@ -220,31 +219,6 @@ export default function Checkout() {
               </TabsList>
               <TabsContent value="mpesa">
                 <div className="h-auto w-full flex flex-col items-center">
-                  {/* <div className="w-full mt-[16px]">
-                        <div>
-                          <div className="flex items-center">
-                            <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l border border-hidden-left border-gray-600">
-                              <Image src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
-                              +254
-                            </span>
-                            <input
-                              id="phone"
-                              type="text"
-                              required
-                              className="w-3/4 h-[50px] bg-white appearance-none rounded-r relative block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                              placeholder="7XXXXXXXX"
-                              autoComplete="nope"
-                              value={customerPhone}
-                              onChange={(e) => setValue("customerPhone", e.target.value)}
-                            ></input>
-                          </div>
-                          {errors.customerPhone && (
-                            <span className="text-criticalRed">
-                              {errors.customerPhone?.message}
-                            </span>
-                          )}
-                        </div>
-                      </div> */}
                   <p className="mt-[20px] text-gray-500">
                     Please ensure you have your phone near you. You will receive a prompt on the
                     phone number you have provided above.
@@ -265,9 +239,14 @@ export default function Checkout() {
                 </div>
               </TabsContent>
               <TabsContent value="card">
-                <div className="pt-4">
+                <div className="h-auto w-full flex flex-col items-center">
+                  <p className="mt-[20px] text-gray-500">
+                    To proceed click the &apos;Confirm and Pay&apos; button. This will prompt a
+                    secure card payment process to begin, ensuring your transaction is processed
+                    smoothly.
+                  </p>
                   <div className="w-full mt-[20px]">
-                  <PaystackHookExample
+                    <PaystackHookExample
                       onSuccess={handlePaystackSuccess}
                       onClose={handlePaystackClose}
                       config={componentProps}
@@ -289,12 +268,28 @@ export default function Checkout() {
   )
 }
 
-const PaystackHookExample = ({ onSuccess, onClose, config, validateForm, paymentMethod, paymentReference, handleSubmit, initialized, setInitialized }: PaystackHookType) => {
+const PaystackHookExample = ({
+  onSuccess,
+  onClose,
+  config,
+  validateForm,
+  paymentMethod,
+  paymentReference,
+  handleSubmit,
+  initialized,
+  setInitialized,
+}: PaystackHookType) => {
+  const [checkoutProgressText, setCheckoutProgressText] = useState<string>("")
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const setOrderDetails = useOrderStore((state) => state.setOrderDetails)
-  const { handlePayment } = useCustomPaystackPayment({config, onSuccess, onClose})
+  const { handlePayment } = useCustomPaystackPayment({
+    config,
+    onSuccess,
+    onClose,
+    setCheckoutProgressText,
+  })
 
   const PayForTickets: SubmitHandler<any> = async (data) => {
     setInitialized(true)
@@ -307,16 +302,23 @@ const PaystackHookExample = ({ onSuccess, onClose, config, validateForm, payment
     }
     try {
       const res = await PurchaseTicketsFn(data)
-      if(res.status === 200){
-        setOrderDetails({...data, orderReference: res.data.reference, datePaid: `${moment().format("Do MMM YY")}`})
+      if (res.status === 200) {
+        setOrderDetails({
+          ...data,
+          orderReference: res.data.reference,
+          datePaid: `${moment().format("Do MMM YY")}`,
+        })
         handlePayment(res.data.reference)
       } else {
-        Sentry.captureException(res.data);
+        warningToast(res.message, 6000)
+        Sentry.captureException(res.data)
         Sentry.captureMessage("Reserve ticket error")
+        setInitialized(false)
       }
     } catch (error) {
+      setInitialized(false)
       errorToast("Something went wrong while processing your order, please try again.")
-      Sentry.captureException(error);
+      Sentry.captureException(error)
       Sentry.captureMessage("Initiate payment error!!")
     }
   }
@@ -328,8 +330,11 @@ const PaystackHookExample = ({ onSuccess, onClose, config, validateForm, payment
         className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
         onClick={handleSubmit(PayForTickets)}
       >
-        {initialized ? "Processing..." : <>Confirm and Pay KES {config.amount / 100}</>}
-        
+        {initialized ? (
+          `${checkoutProgressText ? checkoutProgressText : `Reserving your ticket`}...`
+        ) : (
+          <>Confirm and Pay KES {config.amount / 100}</>
+        )}
       </CustomButton>
     </div>
   )

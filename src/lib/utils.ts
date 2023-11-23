@@ -11,9 +11,17 @@ export const truncateText = (text: string, length: number) => {
   return text?.slice(0, length) + "..."
 }
 
-export const errorToast = (message: string | unknown) => {
+export const errorToast = (message: string | unknown, duration=4000) => {
   toast.error(`Error: ${message}`, {
-    autoClose: 4000,
+    autoClose: duration,
+    pauseOnHover: true,
+    position: toast.POSITION.TOP_RIGHT,
+  })
+}
+
+export const warningToast = (message: string | unknown, duration=4000) => {
+  toast.warning(`Alert: ${message}`, {
+    autoClose: duration,
     pauseOnHover: true,
     position: toast.POSITION.TOP_RIGHT,
   })
