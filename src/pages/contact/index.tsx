@@ -1,7 +1,20 @@
+"use client"
 import DefaultLayout from "@/layouts/default-layout"
+import Head from "next/head"
 export default function Contact() {
   return (
     <DefaultLayout>
+      <Head>
+        <title>Contact Us</title>
+        <meta name="description" content="Let's go on a date -- bill's on us" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta property="og:title" content="Contact Us" />
+        <meta property="og:description" content="Let's go on a date -- bill's on us" />
+        <meta
+          property="og:image"
+          content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
+        />
+      </Head>
       <section className="bg-white dark:bg-gray-900 min-h-screen">
         <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
           <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">
@@ -17,17 +30,17 @@ export default function Contact() {
                 Email
               </h3>
               <p className="mb-4 font-light text-gray-500 dark:text-gray-400 sm:text-xl">
-                Send us an email at{" "}
-                <a
-                  href="mailto:info@tikomatata.com">support@tikomatata.com</a></p></li>
-                  <li className="mb-8 flex flex-col items-center justify-center">
+                Send us an email at <a href="mailto:info@tikomatata.com">support@tikomatata.com</a>
+              </p>
+            </li>
+            <li className="mb-8 flex flex-col items-center justify-center">
               <h3 className="mb-4 text-xl tracking-tight font-extrabold text-gray-900 dark:text-white">
                 Phone
               </h3>
               <p className="mb-4 font-light text-gray-500 dark:text-gray-400 sm:text-xl">
-                Call us at{" "}
-                <a
-                  href="phone:+254740459940">0740459940</a></p></li>
+                Call us at <a href="phone:+254740459940">0740459940</a>
+              </p>
+            </li>
           </ul>
         </div>
       </section>

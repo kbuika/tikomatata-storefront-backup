@@ -8,6 +8,7 @@ interface EventsState {
   setAllEvents: (events: Array<EventDataType>) => void
   setSelectedEvent: (event: EventDataType) => void
   resetAllEvents: () => void
+  resetSelectedEvent: () => void
 }
 
 export const useEventsStore = create<EventsState>()(
@@ -18,6 +19,7 @@ export const useEventsStore = create<EventsState>()(
       setAllEvents: (events) => set(() => ({ allEvents: events })),
       setSelectedEvent: (event) => set(() => ({ selectedEvent: event })),
       resetAllEvents: () => set(() => ({ allEvents: [] })),
+      resetSelectedEvent: () => set(() => ({selectedEvent: null}))
     }),
     {
       name: "events-storage", // name of the item in the storage (must be unique)

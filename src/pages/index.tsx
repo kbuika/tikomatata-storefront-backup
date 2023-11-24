@@ -4,11 +4,13 @@ import Nav from "@/components/Nav"
 import DefaultLayout from "@/layouts/default-layout"
 import { EventDataType } from "@/types/event"
 import { useEventsStore } from "@/stores/events-store"
-import { API_BASE_URL } from "@/constants"
 import { useTicketsStore } from "@/stores/tickets-store"
 import axios from "axios"
 import { useEffect, useState } from "react"
-import Link from "next/link"
+import SellOutEventBanner from "@/components/sell-out-event-banner"
+import { useOrderStore } from "@/stores/order-store"
+import Head from "next/head"
+import * as Sentry from "@sentry/nextjs";
 
 type Props = {
   events: Array<EventDataType>
@@ -20,22 +22,26 @@ const Home: React.FC<Props> = () => {
   const [eventsError, setEventsError] = useState<any>(null)
   const setAllEventsStore = useEventsStore((state) => state.setAllEvents)
   const resetAllTickets = useTicketsStore((state) => state.resetAllTickets)
+  const resetOrderDetails = useOrderStore((state) => state.resetOrderDetails)
+  const resetSelectedEvent = useEventsStore((state) => state.resetSelectedEvent)
   useEffect(() => {
     const fetchAllEvents = async () => {
       setLoading(true)
       const config = {
         method: "get",
-        url: `https://api.tikomatata.co.ke/api/v1/event/all?size=40&page=0`,
+        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/event/all?size=40&page=0`,
       }
       try {
         const response = await axios.request(config)
-        if (response.status === 200) {
-          setEvents(response.data.data)
-          setAllEventsStore(response.data.data)
+        if (response.data.status === 200) {
+          setEvents(response.data.data.events)
+          setAllEventsStore(response.data.data.events)
         } else {
+          Sentry.captureException(response.data);
           setEventsError(response.data)
         }
       } catch (error) {
+        Sentry.captureException(error);
         setEventsError(error)
       } finally {
         setLoading(false)
@@ -45,27 +51,49 @@ const Home: React.FC<Props> = () => {
     // return () => {}
   }, [setAllEventsStore])
   resetAllTickets()
+  resetOrderDetails()
+  resetSelectedEvent()
+  
   return (
     <DefaultLayout noHeader={true} isMain={true}>
-      <main className="home h-[60vh]">
+      <Head>
+        <title>Tikomatata | touch grass!</title>
+        <meta
+          name="description"
+          content="Where Every Event is an Experience, and Every Experience is Extraordinary "
+        />
+        <link rel="icon" href="/favicon.ico" />
+        <meta property="og:title" content="Tikomatata | touch grass!" />
+        <meta
+          property="og:description"
+          content="Where Every Event is an Experience, and Every Experience is Extraordinary"
+        />
+        <meta
+          property="og:image"
+          content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
+        />
+        <meta property="twitter:title" content="Tikomatata | touch grass!" />
+        <meta property="twitter:description" content="Where Every Event is an Experience, and Every Experience is Extraordinary" />
+        <meta
+          property="twitter:image"
+          content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
+        />
+      </Head>
+      <main className="home h-[414px] bg-beigeLight md:h-[65vh]">
         <Nav />
         <Hero />
       </main>
-      <div className="mx-12 my-[3em]">
-        <h2 className="mt-2 text-2xl ml-[1em] font-medium">Upcoming Events</h2>
-        <div className="flex flex-wrap items-start justify-start min-h-[50vh] my-[3em]">
-        <div className="ml-2">
-          <p className="text-lg">Have an issue? <Link href="/contact" className="underline">Contact Us</Link></p>
-        </div>
+      <div className="mx-8 md:mx-0 md:px-[40px]">
+        <h2 className="my-[24px] text-2xl font-bold">Upcoming Events</h2>
+        <div className="flex w-full flex-wrap items-start justify-start min-h-[50vh] mb-[3em]">
           {events?.map((event: EventDataType) => (
             <EventCard key={event?.eventId} event={event} />
           ))}
         </div>
       </div>
+      <SellOutEventBanner />
     </DefaultLayout>
   )
 }
 
 export default Home
-
-

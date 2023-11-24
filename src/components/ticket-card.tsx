@@ -1,23 +1,28 @@
-import React, { useState } from "react"
-import { Minus, Plus } from "lucide-react"
-import { Button } from "./ui/button"
 import { useTicketsStore } from "@/stores/tickets-store"
-import { TicketDataType, TicketDataTypeTest } from "@/types/ticket"
+import { TicketDataTypeTest } from "@/types/ticket"
+import { Minus, Plus } from "lucide-react"
+import moment from "moment"
+import React, { useState } from "react"
+import { Button } from "./ui/button"
 
 interface EventTicketProps {
   ticket: TicketDataTypeTest
+  event: any
 }
 
-const TicketCard: React.FC<EventTicketProps> = ({ticket}) => {
+const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
   const [ticketCount, setTicketCount] = useState(0)
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const updateSelectedTickets = useTicketsStore((state) => state.updateSelectedTickets)
   const setTotalPrice = useTicketsStore((state) => state.setTotalTicketsPrice)
+  const startDateTime = `${event?.startDate} ${event?.startTime}`
 
   // create a ticket quantity value - it finds the ticket in the array and returns the totalQuantitySelected and if it doesn't find it, it returns 0
-  const ticketQuantity = selectedTickets.find((ticketItem) => ticketItem.ticketId === ticket?.ticketId)?.totalQuantitySelected || 0
-  
-  const addTicket = (selectedTicket:any) => {
+  const ticketQuantity =
+    selectedTickets.find((ticketItem) => ticketItem.ticketId === ticket?.ticketId)
+      ?.totalQuantitySelected || 0
+
+  const addTicket = (selectedTicket: any) => {
     setTicketCount(ticketCount + 1)
     // check if the ticket is already in the array if it is, update the count, if not add it
     const ticket = selectedTickets.find((ticket) => ticket.ticketId === selectedTicket?.ticketId)
@@ -75,50 +80,45 @@ const TicketCard: React.FC<EventTicketProps> = ({ticket}) => {
     }
   }
   return (
-    <>
-      <div className="flex flex-col items-center justify-center bg-center bg-cover h-full w-[90%] sm:w-[45%] m-2 max-[640px]:w-[90%]">
-        <div className="w-full mx-auto z-10 rounded">
-          <div className="flex flex-col">
-            <div className="bg-white relative border-2 shadow-sm rounded p-4 m-2 w-full">
-              <div className="flex-none sm:flex">
-                <div className="flex-auto justify-evenly">
-                  <div className="flex items-center justify-center sm:justify-between">
-                    <div className="flex items-center">
-                      <h2 className="font-medium">{ticket?.name}</h2>
-                    </div>
-                  </div>
-
-                  <div className="border-b border-dashed border-b-2 my-3"></div>
-                  <div className="flex flex-col items-center justify-center text-sm sm:items-start">
-                    <div className="flex flex-col items-start">
-                      <p className="font-bold text-center text-xl mt-2 text-mainSecondary">
-                        <span className="text-gray-600">KES </span>{ticket?.price}
-                      </p>
-                      <div className="flex flex-row mt-4 items-center justify-center">
-                        {ticket?.quantity === 0 ? (
-                          <p className="font-bold text-red-600">Sold Out</p>
-                        ): (
-                          <>
-                          <Button className="border rounded" onClick={() => removeTicket(ticket)} disabled={ticketQuantity === 0}>
-                          <Minus className="cursor-pointer" size={13} />
-                        </Button>
-                        <p className="flex items-center justify-center w-[2em] text-base">{ticketQuantity}</p>{" "}
-                        <Button className="bg-neutralDark rounded focus-visible:bg-neutralDark" onClick={() => addTicket(ticket)}>
-                          <Plus className="cursor-pointer" size={13} color="white" />
-                        </Button>
-                          </>
-                        )}
-                        
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="bg-white text-dark w-full mt-6 p-6 h-[auto] w-[366px] rounded-[8px] md:w-[48%]">
+      <div>
+        <h1 className="text-[18px] font-semibold">{ticket?.name}</h1>
+      </div>
+      <div className="mt-2">
+        <p className="text-[17px] font-normal">
+          {moment(event?.startDate).format("ddd MMM Do")} -{" "}
+          {moment(event?.endDate).format("ddd MMM Do")}
+        </p>
+        <p className="text-[17px] font-normal">Starts at {moment(startDateTime).format("LT")}</p>
+      </div>
+      <div className="mt-2">
+        <p className="text-[18px] text-mainPrimary font-bold">KES {ticket?.price}</p>
+      </div>
+      <div>
+        <div className="flex flex-row mt-4 items-center justify-start">
+          {ticket?.quantity === 0 ? (
+            <p className="font-bold text-red-600">Sold Out</p>
+          ) : (
+            <>
+              <Button
+                className="border rounded"
+                onClick={() => removeTicket(ticket)}
+                disabled={ticketQuantity === 0}
+              >
+                <Minus className="cursor-pointer" size={13} color="black" />
+              </Button>
+              <p className="flex items-center justify-center w-[2em] text-base">{ticketQuantity}</p>{" "}
+              <Button
+                className="bg-secondaryBrown rounded focus-visible:bg-secondaryBrown"
+                onClick={() => addTicket(ticket)}
+              >
+                <Plus className="cursor-pointer" size={13} color="black" />
+              </Button>
+            </>
+          )}
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

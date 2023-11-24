@@ -1,18 +1,19 @@
+"use client"
+import DefaultLayout from "@/layouts/default-layout"
+import { errorToast, truncateText, warningToast } from "@/lib/utils"
+import { useTicketsStore } from "@/stores/tickets-store"
+import { TicketDataTypeTest } from "@/types/ticket"
+import axios from "axios"
+import { ArrowLeft, Calendar, Clock2, Loader2, Map, MapPin } from "lucide-react"
+import moment from "moment"
 import Link from "next/link"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 import TicketCard from "../../../components/ticket-card"
 import CustomButton from "../../../components/ui/custom-button"
-import { Calendar, Clock2, Loader2, Map } from "lucide-react"
-import DefaultLayout from "@/layouts/default-layout"
-import moment from "moment"
-import { useEffect, useState } from "react"
-import axios from "axios"
-import { TicketDataType, TicketDataTypeTest, TicketPurchaseType } from "@/types/ticket"
-import { useRouter } from "next/router"
-import { useTicketsStore } from "@/stores/tickets-store"
-import { errorToast } from "@/lib/utils"
-import { API_BASE_URL } from "@/constants"
-import Image from "next/image"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
+import Head from "next/head"
+import * as Sentry from "@sentry/nextjs";
 
 export default function Events() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
@@ -24,22 +25,26 @@ export default function Events() {
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const router = useRouter()
+  const { id: eventId } = router?.query
   useEffect(() => {
     const fetchSelectedEventFn = async () => {
+      if (!eventId) return
       setLoading(true)
       const config = {
         method: "get",
-        url: `https://api.tikomatata.co.ke/api/v1/ticket/event?id=${router?.query?.id}`,
+        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/event?id=${eventId}`,
       }
-  
+
       try {
         const response = await axios.request(config)
-        if (response.status === 200) {
+        if (response.data.status === 200) {
           setSelectedEvent(response.data.data)
         } else {
+          Sentry.captureException(response.data);
           setEventError(response.data.message)
         }
       } catch (error) {
+        Sentry.captureException(error);
         setEventError(error)
       } finally {
         setLoading(false)
@@ -47,18 +52,49 @@ export default function Events() {
     }
     fetchSelectedEventFn()
     // return () => {}
-  }, [router?.query?.id])
+  }, [eventId])
 
   const completeOrder = () => {
-    if(selectedTickets.length === 0) {
-      errorToast("Please select at least one ticket")
-      return;
+    if (selectedTickets.length === 0) {
+      warningToast("Please select at least one ticket")
+      return
     }
     router.push("/checkout")
   }
-  
+
   return (
-    <DefaultLayout>
+    <DefaultLayout noFooter={true}>
+      {selectedEvent !== null && (
+        <Head>
+          <title>{selectedEvent?.name} | Tikomatata | touch grass!</title>
+          <meta name="description" content={`${truncateText(selectedEvent?.description, 15)}...`} />
+          <link rel="icon" href="/favicon.ico" />
+          <meta
+            property="og:title"
+            content={`${selectedEvent?.name} | Tikomatata | touch grass!`}
+          />
+          <meta property="og:description" content={`${truncateText(selectedEvent?.description, 15)}...`} />
+          {selectedEvent?.posterUrl && (
+            <meta
+              property="og:image"
+              content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
+            />
+          )}
+
+          <meta
+            property="twitter:title"
+            content={`${selectedEvent?.name} | Tikomatata | touch grass!`}
+          />
+          <meta
+            property="twitter:description"
+            content={`${truncateText(selectedEvent?.description, 15)}...`}
+          />
+          {selectedEvent?.posterUrl && (
+            <meta property="twitter:image" content={selectedEvent?.posterUrl} />
+          )}
+        </Head>
+      )}
+
       {loading ? (
         <main className="min-h-screen flex items-center justify-center">
           <Loader2 className="mx-auto animate-spin" size={64} color="#3C0862" />
@@ -71,30 +107,42 @@ export default function Events() {
               <CustomButton className="mt-4">
                 <Link href="/">Go Back</Link>
               </CustomButton>
-          </main>
+            </main>
           ) : (
-            <main className="flex min-h-screen flex-col items-start justify-start">
+            <main className="flex sm:min-h-screen flex-col items-start justify-start bg-white sm:bg-beigeLight">
               <div className="flex w-full flex-col items-center justify-between h-full sm:flex-row sm:items-start">
-                <div className="w-full h-[50vh] px-6 pb-6 pt-8 flex items-start justify-center sm:w-[45%] sm:px-16 sm:pb-16 sm:pt-8 sm:min-h-screen">
-                  <div className="h-[22em] w-[25em] sm:h-[40em] sm:w-[35em]">
-                  <div
+                <div className="flex items-start justify-start w-full px-6 pb-6 pt-6 sm:hidden">
+                  <h2
+                    className="text-dark text-xl leading-7 flex flex-row"
+                    onClick={() => router.back()}
+                  >
+                    <span className="mr-4">
+                      <ArrowLeft />
+                    </span>
+                    {selectedEvent?.name}
+                  </h2>
+                </div>
+                <div></div>
+                <div className="w-full h-[auto] px-6 flex items-start justify-center sm:w-[45%] sm:px-16 sm:pb-16 sm:pt-8 sm:min-h-screen">
+                  <div className="h-[300px] w-[366px] sm:h-[40em] sm:w-[35em]">
+                    <div
                       className="w-full h-[100%] bg-top bg-cover rounded"
                       style={{
                         backgroundImage: `url(${selectedEvent?.posterUrl})`,
                         border: "0.25rem",
                       }}
-                    >
-                  </div>
+                    ></div>
                   </div>
                 </div>
-                <div className="w-full p-8 border-t-2 sm:min-h-screen sm:w-[55%] sm:border-l-2 sm:border-t-0 sm:p-12">
+                {/* the mobile view content section  */}
+                <div className="w-full px-8 py-2 bg-white sm:min-h-screen sm:hidden">
                   <div className="flex flex-col">
-                    <h2 className="text-2xl font-semibold text-testPrimary sm:text-4xl">
+                    <h2 className="text-dark text-xl leading-7 hidden sm:flex">
                       {selectedEvent?.name}
                     </h2>
-                    <p className="text-lg mt-4 flex flex-row items-center text-neutralDark">
+                    <p className="text-lg mt-1 flex flex-row items-center text-neutralDark sm:mt-4">
                       <Calendar size={18} className="mr-2" color="grey" />
-                      {moment(selectedEvent?.startDate).format("dddd Do MMMM")}{" "}
+                      {moment(selectedEvent?.startDate).format("dddd Do MMMM")}
                     </p>
                     <p className="text-lg mt-2 flex flex-row items-center text-neutralDark">
                       <Clock2 size={18} className="mr-2" color="grey" />{" "}
@@ -104,18 +152,39 @@ export default function Events() {
                       <Map size={18} className="mr-2" color="grey" /> {selectedEvent?.location}
                     </p>
                   </div>
-                  <div className="mt-6">
+                </div>
+                <div className="w-full bg-white sm:min-h-screen sm:w-[55%] sm:pr-2 sm:pt-6 sm:bg-beigeLight">
+                  {/* the desktop view details section  */}
+                  <div className="hidden sm:block w-full px-8 py-2 bg-white sm:pb-2 sm:px-1 sm:pr-8 sm:bg-beigeLight">
+                    <div className="flex flex-col">
+                      <h2 className="text-dark text-2xl leading-7 hidden sm:flex font-bold">
+                        {selectedEvent?.name}
+                      </h2>
+                      <p className="text-lg mt-1 flex flex-row items-center text-mainPrimary sm:mt-4">
+                        <Calendar size={18} className="mr-2" color="grey" />
+                        {moment(selectedEvent?.startDate).format("dddd Do MMMM")}
+                      </p>
+                      <p className="text-lg mt-2 flex flex-row items-center text-neutralDark">
+                        <Clock2 size={18} className="mr-2" color="grey" />{" "}
+                        {moment(startDateTime).format("LT")} - {moment(endDateTime).format("LT")}
+                      </p>
+                      <p className="text-lg mt-2 flex flex-row items-center text-neutralDark">
+                        <MapPin size={18} className="mr-2" color="grey" /> {selectedEvent?.location}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-6 pt-4 px-8 pb-16 bg-beigeLight sm:px-1 sm:pr-8 sm:pt-2">
                     <Tabs defaultValue="tickets" className="w-full">
                       <TabsList className="bg-none w-full flex justify-start">
                         <TabsTrigger
                           value="tickets"
-                          className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-testPrimary"
+                          className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-secondaryBrown"
                         >
                           Tickets
                         </TabsTrigger>
                         <TabsTrigger
                           value="description"
-                          className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-testPrimary"
+                          className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-secondaryBrown"
                         >
                           Description
                         </TabsTrigger>
@@ -124,33 +193,63 @@ export default function Events() {
                         <div className="flex flex-row flex-wrap items-center justify-between">
                           {selectedEvent?.tickets?.length === 0 ? (
                             <p className="mt-2">No tickets available for this event.</p>
-                          ) : (<>
-                          {selectedEvent?.tickets?.map((ticket: TicketDataTypeTest) => (
-                            <TicketCard key={ticket?.ticketId} ticket={ticket} />
-                          ))}
-                          </>)}
+                          ) : (
+                            <>
+                              {selectedEvent?.tickets?.map((ticket: TicketDataTypeTest) => (
+                                <TicketCard
+                                  key={ticket?.ticketId}
+                                  ticket={ticket}
+                                  event={selectedEvent}
+                                />
+                              ))}
+                            </>
+                          )}
                         </div>
                         {selectedEvent?.tickets?.length !== 0 && (
                           <div className="mt-8 flex flex-col sm:flex-row items-start justify-between w-full">
-                          <div className="w-full bg-gray-100 p-2 h-10 rounded flex items-center justify-between text-lg mb-4 sm:mb-0 sm:w-[45%]">
-                            TOTAL{" "}
-                            <span className="text-stone-900 font-medium">
-                              KES <span className="font-semibold">{totalTicketsPrice}</span>
-                            </span>
+                            <div className="w-full bg-gray-100 p-2 h-10 rounded flex items-center justify-between text-lg mb-4 sm:mb-0 sm:w-[45%]">
+                              TOTAL{" "}
+                              <span className="text-stone-900 font-medium">
+                                KES <span className="font-semibold">{totalTicketsPrice}</span>
+                              </span>
+                            </div>
+
+                            <CustomButton className="w-full sm:w-[45%]" onClick={completeOrder}>
+                              Complete Order
+                            </CustomButton>
                           </div>
-                          
-                            <CustomButton className="w-full sm:w-[45%]" onClick={completeOrder}>Complete Order</CustomButton>
-                        </div>
                         )}
                       </TabsContent>
                       <TabsContent value="description">
-                        <div className="pt-4">
+                        <div className="pt-4 min-h-[40vh] sm:min-h-none">
                           <p>{selectedEvent?.description}</p>
                         </div>
                       </TabsContent>
                     </Tabs>
                   </div>
                 </div>
+                {/* the sticky checkout button  */}
+                {selectedTickets?.length !== 0 && (
+                  <div className="w-full sm:hidden">
+                    <section
+                      id="bottom-navigation"
+                      className=" block fixed inset-x-0 bottom-0 z-10 bg-white shadow h-20 flex flex-row flex-wrap items-center justify-between"
+                    >
+                      <div className="p-4 flex flex-row flex-wrap items-center justify-between w-full">
+                        <div className="w-[45%] p-2 h-10 rounded flex flex-wrap items-center justify-between text-lg">
+                          TOTAL{" "}
+                          <span className="text-stone-900 font-medium">
+                            KES <span className="font-semibold">{totalTicketsPrice}</span>
+                          </span>
+                        </div>
+
+                        <CustomButton className="w-[40%]" onClick={completeOrder}>
+                          Complete Order
+                        </CustomButton>
+                      </div>
+                    </section>
+                  </div>
+                )}
               </div>
             </main>
           )}
