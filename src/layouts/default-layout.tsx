@@ -39,7 +39,7 @@ const DefaultLayout: React.FC<Props> = ({
         <div className="md:flex items-center justify-between hidden space-x-8">
           <Link
             href={
-              process.env.ENV == "production"
+              process.env.NODE_ENV == "production"
                 ? "https://app.tikomatata.com"
                 : "https://dev-app.tikomatata.com"
             }
