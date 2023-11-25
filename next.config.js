@@ -6,6 +6,7 @@ const nextConfig = {
       "tm-poster-images.fra1.cdn.digitaloceanspaces.com",
       "tm-poster-images.blr1.cdn.digitaloceanspaces.com",
       "tm-posters.blr1.cdn.digitaloceanspaces.com",
+      "tm-images.blr1.cdn.digitaloceanspaces.com",
       "external-preview.redd.it",
       "images.unsplash.com",
     ],
