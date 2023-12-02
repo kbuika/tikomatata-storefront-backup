@@ -18,6 +18,11 @@ const nextConfig = {
         destination: "https://echoes.hustlesasa.shop/",
         permanent: true,
       },
+      {
+        source: "/the-jump-off",
+        destination: "https://tikomatata.com/events/THE%20JUMP%20OFF%20?id=6",
+        permanent: true,
+      },
     ]
   },
 }
