@@ -80,7 +80,7 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
     }
   }
   return (
-    <div className="bg-white text-dark w-full mt-6 p-6 h-[auto] w-[366px] rounded-[8px] md:w-[48%]">
+    <div className="bg-white text-dark w-full mt-6 p-6 h-[auto] w-[366px] rounded-[8px] md:w-[48%] shadow-xl">
       <div>
         <h1 className="text-[18px] font-semibold">{ticket?.name}</h1>
       </div>

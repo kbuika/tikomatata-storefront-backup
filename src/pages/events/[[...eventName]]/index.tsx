@@ -142,7 +142,8 @@ export default function Events() {
                     </h2>
                     <p className="text-lg mt-1 flex flex-row items-center text-neutralDark sm:mt-4">
                       <Calendar size={18} className="mr-2" color="grey" />
-                      {moment(selectedEvent?.startDate).format("dddd Do MMMM")}
+                      {moment(selectedEvent?.startDate).format("ddd Do MMM")}
+                      {eventId == "6" && <>{" , "}{moment("2023-12-31").format("ddd Do MMM")}</>}
                     </p>
                     <p className="text-lg mt-2 flex flex-row items-center text-neutralDark">
                       <Clock2 size={18} className="mr-2" color="grey" />{" "}
@@ -162,7 +163,8 @@ export default function Events() {
                       </h2>
                       <p className="text-lg mt-1 flex flex-row items-center text-mainPrimary sm:mt-4">
                         <Calendar size={18} className="mr-2" color="grey" />
-                        {moment(selectedEvent?.startDate).format("dddd Do MMMM")}
+                        {moment(selectedEvent?.startDate).format("ddd Do MMM")}
+                        {eventId == "6" && <>{" , "}{moment("2023-12-31").format("ddd Do MMM")}</>}
                       </p>
                       <p className="text-lg mt-2 flex flex-row items-center text-neutralDark">
                         <Clock2 size={18} className="mr-2" color="grey" />{" "}
