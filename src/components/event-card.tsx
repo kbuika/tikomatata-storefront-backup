@@ -35,7 +35,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
       <div className="flex flex-row w-full min-h-[30%] h-auto pb-2">
         <div className="flex flex-col bg-secondaryBrown items-center justify-start pt-3 mb-[16px] ml-[8px] w-1/4 rounded-b-[8px] font-bold leading-none uppercase text-dark border-r z-10 tracking-wide leading-6">
           <div className="text-base">{moment(event?.startDate).format("ddd")}</div>
-          <div className="text-base mt-1">{moment(event?.startDate).format("Do")}</div>
+          <div className="text-base mt-1">{event?.eventId?.toString() === "6" ? "4 PM" : <>{moment(event?.startDate).format("Do")}</>}</div>
           <div className="text-base mt-1">{moment(event?.startDate).format("MMM")}</div>
         </div>
         <div className="pl-4 pr-4 pt-4 pb-2 font-normal text-gray-800">
@@ -49,7 +49,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
             </div>
             <div className="text-base flex flex-row items-center mt-[4px]">
               <Clock4 size={18} className="mr-2" color="#555455" />
-              {moment(startDateTime).format("LT")}
+              {event?.eventId?.toString() === "6" ? "4:00 PM" : <>{moment(startDateTime).format("LT")}</>}
             </div>
           </div>
         </div>
