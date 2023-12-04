@@ -85,10 +85,29 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
         <h1 className="text-[18px] font-semibold">{ticket?.name}</h1>
       </div>
       <div className="mt-2">
-        <p className="text-[17px] font-normal">
-          {moment(event?.startDate).format("ddd MMM Do")} -{" "}
-          {moment(event?.endDate).format("ddd MMM Do")}
-        </p>
+        {process.env.NODE_ENV === "production" ? (
+          <>
+            <p className="text-[17px] font-normal">
+              {moment(event?.startDate).format("ddd MMM Do")}{" "}
+              {event?.eventId == "6" && ticket?.ticketId?.toString() == "10" && (
+                <>
+                  {(event?.eventId == "6" && ticket?.ticketId?.toString() == "10") ? (
+                    <>and{" "}{moment("2023-12-31").format("ddd Do MMM")}</>
+                  ) : (
+                    <>-{" "}{moment(event?.endDate).format("ddd MMM Do")}</>
+                  )}
+                </>
+              )}
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="text-[17px] font-normal">
+              {moment(event?.startDate).format("ddd MMM Do")} -{" "}
+              {moment(event?.endDate).format("ddd MMM Do")}
+            </p>
+          </>
+        )}
         <p className="text-[17px] font-normal">Starts at {moment(startDateTime).format("LT")}</p>
       </div>
       <div className="mt-2">
