@@ -7,17 +7,19 @@ import { useRouter } from "next/router"
 import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
 import { errorToast } from "@/lib/utils"
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/nextjs"
+import TicketToDownloadTest from "@/components/ticket-download-test"
 
 export default function TicketsOrder() {
   const [orderData, setOrderData] = useState<any>({})
   const [orderError, setOrderError] = useState<any>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const router = useRouter()
-  const {orderId} = router?.query
+  const ticketRef = useRef<any>(null)
+  const { orderId } = router?.query
   useEffect(() => {
     const fetchSelectedOrder = async () => {
-      if(!orderId) return
+      if (!orderId) return
       setLoading(true)
       const config = {
         method: "get",
@@ -30,13 +32,13 @@ export default function TicketsOrder() {
         } else {
           setOrderError(response.data)
           errorToast("Could not fetch purchased ticket! If this persists, please contact support")
-          Sentry.captureException(response.data);
+          Sentry.captureException(response.data)
           Sentry.captureMessage("View tickets error")
         }
       } catch (error) {
         setOrderError(error)
         errorToast("Could not fetch purchased ticket! If this persists, please contact support")
-        Sentry.captureException(error);
+        Sentry.captureException(error)
         Sentry.captureMessage("View tickets error")
       } finally {
         setLoading(false)
@@ -72,11 +74,23 @@ export default function TicketsOrder() {
                   </div>
                   <div className="flex flex-row flex-wrap items-start justify-start">
                     {orderData?.tickets?.map((ticket: any) => (
-                      <TicketToDownload
-                        key={ticket.ticketId}
-                        ticket={ticket}
-                        event={orderData}
-                      />
+                      <>
+                        {process.env.NODE_ENV == "production" ? (
+                          <TicketToDownload
+                            key={ticket.ticketId}
+                            ticket={ticket}
+                            event={orderData}
+                            ticketRef={ticketRef}
+                          />
+                        ) : (
+                          <TicketToDownloadTest
+                            key={ticket.ticketId}
+                            ticket={ticket}
+                            event={orderData}
+                            ticketRef={ticketRef}
+                          />
+                        )}
+                      </>
                     ))}
                   </div>
                 </div>
