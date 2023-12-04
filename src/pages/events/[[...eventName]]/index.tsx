@@ -14,6 +14,7 @@ import CustomButton from "../../../components/ui/custom-button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
 import Head from "next/head"
 import * as Sentry from "@sentry/nextjs"
+import { useEventsStore } from "@/stores/events-store"
 
 export default function Events() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
@@ -23,6 +24,7 @@ export default function Events() {
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
   const endDateTime = `${selectedEvent?.endDate} ${selectedEvent?.endTime}`
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
+  const setSelectedEventInCache = useEventsStore((state) => state.setSelectedEvent)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const router = useRouter()
   const { id: eventId } = router?.query
@@ -38,7 +40,12 @@ export default function Events() {
       try {
         const response = await axios.request(config)
         if (response.data.status === 200) {
-          setSelectedEvent(response.data.data)
+          let event = response.data.data
+          if(event?.eventId?.toString() === "6") {
+            event = {...event, startTime: "16:00"}
+          }
+          setSelectedEvent(event)
+          setSelectedEventInCache(event)
         } else {
           Sentry.captureException(response.data)
           setEventError(response.data.message)
@@ -52,6 +59,7 @@ export default function Events() {
     }
     fetchSelectedEventFn()
     // return () => {}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId])
 
   const completeOrder = () => {
