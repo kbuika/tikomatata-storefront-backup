@@ -13,7 +13,7 @@ import TicketCard from "../../../components/ticket-card"
 import CustomButton from "../../../components/ui/custom-button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
 import Head from "next/head"
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/nextjs"
 
 export default function Events() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
@@ -40,11 +40,11 @@ export default function Events() {
         if (response.data.status === 200) {
           setSelectedEvent(response.data.data)
         } else {
-          Sentry.captureException(response.data);
+          Sentry.captureException(response.data)
           setEventError(response.data.message)
         }
       } catch (error) {
-        Sentry.captureException(error);
+        Sentry.captureException(error)
         setEventError(error)
       } finally {
         setLoading(false)
@@ -73,7 +73,10 @@ export default function Events() {
             property="og:title"
             content={`${selectedEvent?.name} | Tikomatata | touch grass!`}
           />
-          <meta property="og:description" content={`${truncateText(selectedEvent?.description, 15)}...`} />
+          <meta
+            property="og:description"
+            content={`${truncateText(selectedEvent?.description, 15)}...`}
+          />
           {selectedEvent?.posterUrl && (
             <meta
               property="og:image"
@@ -143,7 +146,12 @@ export default function Events() {
                     <p className="text-lg mt-1 flex flex-row items-center text-neutralDark sm:mt-4">
                       <Calendar size={18} className="mr-2" color="grey" />
                       {moment(selectedEvent?.startDate).format("ddd Do MMM")}
-                      {eventId == "6" && <>{" , "}{moment("2023-12-31").format("ddd Do MMM")}</>}
+                      {eventId == "6" && (
+                        <>
+                          {" , "}
+                          {moment("2023-12-31").format("ddd Do MMM")}
+                        </>
+                      )}
                     </p>
                     <p className="text-lg mt-2 flex flex-row items-center text-neutralDark">
                       <Clock2 size={18} className="mr-2" color="grey" />{" "}
@@ -164,7 +172,12 @@ export default function Events() {
                       <p className="text-lg mt-1 flex flex-row items-center text-mainPrimary sm:mt-4">
                         <Calendar size={18} className="mr-2" color="grey" />
                         {moment(selectedEvent?.startDate).format("ddd Do MMM")}
-                        {eventId == "6" && <>{" , "}{moment("2023-12-31").format("ddd Do MMM")}</>}
+                        {eventId == "6" && (
+                          <>
+                            {" , "}
+                            {moment("2023-12-31").format("ddd Do MMM")}
+                          </>
+                        )}
                       </p>
                       <p className="text-lg mt-2 flex flex-row items-center text-neutralDark">
                         <Clock2 size={18} className="mr-2" color="grey" />{" "}
@@ -176,7 +189,14 @@ export default function Events() {
                     </div>
                   </div>
                   <div className="mt-6 pt-4 px-8 pb-16 bg-beigeLight sm:px-1 sm:pr-8 sm:pt-2">
-                    <Tabs defaultValue={process.env.NODE_ENV === "production" && eventId == "6"? "description" : "tickets"} className="w-full">
+                    <Tabs
+                      defaultValue={
+                        process.env.NODE_ENV === "production" && eventId == "6"
+                          ? "description"
+                          : "tickets"
+                      }
+                      className="w-full"
+                    >
                       <TabsList className="bg-none w-full flex justify-start">
                         <TabsTrigger
                           value="tickets"
@@ -224,7 +244,7 @@ export default function Events() {
                       </TabsContent>
                       <TabsContent value="description">
                         <div className="pt-4 min-h-[40vh] sm:min-h-none">
-                          <p>{selectedEvent?.description}</p>
+                          <p style={{ whiteSpace: "pre-wrap" }}>{selectedEvent?.description}</p>
                         </div>
                       </TabsContent>
                     </Tabs>
