@@ -137,7 +137,7 @@ export default function Events() {
                 <div className="w-full h-[auto] px-6 flex items-start justify-center sm:w-[45%] sm:px-16 sm:pb-16 sm:pt-8 sm:min-h-screen">
                   <div className="h-[300px] w-[366px] sm:h-[40em] sm:w-[35em]">
                     <div
-                      className="w-full h-[100%] bg-top bg-cover rounded"
+                      className="w-full h-[100%] bg-contain bg-no-repeat rounded"
                       style={{
                         backgroundImage: `url(${selectedEvent?.posterUrl})`,
                         border: "0.25rem",
