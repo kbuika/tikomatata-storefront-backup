@@ -74,23 +74,12 @@ export default function TicketsOrder() {
                   </div>
                   <div className="flex flex-row flex-wrap items-start justify-start">
                     {orderData?.tickets?.map((ticket: any) => (
-                      <>
-                        {process.env.NODE_ENV == "production" ? (
-                          <TicketToDownload
-                            key={ticket.ticketId}
-                            ticket={ticket}
-                            event={orderData}
-                            ticketRef={ticketRef}
-                          />
-                        ) : (
-                          <TicketToDownloadTest
-                            key={ticket.ticketId}
-                            ticket={ticket}
-                            event={orderData}
-                            ticketRef={ticketRef}
-                          />
-                        )}
-                      </>
+                      <TicketToDownloadTest
+                        key={ticket.ticketId}
+                        ticket={ticket}
+                        event={orderData}
+                        ticketRef={ticketRef}
+                      />
                     ))}
                   </div>
                 </div>
