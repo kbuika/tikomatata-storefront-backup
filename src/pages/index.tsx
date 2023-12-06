@@ -10,7 +10,7 @@ import { useEffect, useState } from "react"
 import SellOutEventBanner from "@/components/sell-out-event-banner"
 import { useOrderStore } from "@/stores/order-store"
 import Head from "next/head"
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/nextjs"
 
 type Props = {
   events: Array<EventDataType>
@@ -37,11 +37,11 @@ const Home: React.FC<Props> = () => {
           setEvents(response.data.data.events)
           setAllEventsStore(response.data.data.events)
         } else {
-          Sentry.captureException(response.data);
+          Sentry.captureException(response.data)
           setEventsError(response.data)
         }
       } catch (error) {
-        Sentry.captureException(error);
+        Sentry.captureException(error)
         setEventsError(error)
       } finally {
         setLoading(false)
@@ -53,7 +53,7 @@ const Home: React.FC<Props> = () => {
   resetAllTickets()
   resetOrderDetails()
   resetSelectedEvent()
-  
+
   return (
     <DefaultLayout noHeader={true} isMain={true}>
       <Head>
@@ -73,7 +73,10 @@ const Home: React.FC<Props> = () => {
           content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
         />
         <meta property="twitter:title" content="Tikomatata | touch grass!" />
-        <meta property="twitter:description" content="Where Every Event is an Experience, and Every Experience is Extraordinary" />
+        <meta
+          property="twitter:description"
+          content="Where Every Event is an Experience, and Every Experience is Extraordinary"
+        />
         <meta
           property="twitter:image"
           content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
@@ -82,6 +85,9 @@ const Home: React.FC<Props> = () => {
       <main className="home h-[414px] bg-beigeLight md:h-[65vh]">
         <Nav />
         <Hero />
+        <div className="flex items-center justify-end bottom-0">
+          <p className="text-slate-500 text-xs mr-2">Credits | @hornsphere</p>
+        </div>
       </main>
       <div className="mx-8 md:mx-0 md:px-[40px]">
         <h2 className="my-[24px] text-2xl font-bold">Upcoming Events</h2>
