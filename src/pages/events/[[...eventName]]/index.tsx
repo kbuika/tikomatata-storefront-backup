@@ -15,6 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui
 import Head from "next/head"
 import * as Sentry from "@sentry/nextjs"
 import { useEventsStore } from "@/stores/events-store"
+import { ReportView } from "@/components/report-view"
 
 export default function Events() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
@@ -121,6 +122,7 @@ export default function Events() {
             </main>
           ) : (
             <main className="flex sm:min-h-screen flex-col items-start justify-start bg-white sm:bg-beigeLight">
+              <ReportView eventId={selectedEvent?.eventId}/>
               <div className="flex w-full flex-col items-center justify-between h-full sm:flex-row sm:items-start">
                 <div className="flex items-start justify-start w-full px-6 pb-6 pt-6 sm:hidden">
                   <h2
