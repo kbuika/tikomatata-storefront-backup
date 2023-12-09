@@ -26,7 +26,7 @@ const DefaultLayout: React.FC<Props> = ({
   return (
     <div className="bg-beigeLight">
       <div
-        className={`h-[10vh] flex items-center justify-between w-full px-[24px] sticky top-0 border-b-2 bg-white z-50
+        className={`h-[8vh] flex items-center justify-between w-full px-[24px] sticky top-0 border-b-2 bg-white z-50
          ${noHeader ? "hidden" : "md:flex"}`}
       >
         <Link href="/">
@@ -38,11 +38,7 @@ const DefaultLayout: React.FC<Props> = ({
         </Link>
         <div className="md:flex items-center justify-between hidden space-x-8">
           <Link
-            href={
-              process.env.NODE_ENV == "production"
-                ? "https://app.tikomatata.com"
-                : "https://dev-app.tikomatata.com"
-            }
+            href="https://agency.tikomatata.com"
             target="_blank"
             rel="noopener noreferrer"
             className=" text-gray-400 hover:text-white"

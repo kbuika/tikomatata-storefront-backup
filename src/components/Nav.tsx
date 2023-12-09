@@ -31,7 +31,7 @@ const Nav = () => {
         )}
       </Link>
       <div className="flex items-center justify-between space-x-8">
-        <Link href={process.env.NODE_ENV == "production" ? "https://app.tikomatata.com" : "https://dev-app.tikomatata.com"} target="_blank" rel="noopener noreferrer" className=" text-gray-400 hover:text-white">
+        <Link href="https://agency.tikomatata.com" target="_blank" rel="noopener noreferrer" className=" text-gray-400 hover:text-white">
           <CustomButton>Create Your Event</CustomButton>
         </Link>
       </div>
