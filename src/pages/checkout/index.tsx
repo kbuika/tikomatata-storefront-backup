@@ -98,6 +98,7 @@ export default function Checkout() {
     email: customerEmail,
     label: `Confirm and Pay KES ${totalTicketsPrice}`,
     phone: `0${customerPhone}` as phone,
+    channels: ["mobile_money", "card"]
   } as PaystackProps
 
   return (
@@ -227,7 +228,7 @@ export default function Checkout() {
                     <PaystackHookExample
                       onSuccess={handlePaystackSuccess}
                       onClose={handlePaystackClose}
-                      config={componentProps}
+                      config={{...componentProps, channels: ["mobile_money"]}}
                       validateForm={validateForm}
                       paymentMethod="mobile_money"
                       paymentReference={paymentReference}
@@ -249,7 +250,7 @@ export default function Checkout() {
                     <PaystackHookExample
                       onSuccess={handlePaystackSuccess}
                       onClose={handlePaystackClose}
-                      config={componentProps}
+                      config={{...componentProps, channels: ["card"]}}
                       validateForm={validateForm}
                       paymentMethod="card"
                       paymentReference={paymentReference}
