@@ -89,9 +89,9 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
           <>
             <p className="text-[17px] font-normal">
               {moment(event?.startDate).format("ddd MMM Do")}{" "}
-              {event?.eventId == "6" && ticket?.ticketId?.toString() == "10" && (
+              {event?.eventId == "6" && (ticket?.ticketId?.toString() == "10" || ticket?.ticketId?.toString() == "11") && (
                 <>
-                  {(event?.eventId == "6" && ticket?.ticketId?.toString() == "10") ? (
+                  {(event?.eventId == "6" && (ticket?.ticketId?.toString() == "10" || ticket?.ticketId?.toString() == "11")) ? (
                     <>and{" "}{moment("2023-12-31").format("ddd Do MMM")}</>
                   ) : (
                     <>-{" "}{moment(event?.endDate).format("ddd MMM Do")}</>
