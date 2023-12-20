@@ -23,7 +23,7 @@ export const PurchaseTicketsFn = async (checkoutData: checkoutDataType) => {
     tickets: purchasedTickets,
     email: checkoutData?.customerEmail,
     name: checkoutData?.customerName,
-    phoneNumber: `254${checkoutData?.customerPhone}`,
+    phoneNumber: checkoutData?.customerPhone !== undefined ? `254${checkoutData?.customerPhone}` : "",
     reference: checkoutData?.orderReference,
   }
 
