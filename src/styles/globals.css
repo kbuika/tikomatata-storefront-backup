@@ -287,3 +287,13 @@
 		width: 50%;
 	 }
 }
+
+.PhoneInputInput {
+	height: 100%;
+}
+
+.PhoneInputInput:focus {
+	border: none;
+	outline: none;
+	border-color: transparent;
+}
