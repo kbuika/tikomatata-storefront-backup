@@ -32,10 +32,7 @@ const schema = yup.object({
       "Please enter a valid email address",
     )
     .required("Please enter your email address"),
-  customerPhone: yup
-    .string()
-    .length(9, "Number should start with 7XXX.. or 1XXX.. and be 9 digits long")
-    .required("Please enter your phone number"),
+  customerPhone: yup.string().notRequired(),
 })
 
 type Currency = "KES"
@@ -97,7 +94,7 @@ export default function Checkout() {
     amount: totalTicketsPrice * 100,
     email: customerEmail,
     label: `Confirm and Pay KES ${totalTicketsPrice}`,
-    phone: `0${customerPhone}` as phone,
+    phone: customerPhone !== undefined ? `0${customerPhone}` as phone : "",
     channels: ["mobile_money", "card"]
   } as PaystackProps
 
@@ -191,7 +188,7 @@ export default function Checkout() {
                     className="w-3/4 h-[50px] bg-white appearance-none rounded-r block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                     placeholder="7XXXXXXXX"
                     autoComplete="nope"
-                    value={customerPhone}
+                    // value={customerPhone}
                     onChange={(e) => setValue("customerPhone", e.target.value)}
                   ></input>
                 </div>
