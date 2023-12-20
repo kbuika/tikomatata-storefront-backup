@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "@/constants"
+import { removePlusInPhone } from "@/lib/utils"
 import { TicketDataType, TicketPurchaseType } from "@/types/ticket"
 import axios from "axios"
 
@@ -23,7 +24,7 @@ export const PurchaseTicketsFn = async (checkoutData: checkoutDataType) => {
     tickets: purchasedTickets,
     email: checkoutData?.customerEmail,
     name: checkoutData?.customerName,
-    phoneNumber: checkoutData?.customerPhone !== undefined ? `254${checkoutData?.customerPhone}` : "",
+    phoneNumber: checkoutData?.customerPhone ? removePlusInPhone(checkoutData?.customerPhone) : "",
     reference: checkoutData?.orderReference,
   }
 

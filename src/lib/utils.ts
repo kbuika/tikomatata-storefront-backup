@@ -60,3 +60,7 @@ export const maskEmail = (email: string): string  => {
 
   return maskedEmail;
 }
+
+export const removePlusInPhone = (phone: string): string => {
+  return phone.replace(/\+/g, '');
+}
