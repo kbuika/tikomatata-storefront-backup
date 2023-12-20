@@ -89,7 +89,7 @@ export default function SuccessOrder() {
             </p>
             <p className="mt-[24px] text-dark text-[17px] leading-8 tricking-wide text-center">
               Your ticket for {selectedEvent?.name} has been sent to your email
-              <span className="text-[16px] font-bold">{" "}{maskEmail(orderDetails?.customerEmail)}</span>!
+              <span className="text-[16px] font-bold">{" "}{orderDetails?.customerEmail}</span>!
             </p>
             {/* <p className="mt-[32px] text-dark text-[16px] font-bold leading-8 tricking-wide">
               Transaction ID: {orderDetails?.orderReference}

@@ -20,6 +20,8 @@ import defaultImage from "../../images/default.jpg"
 import KenyaIcon from "../../images/kenya.png"
 import { PaystackProps } from "react-paystack/dist/types"
 import useCustomPaystackPayment from "@/hooks/useCustomPaystackPayment"
+import "react-phone-number-input/style.css"
+import PhoneInputWithCountry from "react-phone-number-input/react-hook-form"
 import * as Sentry from "@sentry/nextjs"
 
 const schema = yup.object({
@@ -32,10 +34,7 @@ const schema = yup.object({
       "Please enter a valid email address",
     )
     .required("Please enter your email address"),
-  customerPhone: yup
-    .string()
-    .length(9, "Number should start with 7XXX.. or 1XXX.. and be 9 digits long")
-    .required("Please enter your phone number"),
+  customerPhone: yup.string().notRequired(),
 })
 
 type Currency = "KES"
@@ -61,6 +60,7 @@ export default function Checkout() {
     formState: { errors },
     setValue,
     watch,
+    control,
   } = useForm({
     resolver: yupResolver(schema),
   })
@@ -97,8 +97,8 @@ export default function Checkout() {
     amount: totalTicketsPrice * 100,
     email: customerEmail,
     label: `Confirm and Pay KES ${totalTicketsPrice}`,
-    phone: `0${customerPhone}` as phone,
-    channels: ["mobile_money", "card"]
+    phone: customerPhone !== undefined ? (customerPhone as phone) : "",
+    channels: ["mobile_money", "card"],
   } as PaystackProps
 
   return (
@@ -177,28 +177,22 @@ export default function Checkout() {
                 <span className="text-criticalRed">{errors.customerEmail?.message}</span>
               )}
             </div>
-            <div className="w-full mt-[16px]">
+            <div className="w-full mt-[16px] text-neutralDark">
               <div>
-                <div className="flex items-center">
-                  <span className="w-[35%] text-neutralDark lg:w-1/4 bg-white h-[50px] flex items-center justify-center rounded-l border border-hidden-left border-gray-600">
-                    <Image src={KenyaIcon} alt="Kenyan Flag" className="mr-2" />
-                    +254
-                  </span>
-                  <input
-                    id="customerPhone"
-                    type="text"
-                    required
-                    className="w-3/4 h-[50px] bg-white appearance-none rounded-r block w-full px-3 py-2 border border-r-none border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
-                    placeholder="7XXXXXXXX"
-                    autoComplete="nope"
-                    value={customerPhone}
-                    onChange={(e) => setValue("customerPhone", e.target.value)}
-                  ></input>
-                </div>
-                {errors.customerPhone && (
-                  <span className="text-criticalRed">{errors.customerPhone?.message}</span>
-                )}
+                <PhoneInputWithCountry
+                  defaultCountry="KE"
+                  name="customerPhone"
+                  id="customerPhone"
+                  control={control}
+                  rules={{ required: true }}
+                  placeholder="Enter phone number"
+                  onChange={(e: string) => setValue("customerPhone", e)}
+                  className="w-3/4 h-[50px] bg-white appearance-none rounded block w-full pl-5 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                />
               </div>
+              {errors.customerPhone && (
+                <span className="text-criticalRed">{errors.customerPhone?.message}</span>
+              )}
             </div>
           </div>
           <div className="mt-6">
@@ -228,7 +222,7 @@ export default function Checkout() {
                     <PaystackHookExample
                       onSuccess={handlePaystackSuccess}
                       onClose={handlePaystackClose}
-                      config={{...componentProps, channels: ["mobile_money"]}}
+                      config={{ ...componentProps, channels: ["mobile_money"] }}
                       validateForm={validateForm}
                       paymentMethod="mobile_money"
                       paymentReference={paymentReference}
@@ -250,7 +244,7 @@ export default function Checkout() {
                     <PaystackHookExample
                       onSuccess={handlePaystackSuccess}
                       onClose={handlePaystackClose}
-                      config={{...componentProps, channels: ["card"]}}
+                      config={{ ...componentProps, channels: ["card"] }}
                       validateForm={validateForm}
                       paymentMethod="card"
                       paymentReference={paymentReference}
@@ -312,15 +306,19 @@ const PaystackHookExample = ({
         handlePayment(res.data.reference)
       } else {
         warningToast(res.message, 6000)
-        Sentry.captureException(res.data)
-        Sentry.captureMessage("Reserve ticket error")
+        if (process.env.NODE_ENV === "production") {
+          Sentry.captureException(res.data)
+          Sentry.captureMessage("Reserve ticket error")
+        }
         setInitialized(false)
       }
     } catch (error) {
       setInitialized(false)
       errorToast("Something went wrong while processing your order, please try again.")
-      Sentry.captureException(error)
-      Sentry.captureMessage("Initiate payment error!!")
+      if (process.env.NODE_ENV === "production") {
+        Sentry.captureException(error)
+        Sentry.captureMessage("Initiate payment error!!")
+      }
     }
   }
 
