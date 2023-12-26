@@ -85,7 +85,7 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
         <h1 className="text-[18px] font-semibold">{ticket?.name}</h1>
       </div>
       <div className="mt-2">
-        {process.env.NODE_ENV === "development" ? (
+        {process.env.NODE_ENV === "production" ? (
           <>
             <p className="text-[17px] font-normal">
               {moment(event?.startDate).format("ddd MMM Do")}{" "}
