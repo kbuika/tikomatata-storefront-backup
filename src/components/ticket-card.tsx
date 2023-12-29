@@ -4,6 +4,7 @@ import { Minus, Plus } from "lucide-react"
 import moment from "moment"
 import React, { useState } from "react"
 import { Button } from "./ui/button"
+import Sparkles from 'react-sparkle'
 
 interface EventTicketProps {
   ticket: TicketDataTypeTest
@@ -80,7 +81,8 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
     }
   }
   return (
-    <div className="bg-white text-dark w-full mt-6 p-6 h-[auto] w-[366px] rounded-[8px] md:w-[48%] shadow-xl">
+    <div className={`bg-white text-dark w-full mt-6 p-6 h-[auto] w-[366px] rounded-[8px] md:w-[48%] shadow-xl relative ${ticket?.ticketId?.toString() == "12" && "bg-[#ec8b9a]"}`}>
+      {ticket?.ticketId?.toString() == "12" && <Sparkles />}
       <div>
         <h1 className="text-[18px] font-semibold">{ticket?.name}</h1>
       </div>
@@ -89,7 +91,7 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
           <>
             <p className="text-[17px] font-normal">
               {moment(event?.startDate).format("ddd MMM Do")}{" "}
-              {event?.eventId == "6" && (ticket?.ticketId?.toString() == "8" || ticket?.ticketId?.toString() == "9" || ticket?.ticketId?.toString() == "11") && (
+              {event?.eventId == "6" && (ticket?.ticketId?.toString() == "8" || ticket?.ticketId?.toString() == "9" || ticket?.ticketId?.toString() == "11" || ticket?.ticketId?.toString() == "12") && (
                     <>or{" "}{moment("2023-12-31").format("ddd Do MMM")}</>
                     )}
 
