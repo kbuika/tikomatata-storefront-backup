@@ -72,6 +72,10 @@ export default function TicketsOrder() {
                       </Link>
                     </p>
                   </div>
+                  <div className="mx-6">
+                    <p>Please Note: <strong>VIP, Regular, Flash Sale and Group Tickets are only valid for one day -- Either Day One (30th) or Day Two (31st)</strong></p>
+                    <p>Please Note: <strong>Seasonal tickets are valid for all the 2 days</strong></p>
+                  </div>
                   <div className="flex flex-row flex-wrap items-start justify-start">
                     {orderData?.tickets?.map((ticket: any) => (
                       <TicketToDownloadTest
@@ -99,6 +103,7 @@ export default function TicketsOrder() {
                       <li>
                         <a href="mailto:info@tikomatata.com">info@tikomatata.com</a>
                       </li>
+                      <li>0110733776</li>
                       <li>0740459940</li>
                     </ul>
                   </div>
