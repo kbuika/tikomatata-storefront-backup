@@ -16,6 +16,7 @@ import Head from "next/head"
 import * as Sentry from "@sentry/nextjs"
 import { useEventsStore } from "@/stores/events-store"
 import { ReportView } from "@/components/report-view"
+import TicketCardList from "@/components/ticket-card-list"
 
 export default function Events() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
@@ -227,13 +228,10 @@ export default function Events() {
                             <p className="mt-2">No tickets available for this event.</p>
                           ) : (
                             <>
-                              {selectedEvent?.tickets?.map((ticket: TicketDataTypeTest) => (
-                                <TicketCard
-                                  key={ticket?.ticketId}
-                                  ticket={ticket}
+                                <TicketCardList
+                                  tickets={selectedEvent?.tickets}
                                   event={selectedEvent}
                                 />
-                              ))}
                             </>
                           )}
                         </div>
