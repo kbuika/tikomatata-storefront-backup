@@ -81,8 +81,8 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
     }
   }
   return (
-    <div className={`text-dark w-full mt-6 p-6 h-[auto] w-[366px] rounded-[8px] md:w-[48%] shadow-xl relative ${ticket?.ticketId?.toString() == "12" ? "bg-[#ec8b9a]": "bg-white"}`}>
-      {ticket?.ticketId?.toString() == "12" && <Sparkles />}
+    <div className={`text-dark w-full mt-6 p-6 h-[auto] w-[366px] rounded-[8px] md:w-[48%] shadow-xl relative ${ticket?.ticketId?.toString() == "13" ? "bg-[#ec8b9a]": "bg-white"}`}>
+      {ticket?.ticketId?.toString() == "13" && <Sparkles />}
       <div>
         <h1 className="text-[18px] font-semibold">{ticket?.name}</h1>
       </div>
