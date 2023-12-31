@@ -90,20 +90,7 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
         {process.env.NODE_ENV === "production" ? (
           <>
             <p className="text-[17px] font-normal">
-              {moment(event?.startDate).format("ddd MMM Do")}{" "}
-              {event?.eventId == "6" && (ticket?.ticketId?.toString() == "8" || ticket?.ticketId?.toString() == "9" || ticket?.ticketId?.toString() == "11" || ticket?.ticketId?.toString() == "12") && (
-                    <>or{" "}{moment("2023-12-31").format("ddd Do MMM")}</>
-                    )}
-
-              {event?.eventId == "6" && (ticket?.ticketId?.toString() == "10") && (
-                <>
-                  {(event?.eventId == "6" && (ticket?.ticketId?.toString() == "10")) ? (
-                    <>and{" "}{moment("2023-12-31").format("ddd Do MMM")}</>
-                  ) : (
-                    <>-{" "}{moment(event?.endDate).format("ddd MMM Do")}</>
-                  )}
-                </>
-              )}
+              {moment("2023-12-31").format("ddd MMM Do")}{" "}
             </p>
           </>
         ) : (
