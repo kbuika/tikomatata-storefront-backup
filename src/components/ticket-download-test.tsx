@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { errorToast } from "@/lib/utils"
+import { errorToast, generateReferenceCode } from "@/lib/utils"
 import { toPng } from "html-to-image"
 import { DownloadIcon, Loader2 } from "lucide-react"
 import moment from "moment"
@@ -18,8 +18,12 @@ export const TicketToDownloadTest = ({ ticket, event, ticketRef }: any) => {
     setTimeout(() => {
       toPng(ticketRef.current, { cacheBust: false, includeQueryParams: true })
         .then((dataUrl) => {
+          const regex = /\/posters\/([a-zA-Z0-9-]+)\.png/;
+          const match = ticket?.ticketUrl.match(regex);
+          // extract qrcode id
+          const extractedQRId = match && match[1];
           const link = document.createElement("a")
-          link.download = `${ticket?.name || ticket?.ticketType}-${event?.eventName}.png`
+          link.download = `${ticket?.name.trim() || ticket?.ticketType.trim()}-${event?.eventName.trim()}-${extractedQRId}.png`
           link.href = dataUrl
           link.click()
         })
