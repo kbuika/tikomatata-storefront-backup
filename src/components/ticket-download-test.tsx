@@ -109,7 +109,7 @@ export const TicketToDownloadTest = ({ ticket, event, ticketRef }: any) => {
                       <h4 className="font-[400] text-[0.9em]">Date</h4>
                       <p className="font-[700] mt-[4px] mb-[4px] text-[0.9em]">
                         {/* FIXME: ADD second date on ticket download */}
-                        {moment(startDateTime).format("DD MMM YYYY")} and {moment("2023-12-31").format("ddd Do MMM")} 
+                        {moment("2023-12-31").format("ddd Do MMM")} 
                       </p>
                     </div>
                     <div>
