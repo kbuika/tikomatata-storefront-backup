@@ -23,7 +23,7 @@ export const TicketToDownloadTest = ({ ticket, event, ticketRef }: any) => {
           // extract qrcode id
           const extractedQRId = match && match[1];
           const link = document.createElement("a")
-          link.download = `${ticket?.name.trim() || ticket?.ticketType.trim()}-${event?.eventName.trim()}-${extractedQRId}.png`
+          link.download = `${ticket?.name || ticket?.ticketType}-${event?.eventName}-${extractedQRId}.png`
           link.href = dataUrl
           link.click()
         })
