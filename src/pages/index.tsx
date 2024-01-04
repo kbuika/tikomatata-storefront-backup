@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero"
 import EventCard from "../components/event-card"
+import SEO from "../components/seo"
 import Nav from "@/components/Nav"
 import DefaultLayout from "@/layouts/default-layout"
 import { EventDataType } from "@/types/event"
@@ -9,7 +10,6 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import SellOutEventBanner from "@/components/sell-out-event-banner"
 import { useOrderStore } from "@/stores/order-store"
-import Head from "next/head"
 import * as Sentry from "@sentry/nextjs"
 
 type Props = {
@@ -56,32 +56,7 @@ const Home: React.FC<Props> = () => {
 
   return (
     <DefaultLayout noHeader={true} isMain={true}>
-      <Head>
-        <title>Tikomatata | touch grass!</title>
-        <meta
-          name="description"
-          content="Where Every Event is an Experience, and Every Experience is Extraordinary "
-        />
-        <link rel="icon" href="/favicon.ico" />
-        <meta property="og:title" content="Tikomatata | touch grass!" />
-        <meta
-          property="og:description"
-          content="Where Every Event is an Experience, and Every Experience is Extraordinary"
-        />
-        <meta
-          property="og:image"
-          content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
-        />
-        <meta property="twitter:title" content="Tikomatata | touch grass!" />
-        <meta
-          property="twitter:description"
-          content="Where Every Event is an Experience, and Every Experience is Extraordinary"
-        />
-        <meta
-          property="twitter:image"
-          content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
-        />
-      </Head>
+      <SEO title="Tikomatata" />
       <main className="home h-[414px] bg-beigeLight md:h-[65vh]">
         <Nav />
         <Hero />

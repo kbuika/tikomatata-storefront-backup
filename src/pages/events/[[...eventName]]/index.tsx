@@ -17,6 +17,7 @@ import * as Sentry from "@sentry/nextjs"
 import { useEventsStore } from "@/stores/events-store"
 import { ReportView } from "@/components/report-view"
 import TicketCardList from "@/components/ticket-card-list"
+import SEO from "@/components/seo"
 
 export default function Events() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
@@ -74,39 +75,7 @@ export default function Events() {
 
   return (
     <DefaultLayout noFooter={true}>
-      {selectedEvent !== null && (
-        <Head>
-          <title>{selectedEvent?.name} | Tikomatata | touch grass!</title>
-          <meta name="description" content={`${truncateText(selectedEvent?.description, 15)}...`} />
-          <link rel="icon" href="/favicon.ico" />
-          <meta
-            property="og:title"
-            content={`${selectedEvent?.name} | Tikomatata | touch grass!`}
-          />
-          <meta
-            property="og:description"
-            content={`${truncateText(selectedEvent?.description, 15)}...`}
-          />
-          {selectedEvent?.posterUrl && (
-            <meta
-              property="og:image"
-              content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
-            />
-          )}
-
-          <meta
-            property="twitter:title"
-            content={`${selectedEvent?.name} | Tikomatata | touch grass!`}
-          />
-          <meta
-            property="twitter:description"
-            content={`${truncateText(selectedEvent?.description, 15)}...`}
-          />
-          {selectedEvent?.posterUrl && (
-            <meta property="twitter:image" content={selectedEvent?.posterUrl} />
-          )}
-        </Head>
-      )}
+      <SEO title={selectedEvent?.name} description={`${truncateText(selectedEvent?.description, 15)}...`} image={selectedEvent?.posterUrl}/>
 
       {loading ? (
         <main className="min-h-screen flex items-center justify-center">
