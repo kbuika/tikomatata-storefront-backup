@@ -1,3 +1,5 @@
+import { TicketDataType } from "./ticket"
+
 export interface EventDataType {
   eventId?: number
   name: string
@@ -10,6 +12,9 @@ export interface EventDataType {
   startTime?: string
   endTime?: string
   ageLimit: number
-  poster: FileList
+  poster?: FileList
   posterUrl: string
+  cancelled?: boolean
+  published?: boolean
+  tickets?: null | TicketDataType[]
 }

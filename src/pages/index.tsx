@@ -11,6 +11,8 @@ import { useEffect, useState } from "react"
 import SellOutEventBanner from "@/components/sell-out-event-banner"
 import { useOrderStore } from "@/stores/order-store"
 import * as Sentry from "@sentry/nextjs"
+import { getPastEvents } from "@/lib/utils"
+import {pastEvents} from "../data/past-events"
 
 type Props = {
   events: Array<EventDataType>
@@ -66,9 +68,25 @@ const Home: React.FC<Props> = () => {
       </main>
       <div className="mx-8 md:mx-0 md:px-[40px]">
         <h2 className="my-[24px] text-2xl font-bold">Upcoming Events</h2>
+        <div className="flex w-full flex-wrap items-start justify-start min-h-[10vh]">
+          {events?.length > 0 ? (
+            <>
+              {events?.map((event: EventDataType) => (
+                <EventCard key={event?.eventId} event={event} />
+              ))}
+            </>
+          ) : (
+            <>
+              <p className="text-lg">Sorry 😞! There are no upcoming events at the moment</p>
+            </>
+          )}
+        </div>
+      </div>
+      <div className="mx-8 md:mx-0 md:px-[40px]">
+        <h2 className="my-[24px] text-2xl font-bold">Past Events</h2>
         <div className="flex w-full flex-wrap items-start justify-start min-h-[50vh] mb-[3em]">
-          {events?.map((event: EventDataType) => (
-            <EventCard key={event?.eventId} event={event} />
+          {getPastEvents(pastEvents)?.map((event: EventDataType) => (
+            <EventCard key={event?.eventId} event={event} past={true} />
           ))}
         </div>
       </div>

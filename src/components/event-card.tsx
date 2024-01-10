@@ -7,9 +7,10 @@ import { useRouter } from "next/router"
 
 type Props = {
   event: EventDataType
+  past?: boolean
 }
 
-const EventCard: React.FC<Props> = ({ event }) => {
+const EventCard: React.FC<Props> = ({ event, past = false }) => {
   const startDateTime = `${event?.startDate} ${event?.startTime}`
   // const endDateTime = `${event?.endDate} ${event?.endTime}`
   const setSelectedEvent = useEventsStore((state) => state.setSelectedEvent)
@@ -21,9 +22,15 @@ const EventCard: React.FC<Props> = ({ event }) => {
   return (
     <div
       className="flex flex-col w-[24em] h-[25em] border rounded-[16px] mb-4 shadow-xl md:h-[26em] md:w-[21em] md:mr-4 hover:cursor-pointer"
-      onClick={goToEvent}
+      onClick={past ? undefined : goToEvent}
     >
-      <div className="w-full h-[70%] rounded pt-[8px] px-[8px]">
+      <div className="w-full h-[70%] rounded pt-[8px] px-[8px] relative">
+        {past && (
+          <div className="absolute top-2 left-2 bg-mainPrimary text-white rounded-tl-[8px] px-2 py-1">
+            Past Event
+          </div>
+        )}
+
         <div
           className="w-full h-full bg-cover bg-top rounded-t-[8px]"
           style={{
@@ -49,7 +56,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
             </div>
             <div className="text-base flex flex-row items-center mt-[4px]">
               <Clock4 size={18} className="mr-2" color="#555455" />
-              {event?.eventId?.toString() === "6" ? "4:00 PM" : <>{moment(startDateTime).format("LT")}</>}
+              {moment(startDateTime).format("LT")}
             </div>
           </div>
         </div>
