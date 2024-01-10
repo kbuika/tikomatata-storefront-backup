@@ -1,8 +1,7 @@
 import CustomButton from "./ui/custom-button"
 import Link from "next/link"
 
-const SellOutEventBanner = ({ setPaymentState, fullWidth = false }: any) => {
-  const env = process.env.NODE_ENV
+const SellOutEventBanner = () => {
   return (
     <div
       className={`flex flex-col items-center justify-center w-[100%] py-8 bg-[#F5F1F9] w-full`}
