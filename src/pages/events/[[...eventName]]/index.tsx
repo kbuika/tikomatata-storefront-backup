@@ -76,7 +76,6 @@ export default function Events() {
   return (
     <DefaultLayout noFooter={true}>
       <SEO title={selectedEvent?.name} description={`${truncateText(selectedEvent?.description, 15)}...`} image={selectedEvent?.posterUrl}/>
-
       {loading ? (
         <main className="min-h-screen flex items-center justify-center">
           <Loader2 className="mx-auto animate-spin" size={64} color="#3C0862" />
@@ -126,12 +125,6 @@ export default function Events() {
                     <p className="text-lg mt-1 flex flex-row items-center text-neutralDark sm:mt-4">
                       <Calendar size={18} className="mr-2" color="grey" />
                       {moment(selectedEvent?.startDate).format("ddd Do MMM")}
-                      {eventId == "6" && (
-                        <>
-                          {" , "}
-                          {moment("2023-12-31").format("ddd Do MMM")}
-                        </>
-                      )}
                     </p>
                     <p className="text-lg mt-2 flex flex-row items-center text-neutralDark">
                       <Clock2 size={18} className="mr-2" color="grey" />{" "}
@@ -164,11 +157,7 @@ export default function Events() {
                   </div>
                   <div className="mt-6 pt-4 px-8 pb-16 bg-beigeLight sm:px-1 sm:pr-8 sm:pt-2">
                     <Tabs
-                      defaultValue={
-                        process.env.NODE_ENV === "production" && eventId == "6"
-                          ? "description"
-                          : "tickets"
-                      }
+                      defaultValue="tickets"
                       className="w-full"
                     >
                       <TabsList className="bg-none w-full flex justify-start">

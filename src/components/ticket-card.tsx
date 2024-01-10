@@ -4,11 +4,12 @@ import { Minus, Plus } from "lucide-react"
 import moment from "moment"
 import React, { useState } from "react"
 import { Button } from "./ui/button"
-import Sparkles from 'react-sparkle'
+// import Sparkles from 'react-sparkle'
+import { EventDataType } from "@/types/event"
 
 interface EventTicketProps {
   ticket: TicketDataTypeTest
-  event: any
+  event: EventDataType
 }
 
 const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
@@ -81,26 +82,19 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
     }
   }
   return (
-    <div className={`text-dark w-full mt-6 p-6 h-[auto] w-[366px] rounded-[8px] md:w-[48%] shadow-xl relative ${ticket?.ticketId?.toString() == "13" ? "bg-[#ec8b9a]": "bg-white"}`}>
-      {ticket?.ticketId?.toString() == "13" && <Sparkles />}
+    <div
+      className={`text-dark w-full mt-6 p-6 h-[auto] w-[366px] rounded-[8px] md:w-[48%] shadow-xl relative bg-white`}
+    >
       <div>
         <h1 className="text-[18px] font-semibold">{ticket?.name}</h1>
       </div>
       <div className="mt-2">
-        {process.env.NODE_ENV === "production" ? (
-          <>
-            <p className="text-[17px] font-normal">
-              {moment("2023-12-31").format("ddd MMM Do")}{" "}
-            </p>
-          </>
-        ) : (
-          <>
-            <p className="text-[17px] font-normal">
-              {moment(event?.startDate).format("ddd MMM Do")} -{" "}
-              {moment(event?.endDate).format("ddd MMM Do")}
-            </p>
-          </>
-        )}
+        <>
+          <p className="text-[17px] font-normal">
+            {moment(event?.startDate).format("ddd MMM Do")} -{" "}
+            {moment(event?.endDate).format("ddd MMM Do")}
+          </p>
+        </>
         <p className="text-[17px] font-normal">Starts at {moment(startDateTime).format("LT")}</p>
       </div>
       <div className="mt-2">
