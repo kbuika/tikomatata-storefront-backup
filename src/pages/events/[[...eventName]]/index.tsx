@@ -17,6 +17,7 @@ import * as Sentry from "@sentry/nextjs"
 import { useEventsStore } from "@/stores/events-store"
 import { ReportView } from "@/components/report-view"
 import TicketCardList from "@/components/ticket-card-list"
+import SEO from "@/components/seo"
 
 export default function Events() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
@@ -74,40 +75,7 @@ export default function Events() {
 
   return (
     <DefaultLayout noFooter={true}>
-      {selectedEvent !== null && (
-        <Head>
-          <title>{selectedEvent?.name} | Tikomatata | touch grass!</title>
-          <meta name="description" content={`${truncateText(selectedEvent?.description, 15)}...`} />
-          <link rel="icon" href="/favicon.ico" />
-          <meta
-            property="og:title"
-            content={`${selectedEvent?.name} | Tikomatata | touch grass!`}
-          />
-          <meta
-            property="og:description"
-            content={`${truncateText(selectedEvent?.description, 15)}...`}
-          />
-          {selectedEvent?.posterUrl && (
-            <meta
-              property="og:image"
-              content="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata-round.fcf8ea3e.png&w=3840&q=75"
-            />
-          )}
-
-          <meta
-            property="twitter:title"
-            content={`${selectedEvent?.name} | Tikomatata | touch grass!`}
-          />
-          <meta
-            property="twitter:description"
-            content={`${truncateText(selectedEvent?.description, 15)}...`}
-          />
-          {selectedEvent?.posterUrl && (
-            <meta property="twitter:image" content={selectedEvent?.posterUrl} />
-          )}
-        </Head>
-      )}
-
+      <SEO title={selectedEvent?.name} description={`${truncateText(selectedEvent?.description, 15)}...`} image={selectedEvent?.posterUrl}/>
       {loading ? (
         <main className="min-h-screen flex items-center justify-center">
           <Loader2 className="mx-auto animate-spin" size={64} color="#3C0862" />
@@ -157,12 +125,6 @@ export default function Events() {
                     <p className="text-lg mt-1 flex flex-row items-center text-neutralDark sm:mt-4">
                       <Calendar size={18} className="mr-2" color="grey" />
                       {moment(selectedEvent?.startDate).format("ddd Do MMM")}
-                      {eventId == "6" && (
-                        <>
-                          {" , "}
-                          {moment("2023-12-31").format("ddd Do MMM")}
-                        </>
-                      )}
                     </p>
                     <p className="text-lg mt-2 flex flex-row items-center text-neutralDark">
                       <Clock2 size={18} className="mr-2" color="grey" />{" "}
@@ -195,11 +157,7 @@ export default function Events() {
                   </div>
                   <div className="mt-6 pt-4 px-8 pb-16 bg-beigeLight sm:px-1 sm:pr-8 sm:pt-2">
                     <Tabs
-                      defaultValue={
-                        process.env.NODE_ENV === "production" && eventId == "6"
-                          ? "description"
-                          : "tickets"
-                      }
+                      defaultValue="tickets"
                       className="w-full"
                     >
                       <TabsList className="bg-none w-full flex justify-start">
