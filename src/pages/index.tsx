@@ -12,7 +12,7 @@ import SellOutEventBanner from "@/components/sell-out-event-banner"
 import { useOrderStore } from "@/stores/order-store"
 import * as Sentry from "@sentry/nextjs"
 import { getPastEvents } from "@/lib/utils"
-import {pastEvents} from "../data/past-events"
+import { pastEvents } from "../data/past-events"
 
 type Props = {
   events: Array<EventDataType>
@@ -66,9 +66,11 @@ const Home: React.FC<Props> = () => {
           <p className="text-slate-500 text-xs mr-2">Credits | @hornsphere</p>
         </div>
       </main>
-      <div className="mx-8 md:mx-0 md:px-[40px]">
-        <h2 className="my-[24px] text-2xl font-bold">Upcoming Events</h2>
-        <div className="flex w-full flex-wrap items-start justify-start min-h-[10vh]">
+      <div className="mx-8 md:mx-0 sm:px-[10px] md:px-[30px] lg:px-[50px] xl:px-[80px]">
+        <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
+          <h2 className="my-[24px] text-2xl font-bold">Upcoming Events</h2>
+        </div>{" "}
+        <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
           {events?.length > 0 ? (
             <>
               {events?.map((event: EventDataType) => (
@@ -82,9 +84,11 @@ const Home: React.FC<Props> = () => {
           )}
         </div>
       </div>
-      <div className="mx-8 md:mx-0 md:px-[40px]">
-        <h2 className="my-[24px] text-2xl font-bold">Past Events</h2>
-        <div className="flex w-full flex-wrap items-start justify-start min-h-[50vh] mb-[3em]">
+      <div className="mx-8 md:mx-0 sm:px-[10px] md:px-[30px] lg:px-[50px] xl:px-[80px]">
+        <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
+          <h2 className="my-[24px] text-2xl font-bold text-slate-600">Past Events</h2>
+        </div>
+        <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
           {getPastEvents(pastEvents)?.map((event: EventDataType) => (
             <EventCard key={event?.eventId} event={event} past={true} />
           ))}

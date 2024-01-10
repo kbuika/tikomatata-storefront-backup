@@ -21,7 +21,7 @@ const EventCard: React.FC<Props> = ({ event, past = false }) => {
   }
   return (
     <div
-      className="flex flex-col w-[24em] h-[25em] border rounded-[16px] mb-4 shadow-xl md:h-[26em] md:w-[21em] md:mr-4 hover:cursor-pointer"
+      className="flex flex-col w-full h-[25em] border rounded-[16px] mb-4 shadow-xl  md:h-[26em] sm:w-[18em] md:w-[21em] lg:w-[21em] xl:w-[23em] md:mr-4 hover:cursor-pointer"
       onClick={past ? undefined : goToEvent}
     >
       <div className="w-full h-[70%] rounded pt-[8px] px-[8px] relative">
