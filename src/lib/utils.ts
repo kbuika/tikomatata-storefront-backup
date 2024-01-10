@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { toast } from "react-toastify"
+import { EventDataType } from "@/types/event"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -63,4 +64,13 @@ export const maskEmail = (email: string): string  => {
 
 export const removePlusInPhone = (phone: string): string => {
   return phone.replace(/\+/g, '');
+}
+
+export const getPastEvents = (events: EventDataType[]): EventDataType[] => {
+  const currentDate = new Date()
+  return events?.filter((event: EventDataType) => {
+    const eventEndDate = new Date(`${event.endDate}T${event?.endTime}:00Z`);
+
+    return eventEndDate < currentDate
+  })
 }
