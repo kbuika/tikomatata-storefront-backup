@@ -9,6 +9,7 @@ const nextConfig = {
       "tm-images.blr1.cdn.digitaloceanspaces.com",
       "external-preview.redd.it",
       "images.unsplash.com",
+      "github.com",
     ],
   },
   async redirects() {
