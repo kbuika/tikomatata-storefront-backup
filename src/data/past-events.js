@@ -1,5 +1,3 @@
-import JumpOffImage from "../images/past-event-posters/jump-off.png"
-
 export const pastEvents = [
   {
     eventId: 6,
@@ -33,7 +31,7 @@ export const pastEvents = [
     startTime: "12:00",
     endTime: "23:00",
     ageLimit: 18,
-    posterUrl: JumpOffImage,
+    posterUrl: "",
     tickets: null,
   },
 ]
