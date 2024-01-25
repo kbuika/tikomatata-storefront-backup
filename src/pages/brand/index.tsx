@@ -5,6 +5,8 @@ import tikomatata from "@/images/logos/tikomatata.png"
 import twitter from "@/images/logos/x.png"
 import tikomatataRound from "@/images/logos/tikomatata-round.png"
 import tikomatataStacked from "@/images/logos/tikomatata-stacked.png"
+import JumpOffImage from "@/images/past-event-posters/jump-off.png"
+import EchoesImage from "@/images/past-event-posters/echoes.png"
 import Image from "next/image"
 import SEO from "@/components/seo"
 export default function Brand() {
@@ -21,19 +23,25 @@ export default function Brand() {
                 <Image src={facebook} alt="facebook" />
             </div>
             <div className="min-w-[10em] min-h-[10em] flex items-center justify-center border-2 p-3">
-                <Image src={tikomatata} alt="facebook" />
+                <Image src={tikomatata} alt="tikomatata" />
             </div>
             <div className="min-w-[10em] min-h-[10em] flex items-center justify-center border-2 p-3">
-                <Image src={tikomatataRound} alt="facebook" />
+                <Image src={tikomatataRound} alt="round" />
             </div>
             <div className="min-w-[10em] min-h-[10em] flex items-center justify-center border-2 p-3">
-                <Image src={tikomatataStacked} alt="facebook" />
+                <Image src={tikomatataStacked} alt="stacked" />
             </div>
             <div className="min-w-[10em] min-h-[10em] flex items-center justify-center border-2 p-3">
-                <Image src={instagram} alt="facebook" />
+                <Image src={instagram} alt="instagram" />
             </div>
             <div className="min-w-[10em] min-h-[10em] flex items-center justify-center border-2 p-3">
-                <Image src={twitter} alt="facebook" />
+                <Image src={twitter} alt="twitter" />
+            </div>
+            <div className="min-w-[10em] min-h-[10em] flex items-center justify-center border-2 p-3">
+                <Image src={EchoesImage} alt="echoes" />
+            </div>
+            <div className="min-w-[10em] min-h-[10em] flex items-center justify-center border-2 p-3">
+                <Image src={JumpOffImage} alt="jumpoff" />
             </div>
           </div>
         </div>
