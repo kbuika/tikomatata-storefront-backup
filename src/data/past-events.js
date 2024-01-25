@@ -14,7 +14,8 @@ export const pastEvents = [
     startTime: "16:00",
     endTime: "04:00",
     ageLimit: 18,
-    posterUrl: "",
+    posterUrl:
+      "https://github.com/Tikomatata/tikomatata-client-app/blob/main/src/images/past-event-posters/jump-off.png",
     tickets: null,
   },
   {
