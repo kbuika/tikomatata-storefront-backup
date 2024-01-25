@@ -1,3 +1,5 @@
+import JumpOffImage from "../images/past-event-posters/jump-off.png"
+
 export const pastEvents = [
   {
     eventId: 6,
@@ -14,8 +16,24 @@ export const pastEvents = [
     startTime: "16:00",
     endTime: "04:00",
     ageLimit: 18,
-    posterUrl:
-      "https://tm-images.blr1.cdn.digitaloceanspaces.com/posters/f6974793-be71-424e-955d-cd74ff5bdeef.null",
+    posterUrl: "",
+    tickets: null,
+  },
+  {
+    eventId: 1,
+    name: "Echoes: City of Love",
+    cancelled: false,
+    published: true,
+    description: "",
+    location: "KICC",
+    mapLink: undefined,
+    environment: "Outdoor",
+    startDate: "2023-10-20",
+    endDate: "2023-10-20",
+    startTime: "12:00",
+    endTime: "23:00",
+    ageLimit: 18,
+    posterUrl: JumpOffImage,
     tickets: null,
   },
 ]
