@@ -1,12 +1,9 @@
-import React from "react"
-import Link from "next/link"
-import MainLogo from "../images/logos/tikomatata.svg"
-import BrightLogo from "../images/logos/tikomatata-bright.svg"
-import StackedLogo from "../images/logos/tikomatata-stacked.svg"
 import Image from "next/image"
+import Link from "next/link"
+import React from "react"
 import CustomButton from "../components/ui/custom-button"
-import { Copyright } from "lucide-react"
-import Header from "./Header"
+import BrightLogo from "../images/logos/tikomatata-bright.svg"
+import MainLogo from "../images/logos/tikomatata.svg"
 
 type Props = {
   children: React.ReactNode
