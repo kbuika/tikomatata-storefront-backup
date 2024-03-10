@@ -2,7 +2,7 @@ import { UseQueryResult, useQuery } from "@tanstack/react-query"
 import { fetchAllEvents, fetchEventBySlug } from "./api"
 import { EventDataType } from "@/types/event"
 
-export const useAllEvents = (): UseQueryResult<any, Error> => {
+export const useAllEvents = (): UseQueryResult<EventDataType[], Error> => {
   return useQuery({
     queryKey: ["events"],
     queryFn: () => fetchAllEvents(),
