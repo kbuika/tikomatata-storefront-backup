@@ -9,62 +9,34 @@ import moment from "moment"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import TicketCard from "../../../components/ticket-card"
-import CustomButton from "../../../components/ui/custom-button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
+import TicketCard from "../../components/ticket-card"
+import CustomButton from "../../components/ui/custom-button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 import Head from "next/head"
 import * as Sentry from "@sentry/nextjs"
 import { useEventsStore } from "@/stores/events-store"
 import { ReportView } from "@/components/report-view"
 import TicketCardList from "@/components/ticket-card-list"
 import SEO from "@/components/seo"
+import { useEventBySlug } from "@/services/queries"
 
 export default function Events() {
-  const [totalPrice, setTotalPrice] = useState<number>(0)
-  const [selectedEvent, setSelectedEvent] = useState<any>(null)
-  const [eventError, setEventError] = useState<any>(null)
-  const [loading, setLoading] = useState<boolean>(false)
+  const router = useRouter()
+  const { slug } = router?.query
+  const {data: selectedEvent, error: eventError, isLoading: loading} = useEventBySlug(slug! as string)
+  // const [totalPrice, setTotalPrice] = useState<number>(0)
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
   const endDateTime = `${selectedEvent?.endDate} ${selectedEvent?.endTime}`
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
   const setSelectedEventInCache = useEventsStore((state) => state.setSelectedEvent)
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
-  const router = useRouter()
-  const { id: eventId } = router?.query
+  
   useEffect(() => {
-    const fetchSelectedEventFn = async () => {
-      if (!eventId) return
-      setLoading(true)
-      const config = {
-        method: "get",
-        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/event?id=${eventId}`,
-      }
-
-      try {
-        const response = await axios.request(config)
-        if (response.data.status === 200) {
-          let event = response.data.data
-          if(event?.eventId?.toString() === "6") {
-            event = {...event, startTime: "16:00"}
-          }
-          setSelectedEvent(event)
-          setSelectedEventInCache(event)
-        } else {
-          Sentry.captureException(response.data)
-          setEventError(response.data.message)
-        }
-      } catch (error) {
-        Sentry.captureException(error)
-        setEventError(error)
-      } finally {
-        setLoading(false)
-      }
+    if (selectedEvent) {
+      setSelectedEventInCache(selectedEvent)
     }
-    fetchSelectedEventFn()
-    // return () => {}
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventId])
-
+  },[setSelectedEventInCache, selectedEvent])
+  
   const completeOrder = () => {
     if (selectedTickets.length === 0) {
       warningToast("Please select at least one ticket")
@@ -75,7 +47,7 @@ export default function Events() {
 
   return (
     <DefaultLayout noFooter={true}>
-      <SEO title={selectedEvent?.name} description={`${truncateText(selectedEvent?.description, 15)}...`} image={selectedEvent?.posterUrl}/>
+      <SEO title={selectedEvent?.name || ""} description={`${truncateText(selectedEvent?.description || "", 15)}...`} image={selectedEvent?.posterUrl}/>
       {loading ? (
         <main className="min-h-screen flex items-center justify-center">
           <Loader2 className="mx-auto animate-spin" size={64} color="#3C0862" />
@@ -91,7 +63,7 @@ export default function Events() {
             </main>
           ) : (
             <main className="flex sm:min-h-screen flex-col items-start justify-start bg-white sm:bg-beigeLight">
-              <ReportView eventId={selectedEvent?.eventId}/>
+              {process.env.NODE_ENV == "production" && <ReportView eventId={selectedEvent?.eventId?.toString() || ""}/>}
               <div className="flex w-full flex-col items-center justify-between h-full sm:flex-row sm:items-start">
                 <div className="flex items-start justify-start w-full px-6 pb-6 pt-6 sm:hidden">
                   <h2
@@ -144,7 +116,7 @@ export default function Events() {
                       </h2>
                       <p className="text-lg mt-1 flex flex-row items-center text-mainPrimary sm:mt-4">
                         <Calendar size={18} className="mr-2" color="grey" />
-                        {moment("2023-12-31").format("ddd Do MMM")}
+                        {moment(selectedEvent?.startDate).format("ddd Do MMM")}
                       </p>
                       <p className="text-lg mt-2 flex flex-row items-center text-neutralDark">
                         <Clock2 size={18} className="mr-2" color="grey" />{" "}
@@ -181,8 +153,8 @@ export default function Events() {
                           ) : (
                             <>
                                 <TicketCardList
-                                  tickets={selectedEvent?.tickets}
-                                  event={selectedEvent}
+                                  tickets={selectedEvent?.tickets!}
+                                  event={selectedEvent!}
                                 />
                             </>
                           )}
@@ -215,7 +187,7 @@ export default function Events() {
                   <div className="w-full sm:hidden">
                     <section
                       id="bottom-navigation"
-                      className=" block fixed inset-x-0 bottom-0 z-10 bg-white shadow h-20 flex flex-row flex-wrap items-center justify-between"
+                      className="fixed inset-x-0 bottom-0 z-10 bg-white shadow h-20 flex flex-row flex-wrap items-center justify-between"
                     >
                       <div className="p-4 flex flex-row flex-wrap items-center justify-between w-full">
                         <div className="w-[45%] p-2 h-10 rounded flex flex-wrap items-center justify-between text-lg">
