@@ -41,6 +41,7 @@ const EventCard: React.FC<Props> = ({ event, past = false }) => {
           <div className="text-base">{moment(event?.startDate).format("ddd")}</div>
           <div className="text-base mt-1">{moment(event?.startDate).format("Do")}</div>
 
+
           <div className="text-base mt-1">{moment(event?.startDate).format("MMM")}</div>
         </div>
         <div className="pl-4 pr-4 pt-4 pb-2 font-normal text-gray-800">
