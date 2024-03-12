@@ -7,6 +7,6 @@ export const fetchAllEvents = async (): Promise<any> => {
   return data.data.events ?? {}
 }
 export const fetchEventBySlug = async (slug: string): Promise<any> => {
-  const { data } = await axiosInstance.get(`${baseUrl}/event/${slug}`)
+  const { data } = await axiosInstance.get(`${baseUrl}/ticket/event-slug/${slug}`)
   return data.data ?? {}
 }
