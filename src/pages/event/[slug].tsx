@@ -1,24 +1,20 @@
 "use client"
+import { ReportView } from "@/components/report-view"
+import SEO from "@/components/seo"
+import TicketCardList from "@/components/ticket-card-list"
 import DefaultLayout from "@/layouts/default-layout"
-import { errorToast, truncateText, warningToast } from "@/lib/utils"
+import { truncateText, warningToast } from "@/lib/utils"
+import { useEventBySlug } from "@/services/queries"
+import { useEventsStore } from "@/stores/events-store"
 import { useTicketsStore } from "@/stores/tickets-store"
-import { TicketDataTypeTest } from "@/types/ticket"
-import axios from "axios"
 import { ArrowLeft, Calendar, Clock2, Loader2, Map, MapPin } from "lucide-react"
 import moment from "moment"
+import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import TicketCard from "../../components/ticket-card"
+import { useEffect } from "react"
 import CustomButton from "../../components/ui/custom-button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import Head from "next/head"
-import * as Sentry from "@sentry/nextjs"
-import { useEventsStore } from "@/stores/events-store"
-import { ReportView } from "@/components/report-view"
-import TicketCardList from "@/components/ticket-card-list"
-import SEO from "@/components/seo"
-import { useEventBySlug } from "@/services/queries"
 
 export default function Events() {
   const router = useRouter()
@@ -78,14 +74,8 @@ export default function Events() {
                 </div>
                 <div></div>
                 <div className="w-full h-[auto] px-6 flex items-start justify-center sm:w-[45%] sm:px-16 sm:pb-16 sm:pt-8 sm:min-h-screen">
-                  <div className="h-[300px] w-[366px] sm:h-[40em] sm:w-[35em]">
-                    <div
-                      className="w-full h-[100%] bg-contain bg-no-repeat rounded"
-                      style={{
-                        backgroundImage: `url(${selectedEvent?.posterUrl})`,
-                        border: "0.25rem",
-                      }}
-                    ></div>
+                  <div className="flex overflow-hidden items-center justify-center h-[400px] w-[450px] sm:h-[550px] sm:w-[450px] bg-mainPrimary/30 relative rounded object-scale-down">
+                    <Image src={selectedEvent?.posterUrl!} alt={selectedEvent?.name!} fill={true} />
                   </div>
                 </div>
                 {/* the mobile view content section  */}
@@ -127,7 +117,7 @@ export default function Events() {
                       </p>
                     </div>
                   </div>
-                  <div className="mt-6 pt-4 px-8 pb-16 bg-beigeLight sm:px-1 sm:pr-8 sm:pt-2">
+                  <div className="mt-6 pt-4 px-8 pb-28 bg-beigeLight sm:px-1 sm:pr-8 sm:pt-2">
                     <Tabs
                       defaultValue="tickets"
                       className="w-full"
