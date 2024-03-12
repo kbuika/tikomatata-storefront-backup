@@ -1,5 +1,5 @@
 import { useTicketsStore } from "@/stores/tickets-store"
-import { TicketDataTypeTest } from "@/types/ticket"
+import { TicketDataType } from "@/types/ticket"
 import { Minus, Plus } from "lucide-react"
 import moment from "moment"
 import React, { useState } from "react"
@@ -8,7 +8,7 @@ import { Button } from "./ui/button"
 import { EventDataType } from "@/types/event"
 
 interface EventTicketProps {
-  ticket: TicketDataTypeTest
+  ticket: TicketDataType
   event: EventDataType
 }
 

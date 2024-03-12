@@ -16,5 +16,6 @@ export interface EventDataType {
   posterUrl: string
   cancelled?: boolean
   published?: boolean
-  tickets?: null | TicketDataType[]
+  tickets?: null | TicketDataType[],
+  slug?: string
 }

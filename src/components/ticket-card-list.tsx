@@ -1,9 +1,9 @@
-import { TicketDataTypeTest } from "@/types/ticket"
+import { TicketDataType, TicketDataTypeTest } from "@/types/ticket"
 import TicketCard from "./ticket-card"
 import { EventDataType } from "@/types/event"
 
 interface TicketCardListProps {
-  tickets: TicketDataTypeTest[]
+  tickets: TicketDataType[]
   event: EventDataType
 }
 
@@ -22,7 +22,7 @@ const TicketCardList: React.FC<TicketCardListProps> = ({ tickets, event }) => {
 
   return (
     <>
-      {tickets?.map((ticket: TicketDataTypeTest) => (
+      {tickets?.map((ticket: TicketDataType) => (
         <TicketCard key={ticket?.ticketId} ticket={ticket} event={event} />
       ))}
     </>

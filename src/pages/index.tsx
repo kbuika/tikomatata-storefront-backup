@@ -1,17 +1,18 @@
+"use client"
 import Hero from "@/components/Hero"
+import Nav from "@/components/Nav"
+import SellOutEventBanner from "@/components/sell-out-event-banner"
+import DefaultLayout from "@/layouts/default-layout"
+import { getPastEvents } from "@/lib/utils"
+import { useAllEvents } from "@/services/queries"
+import { useEventsStore } from "@/stores/events-store"
+import { useOrderStore } from "@/stores/order-store"
+import { useTicketsStore } from "@/stores/tickets-store"
+import { EventDataType } from "@/types/event"
+import { Loader2 } from "lucide-react"
+import { useEffect } from "react"
 import EventCard from "../components/event-card"
 import SEO from "../components/seo"
-import Nav from "@/components/Nav"
-import DefaultLayout from "@/layouts/default-layout"
-import { EventDataType } from "@/types/event"
-import { useEventsStore } from "@/stores/events-store"
-import { useTicketsStore } from "@/stores/tickets-store"
-import axios from "axios"
-import { useEffect, useState } from "react"
-import SellOutEventBanner from "@/components/sell-out-event-banner"
-import { useOrderStore } from "@/stores/order-store"
-import * as Sentry from "@sentry/nextjs"
-import { getPastEvents } from "@/lib/utils"
 import { pastEvents } from "../data/past-events"
 
 type Props = {
@@ -19,39 +20,16 @@ type Props = {
 }
 // TODO: make the entire app CSR???
 const Home: React.FC<Props> = () => {
-  const [events, setEvents] = useState<Array<EventDataType>>([])
-  const [loading, setLoading] = useState<boolean>(false)
-  const [eventsError, setEventsError] = useState<any>(null)
   const setAllEventsStore = useEventsStore((state) => state.setAllEvents)
   const resetAllTickets = useTicketsStore((state) => state.resetAllTickets)
   const resetOrderDetails = useOrderStore((state) => state.resetOrderDetails)
   const resetSelectedEvent = useEventsStore((state) => state.resetSelectedEvent)
+  const { data: events, error, isLoading } = useAllEvents()
+
   useEffect(() => {
-    const fetchAllEvents = async () => {
-      setLoading(true)
-      const config = {
-        method: "get",
-        url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/event/all?size=40&page=0`,
-      }
-      try {
-        const response = await axios.request(config)
-        if (response.data.status === 200) {
-          setEvents(response.data.data.events)
-          setAllEventsStore(response.data.data.events)
-        } else {
-          Sentry.captureException(response.data)
-          setEventsError(response.data)
-        }
-      } catch (error) {
-        Sentry.captureException(error)
-        setEventsError(error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchAllEvents()
-    // return () => {}
-  }, [setAllEventsStore])
+    if (events) setAllEventsStore(events)
+  }, [events, setAllEventsStore])
+
   resetAllTickets()
   resetOrderDetails()
   resetSelectedEvent()
@@ -70,19 +48,25 @@ const Home: React.FC<Props> = () => {
         <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
           <h2 className="my-[24px] text-2xl font-bold">Upcoming Events</h2>
         </div>{" "}
-        <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
-          {events?.length > 0 ? (
-            <>
-              {events?.map((event: EventDataType) => (
-                <EventCard key={event?.eventId} event={event} />
-              ))}
-            </>
-          ) : (
-            <>
-              <p className="text-lg">Sorry 😞! There are no upcoming events at the moment</p>
-            </>
-          )}
-        </div>
+        {isLoading ? (
+          <div>
+            <Loader2 size={20} />
+          </div>
+        ) : (
+          <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
+            {events && events?.length > 0 ? (
+              <>
+                {events?.map((event: EventDataType) => (
+                  <EventCard key={event?.eventId} event={event} />
+                ))}
+              </>
+            ) : (
+              <>
+                <p className="text-lg">Sorry 😞! There are no upcoming events at the moment</p>
+              </>
+            )}
+          </div>
+        )}
       </div>
       <div className="mx-8 md:mx-0 sm:px-[10px] md:px-[30px] lg:px-[50px] xl:px-[80px]">
         <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
