@@ -13,7 +13,7 @@ interface checkoutDataType {
   orderReference: string
 }
 
-export const PurchaseTicketsFn = async (checkoutData: checkoutDataType) => {
+export const PurchaseTicketsByCardFn = async (checkoutData: checkoutDataType) => {
   const purchasedTickets = checkoutData.tickets.map((ticket: TicketPurchaseType) => {
     return {
       ticketId: ticket.ticketId,
@@ -31,7 +31,7 @@ export const PurchaseTicketsFn = async (checkoutData: checkoutDataType) => {
   const config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/pay`,
+    url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/ticket/pay/card`,
     headers: {
       "Content-Type": "application/json",
     },

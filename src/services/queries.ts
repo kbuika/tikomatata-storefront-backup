@@ -1,5 +1,5 @@
 import { UseQueryResult, useQuery } from "@tanstack/react-query"
-import { fetchAllEvents, fetchEventBySlug } from "./api"
+import { fetchAllEvents, fetchEventBySlug, fetchUserOrder } from "./api"
 import { EventDataType } from "@/types/event"
 
 export const useAllEvents = (): UseQueryResult<EventDataType[], Error> => {
@@ -15,5 +15,14 @@ export const useEventBySlug = (slug: string): UseQueryResult<EventDataType, Erro
     queryKey: ["event", slug],
     queryFn: () => fetchEventBySlug(slug),
     refetchOnWindowFocus: false,
+  })
+}
+
+export const useUserOrder = (orderId: string): UseQueryResult<any, Error> => {
+  return useQuery({
+    queryKey: ["order-data"],
+    queryFn: () => fetchUserOrder(orderId),
+    retry: true,
+    refetchOnMount: true,
   })
 }
