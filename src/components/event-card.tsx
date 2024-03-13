@@ -23,36 +23,38 @@ const EventCard: React.FC<Props> = ({ event, past = false }) => {
   }
   return (
     <div
-      className="flex flex-col w-full h-[30em] border rounded-[16px] mb-4 shadow-xl text-white  md:h-[28em] sm:w-[18em] md:w-[20em] lg:w-[20em] xl:w-[20em] hover:cursor-pointer"
+      className="flex flex-col w-[325px] h-[30em] border-none rounded-[16px] mb-4 shadow-xl text-white  hover:cursor-pointer"
       onClick={past ? undefined : goToEvent}
     >
-      <div className="w-full h-[70%] rounded-[8px] pt-[8px] px-[8px] relative">
+      {/* md:h-[28em] sm:w-[18em] md:w-[20em] lg:w-[20em] xl:w-[20em] */}
+      <div className="w-full h-[70%] rounded-[8px] relative">
         {past && (
-          <div className="absolute top-2 z-10 left-2 bg-mainPrimary text-white rounded-tl-[8px] px-2 py-1">
+          <div className="absolute z-10 bg-mainPrimary text-white rounded-tl-[8px] px-2 py-1">
             Past Event
           </div>
         )}
-        <div className="flex overflow-hidden items-center justify-center h-full w-full relative rounded-t-[8px]">
-          <Image src={event?.posterUrl!} alt={event?.name!} fill={true} className="rounded"/>
+        <div className="flex overflow-hidden items-center justify-center h-full w-full relative rounded-t-[8px] border-2 border-gray-200">
+          <Image src={event?.posterUrl!} alt={event?.name!} fill className="rounded"/>
         </div>
       </div>
       <div className="flex flex-row w-full min-h-[30%] h-auto pb-2">
-        <div className="flex flex-col bg-secondaryBrown items-center justify-start pt-3 mb-[16px] ml-[8px] w-1/4 rounded-b-[8px] font-bold uppercase text-dark border-r z-10 tracking-wide leading-6">
+        {/* <div className="flex flex-col bg-secondaryBrown items-center justify-start pt-3 mb-[16px] ml-[8px] w-1/4 rounded-b-[8px] font-bold uppercase text-dark border-r z-10 tracking-wide leading-6">
           <div className="text-base">{moment(event?.startDate).format("ddd")}</div>
           <div className="text-base mt-1">{moment(event?.startDate).format("Do")}</div>
           <div className="text-base mt-1">{moment(event?.startDate).format("MMM")}</div>
-        </div>
-        <div className="pl-4 pr-4 pt-4 pb-2 font-normal text-gray-800">
-          <h1 className="mb-2 text-lg font-semibold leading-none tracking-tight text-white md:text-lg">
+        </div> */}
+        <div className=" pr-4 pt-4 pb-2 font-normal text-white">
+          <h1 className="mb-2 text-lg font-semibold leading-none tracking-tight md:text-lg">
             {truncateText(event?.name, 20)}
           </h1>
+          <p className="">{moment(event?.startDate).format("ddd")}, {moment(event?.startDate).format("MMM")} {moment(event?.startDate).format("do")}</p>
           <div className="flex flex-col items-start mt-[5px] text-white">
-            <div className="text-sm flex flex-row items-start">
-              <MapPin size={20} className="mr-2" color="#555455" />
+            <div className="text-sm flex flex-row items-start text-rsecdark">
+              {/* <MapPin size={20} className="mr-2" color="#555455" /> */}
               {truncateText(event?.location, 25)}{" "}
             </div>
-            <div className="text-base flex flex-row items-center mt-[5px]">
-              <Clock4 size={18} className="mr-2" color="#555455" />
+            <div className="text-base flex flex-row items-center mt-[5px] text-rsecdark">
+              {/* <Clock4 size={18} className="mr-2" color="#555455" /> */}
               {moment(startDateTime).format("LT")}
             </div>
           </div>

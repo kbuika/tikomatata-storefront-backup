@@ -45,7 +45,7 @@ const Home: React.FC<Props> = () => {
       <div className="absolute inset-0 bg-gradient-to-t from-rbackground from-30% blur-lg" />
       <div className="-mt-36 sm:-mt-80 absolute w-full">
         <div className=" text-white mx-8 md:mx-0 sm:px-[10px] md:px-[30px] lg:px-[50px] xl:px-[80px]">
-          <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
+          <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 mx-auto">
             <h2 className="my-[24px] text-2xl sm:text-3xl font-[700] leading-[60px]">Upcoming Events</h2>
           </div>{" "}
           {isLoading ? (
@@ -53,7 +53,7 @@ const Home: React.FC<Props> = () => {
               <Loader2 size={20} />
             </div>
           ) : (
-            <div className="flex flex-wrap items-start grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl">
+            <div className="flex flex-wrap items-start grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
               {events && events?.length > 0 ? (
                 <>
                   {events?.map((event: EventDataType) => (

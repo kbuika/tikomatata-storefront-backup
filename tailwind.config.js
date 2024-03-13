@@ -44,6 +44,7 @@ module.exports = {
         // redesign colors
         rbackground: "#040E0E",
         rprimary: "#01FFFF",
+        rsecdark: "#C6C8C8",
         // end of redesign colors
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
