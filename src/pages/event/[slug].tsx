@@ -16,6 +16,7 @@ import { useEffect } from "react"
 import CustomButton from "../../components/ui/custom-button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 
+
 export default function Events() {
   const router = useRouter()
   const { slug } = router?.query

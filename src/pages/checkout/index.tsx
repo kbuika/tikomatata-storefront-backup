@@ -1,28 +1,28 @@
 "use client"
-import { PurchaseTicketsFn } from "@/api-calls"
+import { PurchaseTicketsByCardFn } from "@/api-calls"
+import useCustomPaystackPayment from "@/hooks/useCustomPaystackPayment"
 import DefaultLayout from "@/layouts/default-layout"
-import { errorToast, generateReferenceCode, warningToast } from "@/lib/utils"
+import { errorToast, generateReferenceCode, removePlusInPhone, warningToast } from "@/lib/utils"
+import { usePayViaMpesa } from "@/services/mutations"
 import { useEventsStore } from "@/stores/events-store"
 import { useOrderStore } from "@/stores/order-store"
 import { useTicketsStore } from "@/stores/tickets-store"
 import { PaystackHookType } from "@/types"
 import { TicketPurchaseType } from "@/types/ticket"
 import { yupResolver } from "@hookform/resolvers/yup"
+import * as Sentry from "@sentry/nextjs"
 import moment from "moment"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
+import { PaystackProps } from "react-paystack/dist/types"
+import PhoneInputWithCountry from "react-phone-number-input/react-hook-form"
+import "react-phone-number-input/style.css"
 import * as yup from "yup"
 import CustomButton from "../../components/ui/custom-button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 import defaultImage from "../../images/default.jpg"
-import KenyaIcon from "../../images/kenya.png"
-import { PaystackProps } from "react-paystack/dist/types"
-import useCustomPaystackPayment from "@/hooks/useCustomPaystackPayment"
-import "react-phone-number-input/style.css"
-import PhoneInputWithCountry from "react-phone-number-input/react-hook-form"
-import * as Sentry from "@sentry/nextjs"
 
 const schema = yup.object({
   customerName: yup.string().required("Please enter your name"),
@@ -46,6 +46,7 @@ export default function Checkout() {
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const [initialized, setInitialized] = useState<boolean>(false)
+  const { mutateAsync: payTicketViaMpesa, isPending: initializedMpesa} = usePayViaMpesa() 
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
   const router = useRouter()
 
@@ -73,6 +74,34 @@ export default function Checkout() {
       return false
     }
     return true
+  }
+
+  const PayForTicketsViaMpesa: SubmitHandler<any> = async (data) => {
+    const purchasedTickets = selectedTickets.map((ticket: TicketPurchaseType) => {
+      return {
+        ticketId: ticket.ticketId,
+        quantity: ticket.totalQuantitySelected,
+      }
+    })
+    const orderData = {
+      tickets: purchasedTickets,
+      email: data?.customerEmail,
+      name: data?.customerName,
+      phoneNumber: data?.customerPhone ? removePlusInPhone(data?.customerPhone) : "",
+      reference: paymentReference,
+    }
+
+    payTicketViaMpesa(orderData).then((res) => {
+      if (res.status === 200) {
+        router.push("/order/success")
+      }
+    }).catch((error) => {
+      errorToast("Something went wrong while processing your order, please try again.")
+      if (process.env.NODE_ENV === "production") {
+        Sentry.captureException(error)
+        Sentry.captureMessage("Initiate payment error!!")
+      }
+    })
   }
 
   const handlePaystackSuccess = (reference: any) => {
@@ -219,17 +248,17 @@ export default function Checkout() {
                     phone number you have provided above.
                   </p>
                   <div className="w-full mt-[20px]">
-                    <PaystackHookExample
-                      onSuccess={handlePaystackSuccess}
-                      onClose={handlePaystackClose}
-                      config={{ ...componentProps, channels: ["mobile_money"] }}
-                      validateForm={validateForm}
-                      paymentMethod="mobile_money"
-                      paymentReference={paymentReference}
-                      handleSubmit={handleSubmit}
-                      initialized={initialized}
-                      setInitialized={setInitialized}
-                    />
+                  <CustomButton
+                    type="submit"
+                    className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
+                    onClick={handleSubmit(PayForTicketsViaMpesa)}
+                  >
+                    {initializedMpesa ? (
+                      `Reserving your ticket...`
+                    ) : (
+                      <>Confirm and Pay KES {totalTicketsPrice} with Mpesa</>
+                    )}
+                  </CustomButton>
                   </div>
                 </div>
               </TabsContent>
@@ -241,7 +270,7 @@ export default function Checkout() {
                     smoothly.
                   </p>
                   <div className="w-full mt-[20px]">
-                    <PaystackHookExample
+                    <PaystackHook
                       onSuccess={handlePaystackSuccess}
                       onClose={handlePaystackClose}
                       config={{ ...componentProps, channels: ["card"] }}
@@ -263,7 +292,7 @@ export default function Checkout() {
   )
 }
 
-const PaystackHookExample = ({
+const PaystackHook = ({
   onSuccess,
   onClose,
   config,
@@ -296,7 +325,7 @@ const PaystackHookExample = ({
       orderReference: paymentReference,
     }
     try {
-      const res = await PurchaseTicketsFn(data)
+      const res = await PurchaseTicketsByCardFn(data)
       if (res.status === 200) {
         setOrderDetails({
           ...data,
@@ -332,7 +361,7 @@ const PaystackHookExample = ({
         {initialized ? (
           `${checkoutProgressText ? checkoutProgressText : `Reserving your ticket`}...`
         ) : (
-          <>Confirm and Pay KES {config.amount / 100}</>
+          <>Confirm and Pay KES {config.amount / 100} with Card</>
         )}
       </CustomButton>
     </div>
