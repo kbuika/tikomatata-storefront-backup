@@ -23,7 +23,7 @@ const DefaultLayout: React.FC<Props> = ({
   return (
     <div className="bg-beigeLight">
       <div
-        className={`h-[8vh] flex items-center justify-between w-full px-[24px] sticky top-0 border-b-2 bg-white z-50
+        className={`h-[8vh] flex items-center justify-between w-full px-[24px] sticky top-0 border-b-2 backdrop-filter backdrop-blur-lg bg-opacity-30 bg-white z-50
          ${noHeader ? "hidden" : "md:flex"}`}
       >
         <Link href="/">

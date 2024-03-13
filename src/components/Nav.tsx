@@ -13,15 +13,9 @@ const Nav = () => {
     isNotMain: "text-black",
     isMain: "text-gray-300",
   }
-  const mainVariants = {
-    isMain: "border-none",
-    isNotMain: "border-b-2 bg-white",
-  }
   return (
     <div
-      className={`h-[8vh] flex items-center justify-between px-[24px] py-[13px] sticky top-0 bg-white opacity-80 md:px-[40px] ${
-        mainVariants[isMain ? "isMain" : "isNotMain"]
-      }`}
+      className={`h-[8vh] flex items-center justify-between px-[24px] py-[13px] sticky top-0 bg-white backdrop-filter backdrop-blur-lg bg-opacity-30 md:px-[40px]`}
     >
       <Link href="/">
         {isMain ? (
