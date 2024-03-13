@@ -301,3 +301,13 @@ body {
 	outline: none;
 	border-color: transparent;
 }
+
+.sell-out-section {
+	background-image: url("./../images/layer.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	background-blend-mode: multiply;
+	
+	/* height: 414px; */
+}
