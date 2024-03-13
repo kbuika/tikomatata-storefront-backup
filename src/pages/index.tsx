@@ -53,7 +53,7 @@ const Home: React.FC<Props> = () => {
             <Loader2 size={20} />
           </div>
         ) : (
-          <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
+          <div className="flex flex-wrap items-start grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl">
             {events && events?.length > 0 ? (
               <>
                 {events?.map((event: EventDataType) => (
