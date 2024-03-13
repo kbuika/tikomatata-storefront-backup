@@ -1,4 +1,5 @@
 import CustomButton from "./ui/custom-button"
+import { Button } from "./ui/button"
 import Link from "next/link"
 
 const SellOutEventBanner = () => {
@@ -30,9 +31,9 @@ const SellOutEventBanner = () => {
           rel="noopener noreferrer"
           className="w-auto mt-[24px]"
         >
-          <CustomButton className="w-full bg-rbackground text-rprimary px-4 py-4 border border-rprimary">
+          <button className="w-full bg-rbackground text-rprimary px-4 py-4 border border-rprimary rounded-[4px] hover:bg-rprimary hover:text-rbackground hover:border hover:border-rprimary duration-300 ease-in-out">
             Contact us
-          </CustomButton>
+          </button>
         </Link>
       </div>
     </div>

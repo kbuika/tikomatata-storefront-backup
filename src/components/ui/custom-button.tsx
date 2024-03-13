@@ -4,7 +4,7 @@ const CustomButton = ({ children, className, ...attributes }: any) => {
   return (
     <button
       className={clsx(
-        "bg-mainPrimary p-2 rounded-[8px] text-white hover:bg-mainSecondary duration-300 ease-in-out",
+        "bg-rprimary p-2 rounded-[4px] text-rbackground hover:bg-rbackground hover:text-rprimary hover:border hover:border-rprimary duration-300 ease-in-out",
         className,
       )}
       {...attributes}

@@ -286,12 +286,6 @@ body {
 	color: gray;
 }
 
-.main-footer-div {
-	@media (min-width: 768px) { 
-		width: 50%;
-	 }
-}
-
 .PhoneInputInput {
 	height: 100%;
 }

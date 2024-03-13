@@ -1,9 +1,12 @@
+"use client"
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
 import CustomButton from "../components/ui/custom-button"
 import BrightLogo from "../images/logos/tikomatata-bright.svg"
 import MainLogo from "../images/logos/tikomatata.svg"
+import WhiteLogo from "../images/logos/tikomatata-white.png"
+import Instagram3 from "../images/instagram-white.png"
 
 type Props = {
   children: React.ReactNode
@@ -44,54 +47,48 @@ const DefaultLayout: React.FC<Props> = ({
           </Link>
         </div>
       </div>
-      <main className="bg-rbackground static">{children}</main>
-      {/* <footer
-        className={` bg-rbackground text-white footer-container h-[40vh] w-full flex items-center justify-center min-[768px]:hidden  ${
+      <main className="bg-rbackground">{children}</main>
+      <footer
+        className={` bg-rbackground text-white h-[40vh] py-12 sm:py-8 px-[24px] w-full flex items-center justify-center border-t border-t-rprimary/25 min-[768px]:hidden  ${
           noFooter ? "hidden" : ""
         }`}
       >
-        <div className="bg-rbackground main-footer-div p-8 w-full h-full text-white flex flex-col items-center justify-center md:w-[50%]">
-          <div className="w-full flex flex-row items-start justify-between mb-4">
-            <div>
-              <h2 className="font-bold text-xl">Resources</h2>
-              <p className="mt-4 text-lg">
+          <div className="flex flex-col w-full items-center justify-between px-[24px] sm:flex-row">
+            <Image src={WhiteLogo} alt="tikomatata" width={100} height={100} />
+            <div className="flex flex-col items-center justify-between space-x-8 sm:flex-row sm:space-y-4">
+              <p className=" text-lg mt-4 sm:mt-0">
                 <Link
-                  href="https://docs.google.com/document/d/1IyzMAE7d-XDVShFPel1-CuDjXvZ32hEJ8dBPmWqVj58/edit?usp=sharing
-"
-                  className="hover:underline"
+                  href="/contact"
+                  className="underline underline-offset-4"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Have an issue? Contact Us
+                </Link>
+              </p>
+              <p className=" text-lg mt-4 sm:mt-0">
+                <Link
+                  href="https://docs.google.com/document/d/1IyzMAE7d-XDVShFPel1-CuDjXvZ32hEJ8dBPmWqVj58/edit?usp=sharing"
+                  className="underline underline-offset-4"
                   target="_blank"
                   rel="noopener"
                 >
                   Terms
                 </Link>
               </p>
-              <p className="mt-4 text-lg">Privacy</p>
-              <p className="mt-4 text-lg">
-                <Link href="/contact" className="hover:underline">
-                  Contact Us
-                </Link>
-              </p>
-            </div>
-            <div>
-              <h2 className="font-bold text-xl">Socials</h2>
-              <p className="mt-4 text-lg">
+              <p className=" text-lg mt-4 sm:mt-0">
                 <Link
                   href="https://www.instagram.com/tikomatata.ke/"
-                  className="hover:underline"
+                  className="underline underline-offset-4"
                   target="_blank"
                   rel="noopener"
                 >
-                  Instagram
+                  <Image src={Instagram3} alt="tikomatata" width={30} height={40} />
                 </Link>
               </p>
             </div>
           </div>
-          <div className=" mt-8 flex flex-row w-full items-center justify-between">
-            <Image src={MainLogo} alt="tikomatata" width={100} height={100} />
-            <p className="text-lg">© {new Date().getFullYear()} Tikomatata.</p>
-          </div>
-        </div>
-      </footer> */}
+      </footer>
     </div>
   )
 }

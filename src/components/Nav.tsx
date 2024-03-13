@@ -2,7 +2,7 @@ import React from "react"
 import Link from "next/link"
 import CustomButton from "./ui/custom-button"
 import { usePathname } from "next/navigation"
-import MainLogo from "../images/logos/tikomatata.svg"
+import MainLogo from "../images/logos/tikomatata-white.png"
 import BrightLogo from "../images/logos/tikomatata-bright.svg"
 import Image from "next/image"
 
@@ -26,7 +26,7 @@ const Nav = () => {
       </Link>
       <div className="flex items-center justify-between space-x-8">
         <Link href="https://agency.tikomatata.com" target="_blank" rel="noopener noreferrer" className=" text-gray-400 hover:text-white">
-          <CustomButton>Create Your Event</CustomButton>
+          <CustomButton className="bg-rprimary text-rbackground font-medium rounded-[4px]">Create Event</CustomButton>
         </Link>
       </div>
     </div>
