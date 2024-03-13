@@ -40,8 +40,6 @@ const EventCard: React.FC<Props> = ({ event, past = false }) => {
         <div className="flex flex-col bg-secondaryBrown items-center justify-start pt-3 mb-[16px] ml-[8px] w-1/4 rounded-b-[8px] font-bold uppercase text-dark border-r z-10 tracking-wide leading-6">
           <div className="text-base">{moment(event?.startDate).format("ddd")}</div>
           <div className="text-base mt-1">{moment(event?.startDate).format("Do")}</div>
-
-
           <div className="text-base mt-1">{moment(event?.startDate).format("MMM")}</div>
         </div>
         <div className="pl-4 pr-4 pt-4 pb-2 font-normal text-gray-800">
