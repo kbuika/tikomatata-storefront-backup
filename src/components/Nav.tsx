@@ -15,7 +15,7 @@ const Nav = () => {
   }
   return (
     <div
-      className={`h-[8vh] flex items-center justify-between px-[24px] py-[13px] sticky top-0 bg-white backdrop-filter backdrop-blur-lg bg-opacity-30 md:px-[40px]`}
+      className={` h-[8vh] flex items-center justify-between px-[24px] py-[13px] z-10 sticky top-0 bg-white backdrop-filter backdrop-blur-lg bg-opacity-30 md:px-[40px]`}
     >
       <Link href="/">
         {isMain ? (

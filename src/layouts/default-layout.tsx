@@ -21,7 +21,7 @@ const DefaultLayout: React.FC<Props> = ({
   noFooter = false,
 }) => {
   return (
-    <div className="bg-beigeLight">
+    <div className="flex flex-col bg-rbackground">
       <div
         className={`h-[8vh] flex items-center justify-between w-full px-[24px] sticky top-0 border-b-2 backdrop-filter backdrop-blur-lg bg-opacity-30 bg-white z-50
          ${noHeader ? "hidden" : "md:flex"}`}
@@ -44,13 +44,13 @@ const DefaultLayout: React.FC<Props> = ({
           </Link>
         </div>
       </div>
-      <main>{children}</main>
-      <footer
-        className={`footer-container h-[40vh] w-full flex items-center justify-center min-[768px]:hidden  ${
+      <main className="bg-rbackground static">{children}</main>
+      {/* <footer
+        className={` bg-rbackground text-white footer-container h-[40vh] w-full flex items-center justify-center min-[768px]:hidden  ${
           noFooter ? "hidden" : ""
         }`}
       >
-        <div className="main-footer-div p-8 w-full h-full text-dark flex flex-col items-center justify-center md:w-[50%]">
+        <div className="bg-rbackground main-footer-div p-8 w-full h-full text-white flex flex-col items-center justify-center md:w-[50%]">
           <div className="w-full flex flex-row items-start justify-between mb-4">
             <div>
               <h2 className="font-bold text-xl">Resources</h2>
@@ -91,7 +91,7 @@ const DefaultLayout: React.FC<Props> = ({
             <p className="text-lg">© {new Date().getFullYear()} Tikomatata.</p>
           </div>
         </div>
-      </footer>
+      </footer> */}
     </div>
   )
 }

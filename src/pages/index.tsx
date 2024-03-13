@@ -14,6 +14,8 @@ import { useEffect } from "react"
 import EventCard from "../components/event-card"
 import SEO from "../components/seo"
 import { pastEvents } from "../data/past-events"
+import Image from "next/image"
+import HeroImage from "../images/echoes-banner.webp"
 
 type Props = {
   events: Array<EventDataType>
@@ -35,51 +37,51 @@ const Home: React.FC<Props> = () => {
   resetSelectedEvent()
 
   return (
-    <DefaultLayout noHeader={true} isMain={true}>
+    <div>
       <SEO title="Tikomatata" />
-      <main className="home h-[414px] bg-beigeLight md:h-[65vh]">
+      <main className="home h-[414px] md:h-[100vh] relative">
         <Nav />
-        <Hero />
-        <div className="flex items-center justify-end bottom-0">
-          <p className="text-slate-500 text-xs mr-2">Credits | @hornsphere</p>
-        </div>
       </main>
-      <div className="mx-8 md:mx-0 sm:px-[10px] md:px-[30px] lg:px-[50px] xl:px-[80px]">
-        <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
-          <h2 className="my-[24px] text-2xl font-bold">Upcoming Events</h2>
-        </div>{" "}
-        {isLoading ? (
-          <div>
-            <Loader2 size={20} />
+      <div className="absolute inset-0 bg-gradient-to-t from-rbackground from-30% blur-lg" />
+      <div className="-mt-36 sm:-mt-80 absolute w-full">
+        <div className=" text-white mx-8 md:mx-0 sm:px-[10px] md:px-[30px] lg:px-[50px] xl:px-[80px]">
+          <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
+            <h2 className="my-[24px] text-2xl sm:text-3xl font-[700] leading-[60px]">Upcoming Events</h2>
+          </div>{" "}
+          {isLoading ? (
+            <div>
+              <Loader2 size={20} />
+            </div>
+          ) : (
+            <div className="flex flex-wrap items-start grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl">
+              {events && events?.length > 0 ? (
+                <>
+                  {events?.map((event: EventDataType) => (
+                    <EventCard key={event?.eventId} event={event} />
+                  ))}
+                </>
+              ) : (
+                <>
+                  <p className="text-lg">Sorry 😞! There are no upcoming events at the moment</p>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className=" mx-8 md:mx-0 sm:px-[10px] md:px-[30px] lg:px-[50px] xl:px-[80px]">
+          <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
+            <h2 className="my-[24px] text-2xl font-bold text-slate-600">Past Events</h2>
           </div>
-        ) : (
           <div className="flex flex-wrap items-start grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl">
-            {events && events?.length > 0 ? (
-              <>
-                {events?.map((event: EventDataType) => (
-                  <EventCard key={event?.eventId} event={event} />
-                ))}
-              </>
-            ) : (
-              <>
-                <p className="text-lg">Sorry 😞! There are no upcoming events at the moment</p>
-              </>
-            )}
+            {getPastEvents(pastEvents)?.map((event: EventDataType) => (
+              <EventCard key={event?.eventId} event={event} past={true} />
+            ))}
           </div>
-        )}
-      </div>
-      <div className="mx-8 md:mx-0 sm:px-[10px] md:px-[30px] lg:px-[50px] xl:px-[80px]">
-        <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
-          <h2 className="my-[24px] text-2xl font-bold text-slate-600">Past Events</h2>
         </div>
-        <div className="flex flex-wrap items-start grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 max-w-7xl">
-          {getPastEvents(pastEvents)?.map((event: EventDataType) => (
-            <EventCard key={event?.eventId} event={event} past={true} />
-          ))}
-        </div>
+        <SellOutEventBanner />
       </div>
-      <SellOutEventBanner />
-    </DefaultLayout>
+    </div>
   )
 }
 

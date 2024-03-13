@@ -23,7 +23,7 @@ const EventCard: React.FC<Props> = ({ event, past = false }) => {
   }
   return (
     <div
-      className="flex flex-col w-full h-[30em] border rounded-[16px] mb-4 shadow-xl  md:h-[28em] sm:w-[18em] md:w-[20em] lg:w-[20em] xl:w-[20em] hover:cursor-pointer"
+      className="flex flex-col w-full h-[30em] border rounded-[16px] mb-4 shadow-xl text-white  md:h-[28em] sm:w-[18em] md:w-[20em] lg:w-[20em] xl:w-[20em] hover:cursor-pointer"
       onClick={past ? undefined : goToEvent}
     >
       <div className="w-full h-[70%] rounded-[8px] pt-[8px] px-[8px] relative">
@@ -43,10 +43,10 @@ const EventCard: React.FC<Props> = ({ event, past = false }) => {
           <div className="text-base mt-1">{moment(event?.startDate).format("MMM")}</div>
         </div>
         <div className="pl-4 pr-4 pt-4 pb-2 font-normal text-gray-800">
-          <h1 className="mb-2 text-lg font-semibold leading-none tracking-tight text-dark md:text-lg">
+          <h1 className="mb-2 text-lg font-semibold leading-none tracking-tight text-white md:text-lg">
             {truncateText(event?.name, 20)}
           </h1>
-          <div className="flex flex-col items-start mt-[5px] text-gray-700">
+          <div className="flex flex-col items-start mt-[5px] text-white">
             <div className="text-sm flex flex-row items-start">
               <MapPin size={20} className="mr-2" color="#555455" />
               {truncateText(event?.location, 25)}{" "}
