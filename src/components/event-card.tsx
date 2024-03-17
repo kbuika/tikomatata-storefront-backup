@@ -23,7 +23,7 @@ const EventCard: React.FC<Props> = ({ event, past = false }) => {
   }
   return (
     <div
-      className="flex flex-col w-[325px] h-[30em] border-none rounded-[16px] mb-4 shadow-xl text-white  hover:cursor-pointer"
+      className="flex flex-col w-[326px] h-[30em] border-none rounded-[16px] mb-4 text-white  hover:cursor-pointer"
       onClick={past ? undefined : goToEvent}
     >
       {/* md:h-[28em] sm:w-[18em] md:w-[20em] lg:w-[20em] xl:w-[20em] */}
@@ -33,7 +33,7 @@ const EventCard: React.FC<Props> = ({ event, past = false }) => {
             Past Event
           </div>
         )}
-        <div className="flex overflow-hidden items-center justify-center h-full w-full relative rounded-t-[8px] border-2 border-gray-200">
+        <div className="flex overflow-hidden items-center justify-center h-full w-full relative rounded-[8px] border-2 border-[#105858]">
           <Image src={event?.posterUrl!} alt={event?.name!} fill className="rounded"/>
         </div>
       </div>
@@ -44,18 +44,20 @@ const EventCard: React.FC<Props> = ({ event, past = false }) => {
           <div className="text-base mt-1">{moment(event?.startDate).format("MMM")}</div>
         </div> */}
         <div className=" pr-4 pt-4 pb-2 font-normal text-white">
-          <h1 className="mb-2 text-lg font-semibold leading-none tracking-tight md:text-lg">
+          <h1 className="mb-2 text-lg font-semibold leading-none tracking-tight md:text-[24px]">
             {truncateText(event?.name, 20)}
           </h1>
-          <p className="">{moment(event?.startDate).format("ddd")}, {moment(event?.startDate).format("MMM")} {moment(event?.startDate).format("do")}</p>
-          <div className="flex flex-col items-start mt-[5px] text-white">
+          <p className=""></p>
+          <div className="flex flex-col items-start mt-[2px] text-white">
             <div className="text-sm flex flex-row items-start text-rsecdark">
               {/* <MapPin size={20} className="mr-2" color="#555455" /> */}
               {truncateText(event?.location, 25)}{" "}
             </div>
-            <div className="text-base flex flex-row items-center mt-[5px] text-rsecdark">
+            <div className="text-base flex flex-row items-center mt-[2px] text-rsecdark">
               {/* <Clock4 size={18} className="mr-2" color="#555455" /> */}
-              {moment(startDateTime).format("LT")}
+              {/* {event?.startDate} */}
+              {/* FIXME: Date is showing wrong date */}
+              {moment(startDateTime).format("ddd")}, {moment(startDateTime).format("MMM")} {moment(startDateTime).format("do")}, {moment(startDateTime).format("LT")}
             </div>
           </div>
         </div>

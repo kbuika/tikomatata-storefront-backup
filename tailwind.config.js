@@ -42,7 +42,7 @@ module.exports = {
         input: "#3C0862",
         ring: "#3C0862",
         // redesign colors
-        rbackground: "#040E0E",
+        rbackground: "#001A1A",
         rprimary: "#01FFFF",
         rsecdark: "#C6C8C8",
         // end of redesign colors
