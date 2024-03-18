@@ -46,7 +46,7 @@ export default function Checkout() {
   const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const [initialized, setInitialized] = useState<boolean>(false)
-  const { mutateAsync: payTicketViaMpesa, isPending: initializedMpesa} = usePayViaMpesa() 
+  const { mutateAsync: payTicketViaMpesa, isPending: initializedMpesa } = usePayViaMpesa()
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
   const router = useRouter()
 
@@ -91,17 +91,21 @@ export default function Checkout() {
       reference: paymentReference,
     }
 
-    payTicketViaMpesa(orderData).then((res) => {
-      if (res.status === 200) {
-        router.push("/order/success")
-      }
-    }).catch((error) => {
-      errorToast("Something went wrong while processing your order, please try again.")
-      if (process.env.NODE_ENV === "production") {
-        Sentry.captureException(error)
-        Sentry.captureMessage("Initiate payment error!!")
-      }
-    })
+    payTicketViaMpesa(orderData)
+      .then((res) => {
+        if (res.status === 200) {
+          router.push("/order/success")
+        }else {
+          errorToast(res.message)
+        }
+      })
+      .catch((error) => {
+        errorToast("Something went wrong while processing your order, please try again.")
+        if (process.env.NODE_ENV === "production") {
+          Sentry.captureException(error)
+          Sentry.captureMessage("Initiate payment error!!")
+        }
+      })
   }
 
   const handlePaystackSuccess = (reference: any) => {
@@ -132,49 +136,55 @@ export default function Checkout() {
 
   return (
     <DefaultLayout noFooter>
-      <main className="flex min-h-screen flex-col items-center justify-center w-full sm:flex-row sm:items-start">
-        <div className="w-[40%] p-8 flex flex-col items-center justify-start sm:border-l-2 sm:min-h-[50em]">
-          <div className="h-[10em] w-[20em]">
-            <Image
-              src={selectedEvent?.posterUrl ?? defaultImage}
-              alt=""
-              width={100}
-              height={100}
-              className="w-full h-full object-cover rounded-xl"
+      <main className="flex min-h-screen flex-col items-center justify-center w-full pt-[70px] md:pt-[50px] md:flex-row-reverse md:items-start">
+        <div className="w-full p-8 flex flex-col items-start justify-start md:border-l-2 md:border-rborder md:min-h-[50em] md:w-[480px]">
+          <div className="h-[10em] w-full rounded-[4px] md:h-[208px] md:w-full">
+            <div
+              className="h-full w-full bg-cover bg-no-repeat bg-blend-multiply bg-center rounded-[4px]"
+              style={{
+                backgroundImage: `url('${selectedEvent?.posterUrl || defaultImage}')`,
+              }}
             />
           </div>
-          <div className="mt-4 items-start w-[20em]">
-            <h2 className="text-xl font-semibold">{selectedEvent?.name}</h2>
-            <p className="text-base mt-2 flex flex-row items-center">
-              {moment(selectedEvent?.startDate).format("ddd Do MMMM")} at{" "}
-              {moment(startDateTime).format("LT")}
-            </p>
-            <p className="text-base mt-2 flex flex-row items-center">{selectedEvent?.location}</p>
+          <div className="mt-4 items-start w-[20em] text-white">
+            <h2 className="text-2xl font-semibold">Order Summary</h2>
           </div>
-          <div className="w-[20em]">
-            <h2 className="text-xl font-semibold mt-6">Tickets</h2>
+          <div className="w-full text-white">
+            <h2 className="text-xl font-semibold mt-4">{selectedEvent?.name} Tickets</h2>
             {selectedTickets?.map((ticket: TicketPurchaseType) => (
               <div
                 key={ticket?.ticketId}
-                className="flex flex-row w-full items-center justify-between mt-2 mb-2"
+                className="flex flex-row w-full items-center justify-between mt-2 mb-2 text-lg"
               >
                 <p>
-                  <span className="text-gray-500">{ticket?.totalQuantitySelected} x </span>
+                  <span className="text-white">{ticket?.totalQuantitySelected} x </span>
                   {ticket?.name}
                 </p>
                 <p>KES {ticket?.price}</p>
               </div>
             ))}
-
             <hr className="my-4" />
-            <div className="flex flex-row w-full items-center justify-between mt-1 mb-2">
+            <div>
+              <h2 className="text-xl font-semibold">Discounts and Fees</h2>
+              <div className="flex flex-row w-full items-center justify-between mt-2 mb-2 text-lg">
+                <p>
+                  <span className="text-white">Applied Discount</span>
+                </p>
+                <p>KES 0</p>
+              </div>
+            </div>
+            <hr className="my-4" />
+            <div className="flex flex-row w-full items-center justify-between mt-1 mb-2 text-xl">
               <p>TOTAL</p>
               <p>KES {totalTicketsPrice}</p>
             </div>
           </div>
         </div>
-        <div className="w-full px-12 min-h-[50em] border-t-2 sm:border-t-0 sm:border-l-2 sm:w-[50%] sm:p-8 sm:pl-36 sm:px-0 max-[600px]:px-6">
-          <h2 className="text-lg font-medium mt-6 sm:mt-0">Where do we send your tickets?</h2>
+        <div className="w-full px-12 min-h-[50em] border-t-2 md:border-t-0 md:w-[50%] md:p-8 md:px-10 max-[600px]:px-6 text-white">
+          <h2 className="text-xl font-semibold sm:text-2xl mt-6 md:mt-0">Where do we send your tickets?</h2>
+          <p className="text-sm mt-2 text-gray-400">
+            Tickets will be sent to the email provided below.
+          </p>
           <div className="h-auto w-full flex flex-col items-center max-[600px]:mt-2">
             <div className="w-full mt-[4px] text-neutralDark sm:mt-[16px]">
               <div>
@@ -182,7 +192,7 @@ export default function Checkout() {
                   id="name"
                   type="text"
                   required
-                  className="h-[50px] bg-white appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                  className="h-[50px] bg-transparent appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                   placeholder="Name"
                   {...register("customerName", { required: true })}
                 ></input>
@@ -197,7 +207,7 @@ export default function Checkout() {
                   id="email"
                   type="email"
                   required
-                  className="h-[50px] bg-white appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                  className="h-[50px] bg-transparent appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                   placeholder="Email Address"
                   {...register("customerEmail", { required: true })}
                 ></input>
@@ -216,7 +226,7 @@ export default function Checkout() {
                   rules={{ required: true }}
                   placeholder="Enter phone number"
                   onChange={(e: string) => setValue("customerPhone", e)}
-                  className="w-3/4 h-[50px] bg-white appearance-none rounded block w-full pl-5 border border-gray-600 placeholder-gray-500 text-gray-900 focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                  className="h-[50px] bg-transparent appearance-none rounded block w-full pl-5 border border-gray-600 placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
                 />
               </div>
               {errors.customerPhone && (
@@ -225,18 +235,21 @@ export default function Checkout() {
             </div>
           </div>
           <div className="mt-6">
-            <h2 className="mb-4 text-lg">Payment Details</h2>
+            <h2 className="text-xl">Checkout</h2>
+            <p className="mt-2 text-sm mb-4 text-gray-400">
+              Please complete the purchase by providing payment details.
+            </p>
             <Tabs defaultValue="mpesa" className="w-full">
               <TabsList className="bg-none w-full flex justify-start">
                 <TabsTrigger
                   value="mpesa"
-                  className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-mainPrimary"
+                  className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-rprimary"
                 >
                   Mpesa
                 </TabsTrigger>
                 <TabsTrigger
                   value="card"
-                  className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-mainPrimary"
+                  className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-rprimary"
                 >
                   Card
                 </TabsTrigger>
@@ -248,17 +261,17 @@ export default function Checkout() {
                     phone number you have provided above.
                   </p>
                   <div className="w-full mt-[20px]">
-                  <CustomButton
-                    type="submit"
-                    className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
-                    onClick={handleSubmit(PayForTicketsViaMpesa)}
-                  >
-                    {initializedMpesa ? (
-                      `Reserving your ticket...`
-                    ) : (
-                      <>Confirm and Pay KES {totalTicketsPrice} with Mpesa</>
-                    )}
-                  </CustomButton>
+                    <CustomButton
+                      type="submit"
+                      className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
+                      onClick={handleSubmit(PayForTicketsViaMpesa)}
+                    >
+                      {initializedMpesa ? (
+                        `Reserving your ticket...`
+                      ) : (
+                        <>Confirm and Pay KES {totalTicketsPrice} with Mpesa</>
+                      )}
+                    </CustomButton>
                   </div>
                 </div>
               </TabsContent>
