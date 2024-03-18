@@ -26,14 +26,14 @@ const DefaultLayout: React.FC<Props> = ({
   return (
     <div className="flex flex-col bg-rbackground">
       <div
-        className={`h-[8vh] flex items-center justify-between w-full px-[24px] sticky top-0 border-b-2 backdrop-filter backdrop-blur-lg bg-opacity-30 bg-white z-50
+        className={`h-[8vh] flex items-center justify-between w-full px-[24px] absolute top-0 backdrop-filter backdrop-blur-lg bg-opacity-30 border-b-2 border-[#105858] z-50
          ${noHeader ? "hidden" : "md:flex"}`}
       >
         <Link href="/">
           {isMain ? (
-            <Image src={BrightLogo} alt="logo" height={35} width={105} />
+            <Image src={WhiteLogo} alt="logo" height={35} width={105} />
           ) : (
-            <Image src={MainLogo} alt="logo" height={35} width={105} />
+            <Image src={WhiteLogo} alt="logo" height={35} width={105} />
           )}
         </Link>
         <div className="md:flex items-center justify-between hidden space-x-8">
@@ -47,7 +47,7 @@ const DefaultLayout: React.FC<Props> = ({
           </Link>
         </div>
       </div>
-      <main className="bg-rbackground">{children}</main>
+      <main className={`bg-rbackground`}>{children}</main>
       <footer
         className={` bg-rbackground text-white h-[40vh] py-12 sm:py-8 px-[24px] w-full flex items-center justify-center border-t border-t-rprimary/25 min-[768px]:hidden  ${
           noFooter ? "hidden" : ""
