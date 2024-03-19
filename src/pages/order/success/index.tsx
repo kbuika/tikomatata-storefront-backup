@@ -1,18 +1,22 @@
 "use client"
-import Image from "next/image"
-import CustomButton from "../../../components/ui/custom-button"
-import defaultImage from "../../../images/default.jpg"
-import tickImage from "../../../images/success-tick.svg"
 import DefaultLayout from "@/layouts/default-layout"
-import { useTicketsStore } from "@/stores/tickets-store"
-import { TicketPurchaseType } from "@/types/ticket"
 import { useEventsStore } from "@/stores/events-store"
-import moment from "moment"
-import Link from "next/link"
 import { useOrderStore } from "@/stores/order-store"
-import { maskEmail } from "@/lib/utils"
+import { useTicketsStore } from "@/stores/tickets-store"
+import Image from "next/image"
+import Link from "next/link"
 import { useRouter } from "next/router"
-import { ArrowLeft } from "lucide-react"
+import CustomButton from "../../../components/ui/custom-button"
+import tickImage from "../../../images/success-tick.svg"
+import ConfettiExplosion, { ConfettiProps } from 'react-confetti-explosion';
+
+const largeProps: ConfettiProps = {
+  force: 0.8,
+  duration: 3000,
+  particleCount: 400,
+  width: 1600,
+  colors: ['#041E43', '#1471BF', '#5BB4DC', '#fe3b25', '#66D805'],
+};
 
 export default function SuccessOrder() {
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
@@ -23,27 +27,11 @@ export default function SuccessOrder() {
 
   const router = useRouter()
 
+
   return (
     <DefaultLayout>
       <main className="flex flex-col w-full min-h-screen bg-rbackground pt-[50px] text-white md:flex-row">
-        {/* <div
-          className="h-[354px] w-full relative bg-cover bg-no-repeat bg-blend-multiply bg-center md:hidden"
-          style={{
-            backgroundImage: `url('${selectedEvent?.posterUrl}')`,
-          }}
-        >
-          <p
-            className="absolute top-10 left-5 z-10 text-white h-10 w-10 bg-black flex items-center justify-center rounded-[50px] cursor-pointer"
-            onClick={() => router.back()}
-          >
-            <ArrowLeft />
-          </p>
-        </div>
-
-        <div className="-mt-20 h-[149px] w-[100vw] inset-0 bg-gradient-to-t from-rbackground from-85% blur-lg md:hidden" /> */}
-
         <div className="relative flex items-center justify-center p-8 w-full min-h-screen md:w-1/2 md:mt-0 md:flex-col">
-          {/* <div className="flex items-start jusify-center w-full px-12 min-h-[28em] md:min-h-[100vh] md:border-b-0 md:border-l-2 md:w-[50%] md:p-8 md:pl-36 md:px-0 max-[600px]:px-6"> */}
             <div className="h-auto w-full flex flex-col items-center justify-center max-[600px]:mt-2 p-4 ">
               <div className="h-[120px] w-[120px]">
                 <Image
@@ -74,7 +62,6 @@ export default function SuccessOrder() {
               </Link>
             </div>
           </div>
-        {/* </div> */}
         <div className="hidden w-1/2 px-20 pt-20 bg-black fixed top-0 right-0 overflow-auto h-full md:block">
           <div
             className="w-full h-full bg-contain bg-no-repeat bg-center flex items-center justify-center"
@@ -83,6 +70,8 @@ export default function SuccessOrder() {
             }}
           />
         </div>
+        <ConfettiExplosion {...largeProps} />
+
       </main>
     </DefaultLayout>
   )
