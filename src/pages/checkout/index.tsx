@@ -261,17 +261,17 @@ export default function Checkout() {
                     phone number you have provided above.
                   </p>
                   <div className="w-full mt-[20px]">
-                    <CustomButton
-                      type="submit"
-                      className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
-                      onClick={handleSubmit(PayForTicketsViaMpesa)}
-                    >
-                      {initializedMpesa ? (
-                        `Reserving your ticket...`
-                      ) : (
-                        <>Confirm and Pay KES {totalTicketsPrice} with Mpesa</>
-                      )}
-                    </CustomButton>
+                  <PaystackHook
+                      onSuccess={handlePaystackSuccess}
+                      onClose={handlePaystackClose}
+                      config={{ ...componentProps, channels: ["mobile_money"] }}
+                      validateForm={validateForm}
+                      paymentMethod="mobile_money"
+                      paymentReference={paymentReference}
+                      handleSubmit={handleSubmit}
+                      initialized={initialized}
+                      setInitialized={setInitialized}
+                    />
                   </div>
                 </div>
               </TabsContent>
@@ -374,7 +374,7 @@ const PaystackHook = ({
         {initialized ? (
           `${checkoutProgressText ? checkoutProgressText : `Reserving your ticket`}...`
         ) : (
-          <>Confirm and Pay KES {config.amount / 100} with Card</>
+          <>Confirm and Pay KES {config.amount / 100} with {paymentMethod == "mobile_money" ? "Mpesa" : "Card"}</>
         )}
       </CustomButton>
     </div>
