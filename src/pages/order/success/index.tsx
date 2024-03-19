@@ -31,7 +31,8 @@ export default function SuccessOrder() {
   return (
     <DefaultLayout>
       <main className="flex flex-col w-full min-h-screen bg-rbackground pt-[50px] text-white md:flex-row">
-        <div className="relative flex items-center justify-center p-8 w-full min-h-screen md:w-1/2 md:mt-0 md:flex-col">
+      <ConfettiExplosion {...largeProps} />
+        <div className="relative flex items-start justify-start p-8 w-full min-h-screen md:w-1/2 md:mt-0 md:flex-col">
             <div className="h-auto w-full flex flex-col items-center justify-center max-[600px]:mt-2 p-4 ">
               <div className="h-[120px] w-[120px]">
                 <Image
@@ -70,8 +71,6 @@ export default function SuccessOrder() {
             }}
           />
         </div>
-        <ConfettiExplosion {...largeProps} />
-
       </main>
     </DefaultLayout>
   )
