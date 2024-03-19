@@ -103,9 +103,6 @@ export default function Events() {
                     ) : (
                       <>
                         <TicketCardList tickets={selectedEvent?.tickets!} event={selectedEvent!} />
-                        <TicketCardList tickets={selectedEvent?.tickets!} event={selectedEvent!} />
-                        <TicketCardList tickets={selectedEvent?.tickets!} event={selectedEvent!} />
-                        <TicketCardList tickets={selectedEvent?.tickets!} event={selectedEvent!} />
                       </>
                     )}
                   </div>

@@ -11,6 +11,8 @@ import moment from "moment"
 import Link from "next/link"
 import { useOrderStore } from "@/stores/order-store"
 import { maskEmail } from "@/lib/utils"
+import { useRouter } from "next/router"
+import { ArrowLeft } from "lucide-react"
 
 export default function SuccessOrder() {
   const selectedTickets = useTicketsStore((state) => state.selectedTickets)
@@ -19,85 +21,67 @@ export default function SuccessOrder() {
   const selectedEvent = useEventsStore((state) => state.selectedEvent)
   const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
 
+  const router = useRouter()
+
   return (
     <DefaultLayout>
-      <main className="pt-[44px] sm:pt-0 flex min-h-screen flex-col flex-col-reverse items-center justify-center w-full sm:flex-row sm:items-start">
-        <div className="w-[40%] p-8 flex flex-col items-center justify-start sm:border-l-2 sm:min-h-[50em]">
-          <div className="h-[10em] w-[20em] hidden sm:flex">
-            <Image
-              src={selectedEvent?.posterUrl ?? defaultImage}
-              alt=""
-              width={100}
-              height={100}
-              className="w-full h-full object-cover rounded-xl"
-            />
-          </div>
-          <div className="mt-4 items-start w-[20em] hidden sm:flex sm:flex-col">
-            <h2 className="text-xl font-semibold">{selectedEvent?.name}</h2>
-            <p className="text-base mt-2 flex flex-row items-center">
-              {moment(selectedEvent?.startDate).format("ddd Do MMMM")} at{" "}
-              {moment(startDateTime).format("LT")}
-            </p>
-            <p className="text-base mt-2 flex flex-row items-center">{selectedEvent?.location}</p>
-          </div>
-          <div className="w-[20em]">
-            <h2 className="text-xl font-semibold mt-2">Your Order</h2>
-            {selectedTickets?.map((ticket: TicketPurchaseType) => (
-              <div
-                key={ticket?.ticketId}
-                className="flex flex-row w-full items-center justify-between mt-6 mb-2"
-              >
-                <p>
-                  <span className="text-gray-500">{ticket?.totalQuantitySelected} x </span>
-                  {ticket?.name}
-                </p>
-                <p>KES {ticket?.price}</p>
-              </div>
-            ))}
-
-            <hr className="my-4" />
-            <div className="flex flex-row w-full items-center justify-between mt-1 mb-2">
-              <p>Total Amount Paid</p>
-              <p className="font-bold text-dark">KES {totalTicketsPrice}</p>
-            </div>
-            <hr className="my-4" />
-            <div className="flex flex-row w-full items-center justify-between mt-1 mb-2">
-              <p>Date Paid</p>
-              <p className="font-bold text-dark">{orderDetails?.datePaid}</p>
-            </div>
-            <Link href="/" className="block sm:hidden">
-              <CustomButton className="mt-[40px] px-[100px] py-[14px] sm:px-[120px]">Go Back Home</CustomButton>
-            </Link>
-          </div>
+      <main className="flex flex-col w-full min-h-screen bg-rbackground pt-[50px] text-white md:flex-row">
+        {/* <div
+          className="h-[354px] w-full relative bg-cover bg-no-repeat bg-blend-multiply bg-center md:hidden"
+          style={{
+            backgroundImage: `url('${selectedEvent?.posterUrl}')`,
+          }}
+        >
+          <p
+            className="absolute top-10 left-5 z-10 text-white h-10 w-10 bg-black flex items-center justify-center rounded-[50px] cursor-pointer"
+            onClick={() => router.back()}
+          >
+            <ArrowLeft />
+          </p>
         </div>
-        <div className="flex items-start jusify-center w-full px-12 min-h-[28em] sm:min-h-[100vh] border-b-2 sm:border-b-0 sm:border-l-2 sm:w-[50%] sm:p-8 sm:pl-36 sm:px-0 max-[600px]:px-6">
-          <div className="h-auto w-full flex flex-col items-center max-[600px]:mt-2">
-            <div className="h-[120px] w-[120px]">
-              <Image
-                src={tickImage}
-                alt=""
-                width={100}
-                height={100}
-                className="w-full h-full object-cover rounded-xl"
-              />
+
+        <div className="-mt-20 h-[149px] w-[100vw] inset-0 bg-gradient-to-t from-rbackground from-85% blur-lg md:hidden" /> */}
+
+        <div className="relative flex items-center justify-center p-8 w-full min-h-screen md:w-1/2 md:mt-0 md:flex-col">
+          {/* <div className="flex items-start jusify-center w-full px-12 min-h-[28em] md:min-h-[100vh] md:border-b-0 md:border-l-2 md:w-[50%] md:p-8 md:pl-36 md:px-0 max-[600px]:px-6"> */}
+            <div className="h-auto w-full flex flex-col items-center justify-center max-[600px]:mt-2 p-4 ">
+              <div className="h-[120px] w-[120px]">
+                <Image
+                  src={tickImage}
+                  alt=""
+                  width={100}
+                  height={100}
+                  className="w-full h-full object-cover rounded-xl"
+                />
+              </div>
+              <p className="mt-[40px] text-rprimary text-2xl font-bold leading-8 text-center">
+                Ticket Payment Successful
+              </p>
+              <p className="mt-[16px] text-white text-[17px] leading-8 tricking-wide">
+                Your payment has been processed!
+              </p>
+              <p className="mt-[24px] text-white text-[17px] leading-8 tricking-wide text-center">
+                Your ticket for {selectedEvent?.name} has been sent to your email
+                <span className="text-[16px] font-bold"> {orderDetails?.customerEmail}</span>!
+              </p>
+              <p className="mt-[32px] text-white text-[16px] font-bold leading-8 tricking-wide">
+                Transaction ID: {orderDetails?.orderReference}
+              </p>
+              <Link href="/" className="flex">
+                <CustomButton className="mt-[40px] px-[100px] py-[14px] sm:px-[120px]">
+                  Go Back Home
+                </CustomButton>
+              </Link>
             </div>
-            <p className="mt-[40px] text-mainPrimary text-[21px] font-bold leading-8">
-              Ticket Payment Successful
-            </p>
-            <p className="mt-[16px] text-dark text-[17px] leading-8 tricking-wide">
-              Your payment has been processed!
-            </p>
-            <p className="mt-[24px] text-dark text-[17px] leading-8 tricking-wide text-center">
-              Your ticket for {selectedEvent?.name} has been sent to your email
-              <span className="text-[16px] font-bold">{" "}{orderDetails?.customerEmail}</span>!
-            </p>
-            {/* <p className="mt-[32px] text-dark text-[16px] font-bold leading-8 tricking-wide">
-              Transaction ID: {orderDetails?.orderReference}
-            </p> */}
-            <Link href="/" className="hidden sm:flex">
-              <CustomButton className="mt-[40px] px-[100px] py-[14px] sm:px-[120px]">Go Back Home</CustomButton>
-            </Link>
           </div>
+        {/* </div> */}
+        <div className="hidden w-1/2 px-20 pt-20 bg-black fixed top-0 right-0 overflow-auto h-full md:block">
+          <div
+            className="w-full h-full bg-contain bg-no-repeat bg-center flex items-center justify-center"
+            style={{
+              backgroundImage: `url('${selectedEvent?.posterUrl}')`,
+            }}
+          />
         </div>
       </main>
     </DefaultLayout>
