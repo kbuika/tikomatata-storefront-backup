@@ -79,6 +79,10 @@
 	}
   } */
 
+body {
+	background-color: #040E0E;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -282,18 +286,24 @@
 	color: gray;
 }
 
-.main-footer-div {
-	@media (min-width: 768px) { 
-		width: 50%;
-	 }
-}
-
 .PhoneInputInput {
 	height: 100%;
+	background-color: transparent;
+	color: white;
 }
 
 .PhoneInputInput:focus {
 	border: none;
 	outline: none;
 	border-color: transparent;
+}
+
+.sell-out-section {
+	background-image: url("./../images/layer.jpeg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	background-blend-mode: multiply;
+	
+	/* height: 414px; */
 }

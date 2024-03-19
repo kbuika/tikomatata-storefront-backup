@@ -1,0 +1,159 @@
+"use client"
+import { ReportView } from "@/components/report-view"
+import SEO from "@/components/seo"
+import TicketCardList from "@/components/ticket-card-list"
+import DefaultLayout from "@/layouts/default-layout"
+import { truncateText, warningToast } from "@/lib/utils"
+import { useEventBySlug } from "@/services/queries"
+import { useEventsStore } from "@/stores/events-store"
+import { useTicketsStore } from "@/stores/tickets-store"
+import { ArrowLeft, Loader2 } from "lucide-react"
+import moment from "moment"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { useEffect } from "react"
+import CustomButton from "../../components/ui/custom-button"
+
+export default function Events() {
+  const router = useRouter()
+  const { slug } = router?.query
+  const {
+    data: selectedEvent,
+    error: eventError,
+    isLoading: loading,
+  } = useEventBySlug(slug! as string)
+  // const [totalPrice, setTotalPrice] = useState<number>(0)
+  const startDateTime = `${selectedEvent?.startDate} ${selectedEvent?.startTime}`
+  const endDateTime = `${selectedEvent?.endDate} ${selectedEvent?.endTime}`
+  const selectedTickets = useTicketsStore((state) => state.selectedTickets)
+  const setSelectedEventInCache = useEventsStore((state) => state.setSelectedEvent)
+  const totalTicketsPrice = useTicketsStore((state) => state.totalTicketsPrice)
+
+  useEffect(() => {
+    if (selectedEvent) {
+      setSelectedEventInCache(selectedEvent)
+    }
+  }, [setSelectedEventInCache, selectedEvent])
+
+  const completeOrder = () => {
+    if (selectedTickets.length === 0) {
+      warningToast("Please select at least one ticket")
+      return
+    }
+    router.push("/checkout")
+  }
+
+  return (
+    <DefaultLayout noFooter={true} noHeader={false}>
+      <SEO
+        title={selectedEvent?.name || ""}
+        description={`${truncateText(selectedEvent?.description || "", 15)}...`}
+        image={selectedEvent?.posterUrl}
+      />
+      {loading ? (
+        <main className="min-h-screen flex items-center justify-center bg-rbackground">
+          <Loader2 className="mx-auto animate-spin" size={64} color="#white" />
+        </main>
+      ) : (
+        <>
+          {eventError ? (
+            <main className="flex min-h-screen flex-col items-center justify-center bg-rbackground text-white overflow-y-auto">
+              <p>Error. Could not fetch the selected event.</p>
+              <CustomButton className="mt-4">
+                <Link href="/">Go Back</Link>
+              </CustomButton>
+            </main>
+          ) : (
+            <main className="flex flex-col w-full sm:min-h-screen bg-rbackground text-white md:flex-row">
+              {process.env.NODE_ENV == "production" && (
+                <ReportView eventId={selectedEvent?.eventId?.toString() || ""} />
+              )}
+              <div
+                className="h-[354px] w-full relative bg-cover bg-no-repeat bg-blend-multiply bg-center md:hidden"
+                style={{
+                  backgroundImage: `url('${selectedEvent?.posterUrl}')`,
+                }}
+              >
+                <p
+                  className="absolute top-10 left-5 z-10 text-white h-10 w-10 bg-black flex items-center justify-center rounded-[50px] cursor-pointer"
+                  onClick={() => router.back()}
+                >
+                  <ArrowLeft />
+                </p>
+              </div>
+
+              <div className="-mt-20 h-[149px] w-[100vw] inset-0 bg-gradient-to-t from-rbackground from-85% blur-lg md:hidden" />
+
+              <div className="relative md:flex p-8 w-full md:w-1/2 -mt-36 md:mt-0 md:flex-col">
+                <h2 className="text-4xl font-bold mb-4">{selectedEvent?.name}</h2>
+                <p className="mb-6">
+                  {selectedEvent?.location}
+                  <br />
+                  {moment(startDateTime).format("ddd")}, {moment(startDateTime).format("MMMM")}{" "}
+                  {moment(startDateTime).format("do")}
+                  <br />
+                  {moment(startDateTime).format("LT")} - {moment(endDateTime).format("LT")}
+                </p>
+                <p className="mb-6">{selectedEvent?.description}</p>
+                <div className="mb-20">
+                  <h3 className="text-2xl font-semibold mb-2">Tickets</h3>
+                  <div className="flex flex-row flex-wrap items-center justify-between">
+                    {selectedEvent?.tickets?.length === 0 ? (
+                      <p className="mt-2">No tickets available for this event.</p>
+                    ) : (
+                      <>
+                        <TicketCardList tickets={selectedEvent?.tickets!} event={selectedEvent!} />
+                      </>
+                    )}
+                  </div>
+                  {selectedEvent?.tickets?.length !== 0 && (
+                    <div className="mt-8 flex flex-col sm:flex-row items-start justify-between w-full">
+                      <div className="w-full border-2 border-[#105858] p-2 h-10 rounded flex items-center justify-between text-lg mb-4 sm:mb-0 sm:w-[45%]">
+                        TOTAL{" "}
+                        <span className="text-white font-medium">
+                          KES <span className="font-semibold">{totalTicketsPrice}</span>
+                        </span>
+                      </div>
+
+                      <CustomButton className="w-full sm:w-[45%]" onClick={completeOrder}>
+                        Complete Order
+                      </CustomButton>
+                    </div>
+                  )}
+                  {selectedTickets?.length !== 0 && (
+                    <div className="w-full md:hidden">
+                      <section
+                        id="bottom-navigation"
+                        className="fixed inset-x-0 bottom-0 z-10 bg-rbackground shadow h-20 flex flex-row flex-wrap items-center justify-between"
+                      >
+                        <div className="p-4 flex flex-row flex-wrap items-center justify-between w-full border-t-2 border-[#105858]">
+                          <div className="w-[45%] p-2 h-10 rounded flex flex-wrap items-center justify-between text-lg ">
+                            <span className="text-white font-medium text-xl">
+                              KES <span className="font-semibold">{totalTicketsPrice}</span>
+                            </span>
+                          </div>
+
+                          <CustomButton className="w-[40%]" onClick={completeOrder}>
+                            Complete Order
+                          </CustomButton>
+                        </div>
+                      </section>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="hidden w-1/2 px-20 pt-20 bg-black fixed top-0 right-0 overflow-auto h-full md:block">
+                <div
+                  className="w-full h-full bg-contain bg-no-repeat bg-center flex items-center justify-center"
+                  style={{
+                    backgroundImage: `url('${selectedEvent?.posterUrl}')`,
+                  }}
+                />
+              </div>
+            </main>
+          )}
+        </>
+      )}
+    </DefaultLayout>
+  )
+}

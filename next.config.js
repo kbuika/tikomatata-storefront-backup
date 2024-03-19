@@ -10,6 +10,7 @@ const nextConfig = {
       "external-preview.redd.it",
       "images.unsplash.com",
       "github.com",
+      "tikomatata.com",
     ],
   },
   async redirects() {
