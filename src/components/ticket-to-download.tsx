@@ -131,7 +131,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
             </AlertDialogContent>
             <div className="w-full">
               <div className="h-auto w-full m-2 flex flex-row items-start justify-center">
-                <a className="delay-50 duration-100 bg-successBg p-5 rounded-lg w-60 group" href="">
+                <a className="delay-50 duration-100 bg-black p-5 rounded-lg w-60 group" href="">
                   <Image
                     src={event?.posterUrl}
                     className="w-full rounded shadow"
