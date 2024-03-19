@@ -70,9 +70,9 @@ export default function TicketsOrder() {
 
                     <ul className="mt-2">
                       <li>
-                        <a href="mailto:info@tikomatata.com">info@tikomatata.com</a>
+                        <a href="mailto:info@tikomatata.com">support@tikomatata.com</a>
                       </li>
-                      <li>0110733776</li>
+                      {/* <li>0110733776</li> */}
                       <li>0740459940</li>
                     </ul>
                   </div>
