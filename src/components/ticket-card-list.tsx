@@ -21,11 +21,11 @@ const TicketCardList: React.FC<TicketCardListProps> = ({ tickets, event }) => {
   // })
 
   return (
-    <>
+    <div className="w-full">
       {tickets?.map((ticket: TicketDataType) => (
         <TicketCard key={ticket?.ticketId} ticket={ticket} event={event} />
       ))}
-    </>
+    </div>
   )
 }
 

@@ -20,9 +20,10 @@ export const useEventBySlug = (slug: string): UseQueryResult<EventDataType, Erro
 
 export const useUserOrder = (orderId: string): UseQueryResult<any, Error> => {
   return useQuery({
-    queryKey: ["order-data"],
+    queryKey: ["order-data", orderId],
     queryFn: () => fetchUserOrder(orderId),
     retry: true,
+    retryDelay: 10,
     refetchOnMount: true,
   })
 }

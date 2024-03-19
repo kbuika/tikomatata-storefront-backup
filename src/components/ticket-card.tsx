@@ -83,45 +83,51 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
   }
   return (
     <div
-      className={`text-dark w-full mt-6 p-6 h-[auto] w-[366px] rounded-[8px] md:w-[48%] shadow-xl relative bg-white`}
+      className={` w-full mt-6 p-6 h-[auto] rounded-[4px] shadow-xl relative text-white sell-out-section`}
     >
-      <div>
-        <h1 className="text-[18px] font-semibold">{ticket?.name}</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">{ticket?.name}</h1>
+        <div>
+          {ticket?.quantity === 0 && (
+            <div className="font-bold py-1 px-2 bg-slate-400 text-white rounded-[4px]">
+              Sold Out
+            </div>
+          )}
+        </div>
       </div>
       <div className="mt-2">
-        <>
+        {/* <>
           <p className="text-[17px] font-normal">
             {moment(event?.startDate).format("ddd MMM Do")} -{" "}
             {moment(event?.endDate).format("ddd MMM Do")}
           </p>
-        </>
+        </> */}
         <p className="text-[17px] font-normal">Starts at {moment(startDateTime).format("LT")}</p>
       </div>
-      <div className="mt-2">
-        <p className="text-[18px] text-mainPrimary font-bold">KES {ticket?.price}</p>
-      </div>
-      <div>
-        <div className="flex flex-row mt-4 items-center justify-start">
-          {ticket?.quantity === 0 ? (
-            <p className="font-bold text-red-600">Sold Out</p>
-          ) : (
+      <div className="mt-2 flex justify-between items-center">
+        <p className="text-2xl text-white font-bold">KES {ticket?.price}</p>
+        <div>
+          <div className="flex flex-row mt-4 items-center justify-start">
             <>
               <Button
-                className="border rounded"
+                className="border-none h-14 w-14 rounded-[50%] bg-rbackground"
                 onClick={() => removeTicket(ticket)}
                 disabled={ticketQuantity === 0}
               >
-                <Minus className="cursor-pointer" size={13} color="black" />
+                <Minus className="cursor-pointer" size={18} color="white" />
               </Button>
-              <p className="flex items-center justify-center w-[2em] text-base">{ticketQuantity}</p>{" "}
+              <p className="flex items-center justify-center w-[2em] px-6 text-base">
+                {ticketQuantity}
+              </p>{" "}
               <Button
-                className="bg-secondaryBrown rounded focus-visible:bg-secondaryBrown"
+                className="border-none h-14 w-14 rounded-[50%] bg-rbackground"
                 onClick={() => addTicket(ticket)}
+                disabled={ticket?.quantity === 0}
               >
-                <Plus className="cursor-pointer" size={13} color="black" />
+                <Plus className="cursor-pointer" size={18} color="white" />
               </Button>
             </>
-          )}
+          </div>
         </div>
       </div>
     </div>

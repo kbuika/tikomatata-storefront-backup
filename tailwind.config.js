@@ -4,7 +4,7 @@ module.exports = {
   content: ["./src/pages/**/*.{js,ts,jsx,tsx,mdx}", "./src/components/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     fontFamily: {
-      'nunito': ['Nunito']
+      nunito: ["Nunito"],
     },
     container: {
       center: true,
@@ -41,6 +41,12 @@ module.exports = {
         border: "hsl(var(--border))",
         input: "#3C0862",
         ring: "#3C0862",
+        // redesign colors
+        rbackground: "#001A1A",
+        rprimary: "#01FFFF",
+        rsecdark: "#C6C8C8",
+        rborder: "#525252",
+        // end of redesign colors
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {

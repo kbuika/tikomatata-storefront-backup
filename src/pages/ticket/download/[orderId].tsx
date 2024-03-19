@@ -5,28 +5,35 @@ import { useUserOrder } from "@/services/queries"
 import { Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 
 export default function TicketsOrder() {
   const router = useRouter()
   const ticketRef = useRef<any>(null)
   const { orderId } = router?.query
-  const { data:orderData, error: orderError, isLoading: loading } = useUserOrder(orderId as string)
+  const { data: orderData, error: orderError, isLoading: loading } = useUserOrder(orderId! as string);
 
+  if(loading) {
+    <DefaultLayout noFooter={true}>
+      <main className="min-h-screen flex items-center justify-center">
+          <Loader2 className="mx-auto animate-spin" size={64} color="white" />
+        </main>
+    </DefaultLayout>
+  }
   return (
     <DefaultLayout noFooter={true}>
       {loading ? (
         <main className="min-h-screen flex items-center justify-center">
-          <Loader2 className="mx-auto animate-spin" size={64} color="#3C0862" />
+          <Loader2 className="mx-auto animate-spin" size={64} color="white" />
         </main>
       ) : (
         <>
           {orderError ? (
             <main className="flex min-h-screen flex-col items-start justify-start">
-              <p>Error. Could not fetch the selected order.</p>
+              <p>Sorry. We could not fetch your tickets. If this issue persists please <Link href={"/contact"} className="underline underline-offset-2">Contact Us</Link></p>
             </main>
           ) : (
-            <main className="flex sm:h-auto flex-col items-start justify-start">
+            <main className="flex min-h-screen flex-col items-start justify-start pt-[50px] text-white">
               <div className="flex w-full flex-col items-center justify-between h-full sm:flex-row sm:items-start">
                 <div className="w-full h-auto px-6 pb-6 pt-8 flex flex-col items-start justify-start sm:w-[80%] sm:px-16 sm:pb-16 sm:pt-8 sm:min-h-screen sm:h-auto">
                   <div className="mb-4 border-b-2 pb-2 w-full flex flex-row flex-wrap items-center justify-between">
@@ -63,9 +70,9 @@ export default function TicketsOrder() {
 
                     <ul className="mt-2">
                       <li>
-                        <a href="mailto:info@tikomatata.com">info@tikomatata.com</a>
+                        <a href="mailto:info@tikomatata.com">support@tikomatata.com</a>
                       </li>
-                      <li>0110733776</li>
+                      {/* <li>0110733776</li> */}
                       <li>0740459940</li>
                     </ul>
                   </div>
@@ -78,3 +85,4 @@ export default function TicketsOrder() {
     </DefaultLayout>
   )
 }
+
