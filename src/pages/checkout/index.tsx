@@ -136,7 +136,7 @@ export default function Checkout() {
 
   return (
     <DefaultLayout noFooter>
-      <main className="flex min-h-screen flex-col items-center justify-center w-full pt-[70px] md:pt-[50px] md:flex-row-reverse md:items-start">
+      <main className="flex min-h-screen flex-col items-center justify-center w-full md:flex-row-reverse md:items-start">
         <div className="w-full p-8 flex flex-col items-start justify-start md:border-l-2 md:border-rborder md:min-h-[50em] md:w-[480px]">
           <div className="h-[10em] w-full rounded-[4px] md:h-[208px] md:w-full">
             <div

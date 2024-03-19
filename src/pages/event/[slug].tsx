@@ -44,7 +44,7 @@ export default function Events() {
   }
 
   return (
-    <DefaultLayout noFooter={true} noHeader={true}>
+    <DefaultLayout noFooter={true} noHeader={false}>
       <SEO
         title={selectedEvent?.name || ""}
         description={`${truncateText(selectedEvent?.description || "", 15)}...`}
@@ -52,7 +52,7 @@ export default function Events() {
       />
       {loading ? (
         <main className="min-h-screen flex items-center justify-center bg-rbackground">
-          <Loader2 className="mx-auto animate-spin" size={64} color="#3C0862" />
+          <Loader2 className="mx-auto animate-spin" size={64} color="#white" />
         </main>
       ) : (
         <>
@@ -64,7 +64,7 @@ export default function Events() {
               </CustomButton>
             </main>
           ) : (
-            <main className="flex flex-col w-full sm:min-h-screen bg-rbackground md:pt-[50px] text-white md:flex-row">
+            <main className="flex flex-col w-full sm:min-h-screen bg-rbackground text-white md:flex-row">
               {process.env.NODE_ENV == "production" && (
                 <ReportView eventId={selectedEvent?.eventId?.toString() || ""} />
               )}

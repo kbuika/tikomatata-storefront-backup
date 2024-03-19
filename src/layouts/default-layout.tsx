@@ -7,6 +7,7 @@ import BrightLogo from "../images/logos/tikomatata-bright.svg"
 import MainLogo from "../images/logos/tikomatata.svg"
 import WhiteLogo from "../images/logos/tikomatata-white.png"
 import Instagram3 from "../images/instagram-white.png"
+import Header from "./Header"
 
 type Props = {
   children: React.ReactNode
@@ -25,8 +26,8 @@ const DefaultLayout: React.FC<Props> = ({
 }) => {
   return (
     <div className="flex flex-col bg-rbackground">
-      <div
-        className={`h-[8vh] flex items-center justify-between w-full px-[24px] absolute top-0 backdrop-filter backdrop-blur-lg bg-opacity-30 border-b-2 border-[#105858] z-50
+      <header
+        className={`h-[8vh] flex items-center justify-between w-full px-[24px] sticky top-0 backdrop-filter backdrop-blur-lg bg-opacity-30 bg-rbackground z-50 md:border-b-2 md:border-rborder
          ${noHeader ? "hidden" : "md:flex"}`}
       >
         <Link href="/">
@@ -46,7 +47,7 @@ const DefaultLayout: React.FC<Props> = ({
             <CustomButton>Create Your Event</CustomButton>
           </Link>
         </div>
-      </div>
+      </header>
       <main className={`bg-rbackground`}>{children}</main>
       <footer
         className={` bg-rbackground text-white h-[40vh] py-12 sm:py-8 px-[24px] w-full flex items-center justify-center border-t border-t-rprimary/25 min-[768px]:hidden  ${
