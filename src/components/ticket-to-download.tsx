@@ -70,9 +70,9 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                     </h1>
                   </div>
                   <div className="center-content w-full flex flex-col justify-center items-center">
-                    <p className="mt-[10px] w-full text-center text-[0.7em]">
+                    {/* <p className="mt-[10px] w-full text-center text-[0.7em]">
                       Share the QR code below at the gate and you&apos;ll be good to go!
-                    </p>
+                    </p> */}
                   </div>
                   <div className="center-content qr-code-main-div w-full flex flex-col justify-center items-center">
                     <div className="center-content qr-code-div w-full flex flex-col justify-center items-center absolute top-[130px]">
