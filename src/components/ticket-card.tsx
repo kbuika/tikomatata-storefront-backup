@@ -89,7 +89,7 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
         <h1 className="text-2xl font-semibold">{ticket?.name}</h1>
         <div>
           {ticket?.quantity === 0 && (
-            <div className="font-bold py-1 px-2 bg-slate-400 text-white rounded-[4px]">
+            <div className="font-semibold py-1 px-2 bg-red-600 text-white rounded-[4px]">
               Sold Out
             </div>
           )}
@@ -107,7 +107,7 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
       <div className="mt-2 flex justify-between items-center">
         <p className="text-2xl text-white font-bold">KES {ticket?.price}</p>
         <div>
-          <div className="flex flex-row mt-4 items-center justify-start">
+          <div className="flex flex-row items-center justify-start">
             <>
               <Button
                 className="border-none h-14 w-14 rounded-[50%] bg-rbackground"

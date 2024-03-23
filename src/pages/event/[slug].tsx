@@ -13,6 +13,8 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import CustomButton from "../../components/ui/custom-button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
 
 export default function Events() {
   const router = useRouter()
@@ -33,6 +35,7 @@ export default function Events() {
     if (selectedEvent) {
       setSelectedEventInCache(selectedEvent)
     }
+
   }, [setSelectedEventInCache, selectedEvent])
 
   const completeOrder = () => {
@@ -85,7 +88,7 @@ export default function Events() {
               <div className="-mt-20 h-[149px] w-[100vw] inset-0 bg-gradient-to-t from-rbackground from-85% blur-lg md:hidden" />
 
               <div className="relative md:flex p-8 w-full md:w-1/2 -mt-36 md:mt-0 md:flex-col">
-                <h2 className="text-4xl font-bold mb-4">{selectedEvent?.name}</h2>
+                <h2 className="text-4xl md:text-3xl font-bold mb-4">{selectedEvent?.name}</h2>
                 <p className="mb-6">
                   {selectedEvent?.location}
                   <br />
@@ -94,32 +97,61 @@ export default function Events() {
                   <br />
                   {moment(startDateTime).format("LT")} - {moment(endDateTime).format("LT")}
                 </p>
-                <p className="mb-6">{selectedEvent?.description}</p>
-                <div className="mb-20">
-                  <h3 className="text-2xl font-semibold mb-2">Tickets</h3>
-                  <div className="flex flex-row flex-wrap items-center justify-between">
-                    {selectedEvent?.tickets?.length === 0 ? (
-                      <p className="mt-2">No tickets available for this event.</p>
-                    ) : (
-                      <>
-                        <TicketCardList tickets={selectedEvent?.tickets!} event={selectedEvent!} />
-                      </>
-                    )}
+                {/* <p className="mb-6">{selectedEvent?.description}</p> */}
+                <div className="mb-20 mt-2 pt-4 pb-2 sm:px-1 sm:pr-8 sm:pt-2">
+                    <Tabs
+                      defaultValue="tickets"
+                      className="w-full"
+                    >
+                      <TabsList className="bg-none w-full flex justify-start">
+                        <TabsTrigger
+                          value="tickets"
+                          className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-b-rprimary"
+                        >
+                          Tickets
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="description"
+                          className="w-[50%] flex justify-start text-lg data-[state=active]:border-b-2 data-[state=active]:border-rprimary"
+                        >
+                          Description
+                        </TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="tickets">
+                        <div className="flex flex-row flex-wrap items-center justify-between">
+                          {selectedEvent?.tickets?.length === 0 ? (
+                            <p className="mt-2">No tickets available for this event.</p>
+                          ) : (
+                            <>
+                                <TicketCardList
+                                  tickets={selectedEvent?.tickets!}
+                                  event={selectedEvent!}
+                                />
+                            </>
+                          )}
+                        </div>
+                        {selectedEvent?.tickets?.length !== 0 && (
+                          <div className="mt-8 flex flex-col sm:flex-row items-start justify-between w-full">
+                          <div className="w-full border-2 border-[#105858] p-2 h-10 rounded flex items-center justify-between text-lg mb-4 sm:mb-0 sm:w-[45%]">
+                            TOTAL{" "}
+                            <span className="text-white font-medium">
+                              KES <span className="font-semibold">{totalTicketsPrice}</span>
+                            </span>
+                          </div>
+    
+                          <CustomButton className="w-full sm:w-[45%]" onClick={completeOrder}>
+                            Complete Order
+                          </CustomButton>
+                        </div>
+                        )}
+                      </TabsContent>
+                      <TabsContent value="description">
+                        <div className="pt-4 min-h-[40vh] sm:min-h-none">
+                          <p style={{ whiteSpace: "pre-wrap" }} className="px-4">{selectedEvent?.description}</p>
+                        </div>
+                      </TabsContent>
+                    </Tabs>
                   </div>
-                  {selectedEvent?.tickets?.length !== 0 && (
-                    <div className="mt-8 flex flex-col sm:flex-row items-start justify-between w-full">
-                      <div className="w-full border-2 border-[#105858] p-2 h-10 rounded flex items-center justify-between text-lg mb-4 sm:mb-0 sm:w-[45%]">
-                        TOTAL{" "}
-                        <span className="text-white font-medium">
-                          KES <span className="font-semibold">{totalTicketsPrice}</span>
-                        </span>
-                      </div>
-
-                      <CustomButton className="w-full sm:w-[45%]" onClick={completeOrder}>
-                        Complete Order
-                      </CustomButton>
-                    </div>
-                  )}
                   {selectedTickets?.length !== 0 && (
                     <div className="w-full md:hidden">
                       <section
@@ -140,9 +172,8 @@ export default function Events() {
                       </section>
                     </div>
                   )}
-                </div>
               </div>
-              <div className="hidden w-1/2 px-20 pt-20 bg-black fixed top-0 right-0 overflow-auto h-full md:block">
+              <div className="hidden w-1/2 px-20 pt-20 bg-[#001A1A] fixed top-0 right-0 overflow-auto h-full md:block">
                 <div
                   className="w-full h-full bg-contain bg-no-repeat bg-center flex items-center justify-center"
                   style={{
