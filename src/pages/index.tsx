@@ -43,7 +43,7 @@ const Home: React.FC<Props> = () => {
         <div className="home h-[414px] md:h-[100vh] relative">
           <Nav />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-rbackground from-30% blur-lg" />
+        <div className="absolute inset-0 bg-gradient-to-t from-rbackground from-30% blur-lg -mb-10" />
         <div className="-mt-36 sm:-mt-80 relative w-full h-auto">
           <div className="text-white mx-8 md:mx-0 sm:px-[10px] md:px-[30px] lg:px-[50px] xl:px-[80px]">
             <div className="grid justify-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 mx-auto">

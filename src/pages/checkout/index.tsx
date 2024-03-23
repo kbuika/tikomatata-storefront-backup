@@ -150,7 +150,7 @@ export default function Checkout() {
             <h2 className="text-2xl font-semibold">Order Summary</h2>
           </div>
           <div className="w-full text-white">
-            <h2 className="text-xl font-semibold mt-4">{selectedEvent?.name} Tickets</h2>
+            <h2 className="text-xl font-semibold mt-4 text-rprimary">{selectedEvent?.name} Tickets</h2>
             {selectedTickets?.map((ticket: TicketPurchaseType) => (
               <div
                 key={ticket?.ticketId}
@@ -192,7 +192,7 @@ export default function Checkout() {
                   id="name"
                   type="text"
                   required
-                  className="h-[50px] bg-transparent appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                  className="h-[50px] bg-transparent appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:ring-rprimary focus:z-10 sm:text-sm"
                   placeholder="Name"
                   {...register("customerName", { required: true })}
                 ></input>
@@ -207,7 +207,7 @@ export default function Checkout() {
                   id="email"
                   type="email"
                   required
-                  className="h-[50px] bg-transparent appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                  className="h-[50px] bg-transparent appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:ring-rprimary focus:z-10 sm:text-sm"
                   placeholder="Email Address"
                   {...register("customerEmail", { required: true })}
                 ></input>
@@ -226,7 +226,7 @@ export default function Checkout() {
                   rules={{ required: true }}
                   placeholder="Enter phone number"
                   onChange={(e: string) => setValue("customerPhone", e)}
-                  className="h-[50px] bg-transparent appearance-none rounded block w-full pl-5 border border-gray-600 placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:z-10 sm:text-sm"
+                  className="h-[50px] bg-transparent appearance-none rounded block w-full pl-5 border border-gray-600 placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:ring-rprimary focus:z-10 sm:text-sm"
                 />
               </div>
               {errors.customerPhone && (

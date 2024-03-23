@@ -83,7 +83,7 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
   }
   return (
     <div
-      className={` w-full mt-6 p-6 h-[auto] rounded-[4px] shadow-xl relative text-white sell-out-section`}
+      className={` w-full mt-6 px-4 py-4 h-[auto] rounded-[4px] shadow-xl relative text-white sell-out-section`}
     >
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">{ticket?.name}</h1>
@@ -104,13 +104,13 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
         </> */}
         <p className="text-[17px] font-normal">Starts at {moment(startDateTime).format("LT")}</p>
       </div>
-      <div className="mt-2 flex justify-between items-center">
+      <div className="mt-2 flex justify-between items-center flex-wrap w-full">
         <p className="text-2xl text-white font-bold">KES {ticket?.price}</p>
         <div>
           <div className="flex flex-row items-center justify-start">
             <>
               <Button
-                className="border-none h-14 w-14 rounded-[50%] bg-rbackground"
+                className="border-none h-12 w-12 sm:h-14 sm:w-14 rounded-[50%] bg-rbackground"
                 onClick={() => removeTicket(ticket)}
                 disabled={ticketQuantity === 0}
               >
@@ -120,7 +120,7 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
                 {ticketQuantity}
               </p>{" "}
               <Button
-                className="border-none h-14 w-14 rounded-[50%] bg-rbackground"
+                className="border-none h-12 w-12 sm:h-14 sm:w-14 rounded-[50%] bg-rbackground"
                 onClick={() => addTicket(ticket)}
                 disabled={ticket?.quantity === 0}
               >
