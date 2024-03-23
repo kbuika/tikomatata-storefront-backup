@@ -137,7 +137,8 @@ export default function Checkout() {
   return (
     <DefaultLayout noFooter>
       <main className="flex min-h-screen flex-col items-center justify-center w-full md:flex-row-reverse md:items-start">
-        <div className="w-full p-8 flex flex-col items-start justify-start md:border-l-2 md:border-rborder md:min-h-[50em] md:w-[480px]">
+        <div className="w-full px-8 py-2 flex flex-col items-start justify-start md:p-8 md:border-l-2 md:border-rborder md:min-h-[50em] md:w-[480px]">
+          {/* <button className="md:hidden mb-2 -mt-2"><ArrowLeft color="white"/></button> */}
           <div className="h-[10em] w-full rounded-[4px] md:h-[208px] md:w-full">
             <div
               className="h-full w-full bg-cover bg-no-repeat bg-blend-multiply bg-center rounded-[4px]"
@@ -147,26 +148,26 @@ export default function Checkout() {
             />
           </div>
           <div className="mt-4 items-start w-[20em] text-white">
-            <h2 className="text-2xl font-semibold">Order Summary</h2>
+            <h2 className="text-xl sm:text-2xl font-semibold">Order Summary</h2>
           </div>
           <div className="w-full text-white">
-            <h2 className="text-xl font-semibold mt-4 text-rprimary">{selectedEvent?.name} Tickets</h2>
+            <h2 className="text-lg md:text-xl font-semibold mt-4 text-rprimary">{selectedEvent?.name} Tickets</h2>
             {selectedTickets?.map((ticket: TicketPurchaseType) => (
               <div
                 key={ticket?.ticketId}
                 className="flex flex-row w-full items-center justify-between mt-2 mb-2 text-lg"
               >
                 <p>
-                  <span className="text-white">{ticket?.totalQuantitySelected} x </span>
+                  <span className="text-white text-base md:text-lg">{ticket?.totalQuantitySelected} x </span>
                   {ticket?.name}
                 </p>
-                <p>KES {ticket?.price}</p>
+                <p className="text-base md:text-lg">KES {ticket?.price}</p>
               </div>
             ))}
             <hr className="my-4" />
             <div>
-              <h2 className="text-xl font-semibold">Discounts and Fees</h2>
-              <div className="flex flex-row w-full items-center justify-between mt-2 mb-2 text-lg">
+              <h2 className="text-lg sm:text-xl font-semibold">Discounts and Fees</h2>
+              <div className="flex flex-row w-full items-center justify-between mt-2 mb-2 text-base sm:text-lg">
                 <p>
                   <span className="text-white">Applied Discount</span>
                 </p>
@@ -174,13 +175,13 @@ export default function Checkout() {
               </div>
             </div>
             <hr className="my-4" />
-            <div className="flex flex-row w-full items-center justify-between mt-1 mb-2 text-xl">
+            <div className="flex flex-row w-full items-center justify-between mt-1 mb-2 text-lg md:text-xl">
               <p>TOTAL</p>
               <p>KES {totalTicketsPrice}</p>
             </div>
           </div>
         </div>
-        <div className="w-full px-12 min-h-[50em] border-t-2 md:border-t-0 md:w-[50%] md:p-8 md:px-10 max-[600px]:px-6 text-white">
+        <div className="w-full px-12 min-h-[50em] md:border-t-0 md:w-[50%] md:p-8 md:px-10 max-[600px]:px-6 text-white">
           <h2 className="text-xl font-semibold sm:text-2xl mt-6 md:mt-0">Where do we send your tickets?</h2>
           <p className="text-sm mt-2 text-gray-400">
             Tickets will be sent to the email provided below.
@@ -192,7 +193,7 @@ export default function Checkout() {
                   id="name"
                   type="text"
                   required
-                  className="h-[50px] bg-transparent appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:ring-rprimary focus:z-10 sm:text-sm"
+                  className="h-[50px] bg-transparent appearance-none rounded block w-full px-3 py-2 border border-[#EAEAEA] placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:ring-rprimary focus:z-10 sm:text-sm"
                   placeholder="Name"
                   {...register("customerName", { required: true })}
                 ></input>
@@ -207,7 +208,7 @@ export default function Checkout() {
                   id="email"
                   type="email"
                   required
-                  className="h-[50px] bg-transparent appearance-none rounded block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:ring-rprimary focus:z-10 sm:text-sm"
+                  className="h-[50px] bg-transparent appearance-none rounded block w-full px-3 py-2 border border-[#EAEAEA] placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:ring-rprimary focus:z-10 sm:text-sm"
                   placeholder="Email Address"
                   {...register("customerEmail", { required: true })}
                 ></input>
@@ -226,7 +227,7 @@ export default function Checkout() {
                   rules={{ required: true }}
                   placeholder="Enter phone number"
                   onChange={(e: string) => setValue("customerPhone", e)}
-                  className="h-[50px] bg-transparent appearance-none rounded block w-full pl-5 border border-gray-600 placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:ring-rprimary focus:z-10 sm:text-sm"
+                  className="h-[50px] bg-transparent appearance-none rounded block w-full pl-5 border border-[#EAEAEA] placeholder-gray-500 text-white focus:border-none focus:outline-none focus:ring-2 focus:ring-rprimary focus:z-10 sm:text-sm"
                 />
               </div>
               {errors.customerPhone && (
@@ -365,10 +366,10 @@ const PaystackHook = ({
   }
 
   return (
-    <div>
+    <div className="border border-[#EAEAEA] rounded-[5px]">
       <CustomButton
         type="submit"
-        className="h-[50px] group relative w-full flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
+        className="h-[50px] group relative w-full p-1 flex justify-center items-center py-2 px-4 border border-gray-600 text-base font-medium rounded text-black focus:outline-none focus:ring-2 focus:ring-offset-2"
         onClick={handleSubmit(PayForTickets)}
       >
         {initialized ? (

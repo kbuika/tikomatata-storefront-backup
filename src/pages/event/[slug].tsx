@@ -86,9 +86,7 @@ export default function Events() {
               <div className="-mt-20 h-[149px] w-[100vw] inset-0 bg-gradient-to-t from-rbackground from-85% blur-lg md:hidden" />
 
               <div className="relative md:flex p-8 w-full md:w-1/2 -mt-36 md:mt-0 md:flex-col">
-                <h2 className="text-4xl md:text-3xl font-bold mb-4">
-                  {selectedEvent?.name}
-                </h2>
+                <h2 className="text-4xl md:text-3xl font-bold mb-4">{selectedEvent?.name}</h2>
                 <div className="flex flex-col space-y-2">
                   <p>{selectedEvent?.location}</p>
                   <p>
@@ -131,16 +129,18 @@ export default function Events() {
                       </div>
                       {selectedEvent?.tickets?.length !== 0 && (
                         <div className="mt-8 flex flex-col sm:flex-row items-start justify-between w-full">
-                          <div className="w-full border-2 border-[#105858] p-2 h-10 rounded flex items-center justify-between text-lg mb-4 sm:mb-0 sm:w-[45%]">
+                          <div className="w-full border-2 border-[#105858] p-2 h-12 rounded flex items-center justify-between text-lg mb-4 sm:mb-0 sm:w-[45%]">
                             TOTAL{" "}
                             <span className="text-white font-medium">
                               KES <span className="font-semibold">{totalTicketsPrice}</span>
                             </span>
                           </div>
 
-                          <CustomButton className="w-full sm:w-[45%]" onClick={completeOrder}>
-                            Complete Order
-                          </CustomButton>
+                          <div className="h-12 w-full sm:w-[45%] border border-[#EAEAEA] rounded-[5px] p-[1px]">
+                            <CustomButton className="w-full h-full" onClick={completeOrder}>
+                              Complete Order
+                            </CustomButton>
+                          </div>
                         </div>
                       )}
                     </TabsContent>
