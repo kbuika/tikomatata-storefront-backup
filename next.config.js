@@ -11,6 +11,8 @@ const nextConfig = {
       "images.unsplash.com",
       "github.com",
       "tikomatata.com",
+      "files.tikomatata.co.ke",
+      "minio-lcswg0k.37.60.233.230.sslip.io",
     ],
   },
   async redirects() {

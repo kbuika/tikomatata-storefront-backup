@@ -30,10 +30,10 @@ export default function SuccessOrder() {
 
   return (
     <DefaultLayout>
-      <main className="flex flex-col w-full min-h-screen bg-rbackground pt-[50px] text-white md:flex-row">
+      <main className="flex flex-col w-full min-h-screen bg-rbackground text-white md:flex-row">
         <ConfettiExplosion {...largeProps} />
-        <div className="relative flex items-start justify-start p-8 w-full min-h-screen md:w-1/2 md:mt-0 md:flex-col">
-          <div className="h-auto w-full flex flex-col items-center justify-center max-[600px]:mt-2 p-4 ">
+        <div className="relative flex items-start justify-start p-2 md:p-8 w-full min-h-screen md:w-1/2 md:mt-0 md:flex-col">
+          <div className="h-auto w-full flex flex-col items-center justify-start max-[600px]:mt-2 py-2 md:p-4">
             <div className="h-[120px] w-[120px]">
               <Image
                 src={tickImage}
@@ -60,7 +60,7 @@ export default function SuccessOrder() {
               {selectedTickets?.map((ticket: TicketPurchaseType) => (
                 <div
                   key={ticket?.ticketId}
-                  className="flex flex-row w-full items-center justify-between mt-2 mb-2 text-lg"
+                  className="flex flex-row w-full items-center justify-between mt-2 mb-2 text-base md:text-lg"
                 >
                   <p>
                     <span className="text-white">{ticket?.totalQuantitySelected} x </span>
@@ -71,9 +71,14 @@ export default function SuccessOrder() {
               ))}
 
               <hr className="my-4" />
-              <div className="flex flex-row w-full items-center justify-between mt-1 mb-2 text-xl">
-                <p>TOTAL</p>
+              <div className="flex flex-row w-full items-center justify-between mt-1 mb-2 text-lg md:text-xl">
+                <p>Total Amount Paid</p>
                 <p>KES {totalTicketsPrice}</p>
+              </div>
+              <hr className="my-4" />
+              <div className="flex flex-row w-full items-center justify-between mt-1 mb-2 text-lg md:text-xl">
+                <p>Date Paid</p>
+                <p>{orderDetails?.datePaid}</p>
               </div>
             </div>
             <Link href="/" className="flex">
