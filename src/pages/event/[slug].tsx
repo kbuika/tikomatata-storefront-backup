@@ -66,9 +66,9 @@ export default function Events() {
             </main>
           ) : (
             <main className="flex flex-col w-full sm:min-h-screen bg-rbackground text-white md:flex-row">
-              {process.env.NODE_ENV == "production" && (
-                <ReportView eventId={selectedEvent?.eventId?.toString() || ""} />
-              )}
+              {/* {process.env.NODE_ENV == "production" && ( */}
+              <ReportView eventId={selectedEvent?.eventId?.toString() || ""} />
+              {/* // )} */}
               <div
                 className="h-[354px] w-full relative bg-cover bg-no-repeat bg-blend-multiply bg-center md:hidden"
                 style={{
