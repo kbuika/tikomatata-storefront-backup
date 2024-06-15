@@ -27,6 +27,11 @@ const nextConfig = {
         destination: "https://tikomatata.com/events/THE%20JUMP%20OFF%20?id=6",
         permanent: true,
       },
+      {
+        source: "/bnp",
+        destination: "https://tikomatata.com/event/bnp-experience",
+        permanent: true,
+      },
     ]
   },
 }
