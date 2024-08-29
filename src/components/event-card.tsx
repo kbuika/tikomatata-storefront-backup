@@ -28,8 +28,11 @@ const EventCard: React.FC<Props> = ({ event }) => {
     >
       {/* md:h-[28em] sm:w-[18em] md:w-[20em] lg:w-[20em] xl:w-[20em] */}
       <div className="w-full h-[70%] rounded-[8px] relative">
-        <div className="flex overflow-hidden items-center justify-center h-full w-full relative rounded-[8px] border-2 border-[#105858]">
-          <Image src={event?.posterUrl!} alt={event?.name!} fill className="rounded"/>
+      <div className="h-full w-full rounded-[8px] border-2 border-[#105858] bg-cover bg-no-repeat bg-blend-multiply bg-center"
+        style={{
+          backgroundImage: `url('${event?.posterUrl}')`,
+        }}
+        >
         </div>
       </div>
       <div className="flex flex-row w-full min-h-[30%] h-auto pb-2">
