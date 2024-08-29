@@ -3,7 +3,7 @@ import { ReportView } from "@/components/report-view"
 import SEO from "@/components/seo"
 import TicketCardList from "@/components/ticket-card-list"
 import DefaultLayout from "@/layouts/default-layout"
-import { truncateText, warningToast } from "@/lib/utils"
+import { sortTickets, truncateText, warningToast } from "@/lib/utils"
 import { useEventBySlug } from "@/services/queries"
 import { useEventsStore } from "@/stores/events-store"
 import { useTicketsStore } from "@/stores/tickets-store"
@@ -127,7 +127,7 @@ export default function Events() {
                           </>
                         )}
                       </div>
-                      {selectedEvent?.tickets?.length !== 0 && (
+                      {sortTickets(selectedEvent?.tickets)?.length !== 0 && (
                         <div className="mt-8 flex flex-col sm:flex-row items-start justify-between w-full">
                           <div className="w-full border-2 border-[#105858] p-2 h-12 rounded flex items-center justify-between text-lg mb-4 sm:mb-0 sm:w-[45%]">
                             TOTAL{" "}
