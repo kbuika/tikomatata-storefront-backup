@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { toast } from "react-toastify"
 import { EventDataType } from "@/types/event"
+import { TicketDataType } from "@/types/ticket"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -73,4 +74,16 @@ export const getPastEvents = (events: EventDataType[]): EventDataType[] => {
 
     return eventEndDate < currentDate
   })
+}
+
+export function sortTickets(tickets: TicketDataType[] | null | undefined): TicketDataType[] {
+  if(!tickets) return []
+  return tickets.sort((a, b) => {
+    const quantityA = Number(a.quantity);
+    const quantityB = Number(b.quantity);
+    
+    if (quantityA === 0 && quantityB !== 0) return 1;
+    if (quantityB === 0 && quantityA !== 0) return -1;
+    return 0;
+  });
 }
