@@ -37,7 +37,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
         .finally(() => {
           setOpen(false)
         })
-    }, 1000)
+    }, 2000)
   }
 
   return (
