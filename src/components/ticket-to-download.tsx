@@ -76,7 +76,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                   </div>
                   <div className="center-content qr-code-main-div w-full flex flex-col justify-center items-center">
                     <div className="center-content qr-code-div w-full flex flex-col justify-center items-center absolute top-[130px]">
-                      <Image src={ticket?.ticketUrl} alt="" width={210} height={210} className="" />
+                      <Image src={ticket?.ticketUrl} alt="" width={210} height={210} className="" unoptimized/>
                     </div>
                   </div>
                 </div>
