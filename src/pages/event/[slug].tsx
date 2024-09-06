@@ -174,7 +174,7 @@ export default function Events() {
                   </div>
                 )}
               </div>
-              <div className="hidden w-1/2 px-20 pt-20 bg-[#001A1A] fixed top-0 right-0 overflow-auto h-full md:block">
+              <div className="hidden w-1/2 px-20 pt-20 bg-[#001A1A] fixed top-[40px] right-0 overflow-auto h-full md:block">
                 <div
                   className="w-full h-full bg-contain bg-no-repeat bg-center flex items-center justify-center"
                   style={{

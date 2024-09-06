@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import Link from "next/link"
-import React from "react"
+import React, { useState, useEffect } from "react"
 import CustomButton from "../components/ui/custom-button"
 import BrightLogo from "../images/logos/tikomatata-bright.svg"
 import MainLogo from "../images/logos/tikomatata.svg"
@@ -24,10 +24,30 @@ const DefaultLayout: React.FC<Props> = ({
   noHeader = false,
   noFooter = false,
 }) => {
+  const [showBanner, setShowBanner] = useState(false);
+
+  useEffect(() => {
+    const checkBannerVisibility = () => {
+      const now = new Date();
+      const maintenanceDate = new Date('2024-09-07T07:30:00+03:00'); 
+      setShowBanner(now < maintenanceDate);
+    };
+
+    checkBannerVisibility();
+    const timer = setInterval(checkBannerVisibility, 600000); 
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="flex flex-col bg-rbackground">
+      {showBanner && (
+        <div className="bg-rprimary text-black text-center py-2 px-4 font-bold z-50 sticky top-0">
+          Scheduled maintenance on September 7th from 5:00 AM to 7:30 AM. Payment processing will be affected.
+        </div>
+      )}
       <header
-        className={`h-[8vh] flex items-center justify-between w-full px-[24px] sticky top-0 backdrop-filter backdrop-blur-lg bg-opacity-30 bg-rbackground z-50 md:border-b-2 md:border-rborder
+        className={`h-[8vh] flex items-center justify-between w-full px-[24px] sticky ${showBanner ? 'top-10' : 'top-0'} backdrop-filter backdrop-blur-lg bg-opacity-30 bg-rbackground z-50 md:border-b-2 md:border-rborder
          ${noHeader ? "hidden" : "md:flex"}`}
       >
         <Link href="/">
