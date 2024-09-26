@@ -18,4 +18,5 @@ export interface EventDataType {
   published?: boolean
   tickets?: null | TicketDataType[],
   slug?: string
+  serviceChargePercentage: number
 }

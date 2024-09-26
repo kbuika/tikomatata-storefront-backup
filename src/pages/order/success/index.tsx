@@ -10,6 +10,7 @@ import CustomButton from "../../../components/ui/custom-button"
 import tickImage from "../../../images/success-tick.svg"
 import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion"
 import { TicketPurchaseType } from "@/types/ticket"
+import { calculateOrderTotal, calculateTotalServiceFee } from "@/lib/utils"
 
 const largeProps: ConfettiProps = {
   force: 0.8,
@@ -72,8 +73,13 @@ export default function SuccessOrder() {
 
               <hr className="my-4" />
               <div className="flex flex-row w-full items-center justify-between mt-1 mb-2 text-lg md:text-xl">
+                <p>Service Charge</p>
+                <p>KES {calculateTotalServiceFee(selectedTickets, selectedEvent?.serviceChargePercentage!)}</p>
+              </div>
+              <hr className="my-4" />
+              <div className="flex flex-row w-full items-center justify-between mt-1 mb-2 text-lg md:text-xl">
                 <p>Total Amount Paid</p>
-                <p>KES {totalTicketsPrice}</p>
+                <p>KES {calculateOrderTotal(totalTicketsPrice, calculateTotalServiceFee(selectedTickets, selectedEvent?.serviceChargePercentage!))}</p>
               </div>
               <hr className="my-4" />
               <div className="flex flex-row w-full items-center justify-between mt-1 mb-2 text-lg md:text-xl">
