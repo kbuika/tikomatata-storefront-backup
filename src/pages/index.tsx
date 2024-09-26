@@ -65,7 +65,7 @@ const Home: React.FC<Props> = () => {
                   </>
                 ) : (
                   <>
-                    <p className="text-lg">Sorry 😞! There are no upcoming events at the moment</p>
+                    <p className="text-lg">We are working on some good events for you!</p>
                   </>
                 )}
               </div>
