@@ -2,7 +2,7 @@ import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { toast } from "react-toastify"
 import { EventDataType } from "@/types/event"
-import { TicketDataType } from "@/types/ticket"
+import { TicketDataType, TicketPurchaseType } from "@/types/ticket"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -86,4 +86,17 @@ export function sortTickets(tickets: TicketDataType[] | null | undefined): Ticke
     if (quantityB === 0 && quantityA !== 0) return -1;
     return 0;
   });
+}
+
+
+export function calculateTotalServiceFee(selectedTickets: TicketPurchaseType[], serviceChargePercentage: number): number {
+  let totalServiceFee = 0
+  selectedTickets.map((ticket: TicketPurchaseType) => {
+    totalServiceFee += (((parseFloat(ticket.price) * serviceChargePercentage) / 100) * ticket.totalQuantitySelected)
+  })
+  return Math.ceil(totalServiceFee)
+}
+
+export function calculateOrderTotal(totalPrice: number, serviceFee: number): number {
+  return Math.ceil(totalPrice + serviceFee)
 }

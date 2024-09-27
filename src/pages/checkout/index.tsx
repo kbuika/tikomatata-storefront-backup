@@ -2,7 +2,7 @@
 import { PurchaseTicketsByCardFn } from "@/api-calls"
 import useCustomPaystackPayment from "@/hooks/useCustomPaystackPayment"
 import DefaultLayout from "@/layouts/default-layout"
-import { errorToast, generateReferenceCode, removePlusInPhone, warningToast } from "@/lib/utils"
+import { calculateOrderTotal, calculateTotalServiceFee, errorToast, generateReferenceCode, removePlusInPhone, warningToast } from "@/lib/utils"
 import { usePayViaMpesa } from "@/services/mutations"
 import { useEventsStore } from "@/stores/events-store"
 import { useOrderStore } from "@/stores/order-store"
@@ -127,9 +127,9 @@ export default function Checkout() {
     onSuccess: (reference: any) => handlePaystackSuccess(reference),
     onClose: handlePaystackClose,
     currency: "KES" as Currency,
-    amount: totalTicketsPrice * 100,
+    amount: calculateOrderTotal(totalTicketsPrice, calculateTotalServiceFee(selectedTickets, selectedEvent?.serviceChargePercentage!))*100,
     email: customerEmail,
-    label: `Confirm and Pay KES ${totalTicketsPrice}`,
+    label: `Confirm and Pay KES ${calculateOrderTotal(totalTicketsPrice, calculateTotalServiceFee(selectedTickets, selectedEvent?.serviceChargePercentage!))}`,
     phone: customerPhone !== undefined ? (customerPhone as phone) : "",
     channels: ["mobile_money", "card"],
   } as PaystackProps
@@ -169,6 +169,12 @@ export default function Checkout() {
               <h2 className="text-lg sm:text-xl font-semibold">Discounts and Fees</h2>
               <div className="flex flex-row w-full items-center justify-between mt-2 mb-2 text-base sm:text-lg">
                 <p>
+                  <span className="text-white">Service Fee</span>
+                </p>
+                <p>KES {calculateTotalServiceFee(selectedTickets, selectedEvent?.serviceChargePercentage!)}</p>
+              </div>
+              <div className="flex flex-row w-full items-center justify-between mt-2 mb-2 text-base sm:text-lg">
+                <p>
                   <span className="text-white">Applied Discount</span>
                 </p>
                 <p>KES 0</p>
@@ -177,7 +183,7 @@ export default function Checkout() {
             <hr className="my-4" />
             <div className="flex flex-row w-full items-center justify-between mt-1 mb-2 text-lg md:text-xl">
               <p>TOTAL</p>
-              <p>KES {totalTicketsPrice}</p>
+              <p>KES {calculateOrderTotal(totalTicketsPrice, calculateTotalServiceFee(selectedTickets, selectedEvent?.serviceChargePercentage!))}</p>
             </div>
           </div>
         </div>
