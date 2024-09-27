@@ -89,7 +89,7 @@ export default function SuccessOrder() {
             </div>
             <Link href="/" className="flex">
               <CustomButton className="mt-[40px] px-[100px] py-[14px] sm:px-[120px]">
-                Home
+                Go Back Home
               </CustomButton>
             </Link>
           </div>
