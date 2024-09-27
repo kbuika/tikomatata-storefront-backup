@@ -11,9 +11,7 @@ const Hero = () => {
 				From electrifying music concerts to action-packed sporting events, we&apos;ve
 				got you covered.
 			</p>
-			<p className='mb-6 md:text-center md:text-lg md:text-gray-100 text-white'>
-				Don&amp;t miss out on the memories - grab your tickets now!
-			</p> */}
+			*/}
     </div>
   )
 }
