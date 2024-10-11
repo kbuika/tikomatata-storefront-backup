@@ -103,6 +103,11 @@ const TicketCard: React.FC<EventTicketProps> = ({ ticket, event }) => {
           </p>
         </> */}
         <p className="text-[17px] font-normal">Starts at {moment(startDateTime).format("LT")}</p>
+        {event?.eventId == 22 && ticket?.ticketId == 25 && (
+          <p className="text-sm font-medium text-yellow-400 mt-2">
+            Disclaimer: This ticket is only for students. Student IDs will be checked at the event.
+          </p>
+        )}
       </div>
       <div className="mt-2 flex justify-between items-center flex-wrap w-full">
         <p className="text-2xl text-white font-bold">KES {ticket?.price}</p>
