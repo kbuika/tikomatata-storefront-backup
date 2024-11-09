@@ -7,6 +7,7 @@ import tikomatataRound from "@/images/logos/tikomatata-round.png"
 import tikomatataStacked from "@/images/logos/tikomatata-stacked.png"
 import JumpOffImage from "@/images/past-event-posters/jump-off.png"
 import EchoesImage from "@/images/past-event-posters/echoes.png"
+import FTLA from "@/images/ftla.jpeg"
 import Image from "next/image"
 import SEO from "@/components/seo"
 export default function Brand() {
@@ -42,6 +43,9 @@ export default function Brand() {
             </div>
             <div className="min-w-[10em] min-h-[10em] flex items-center justify-center border-2 p-3">
                 <Image src={JumpOffImage} alt="jumpoff" />
+            </div>
+            <div className="min-w-[10em] min-h-[10em] flex items-center justify-center border-2 p-3">
+              <Image src={FTLA} alt="ftla" />
             </div>
           </div>
         </div>
