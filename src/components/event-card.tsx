@@ -18,8 +18,12 @@ const EventCard: React.FC<Props> = ({ event }) => {
   const setSelectedEvent = useEventsStore((state) => state.setSelectedEvent)
   const router = useRouter()
   const goToEvent = () => {
-    setSelectedEvent(event)
-    router.push(`/event/${event?.slug}`)
+    if (event?.slug === "ftla") {
+      window.location.href = "https://triply.co/ftla"
+    } else {
+      setSelectedEvent(event)
+      router.push(`/event/${event?.slug}`)
+    }
   }
   return (
     <div

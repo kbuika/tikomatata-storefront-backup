@@ -16,6 +16,7 @@ import Image from "next/image"
 import { useEffect } from "react"
 import EventCard from "../components/event-card"
 import SEO from "../components/seo"
+import Link from "next/link"
 
 type Props = {
   events: Array<EventDataType>
@@ -59,6 +60,25 @@ const Home: React.FC<Props> = () => {
               <div className="flex flex-wrap items-start grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                 {events && events?.length > 0 ? (
                   <>
+                    <Link href="https://triply.co/ftla">
+                      <EventCard
+                        key="external-event"
+                      event={{
+                        slug: "ftla",
+                        eventId: 6000,
+                        name: "FTLA",
+                        description: "Click to visit external site",
+                        startDate: "2024-11-30",
+                        endDate: "2024-12-01",
+                        startTime: "16:00",
+                        endTime: "04:00",
+                        location: "Bomas of Kenya Outdoor Grounds",
+                        posterUrl: "https://ibb.co/Wy5sxrJ",
+                        ageLimit: 18,
+                        serviceChargePercentage: 0
+                      }}
+                    />
+                    </Link>
                     {events?.map((event: EventDataType) => (
                       <EventCard key={event?.eventId} event={event} />
                     ))}

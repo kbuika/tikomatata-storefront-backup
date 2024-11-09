@@ -13,6 +13,7 @@ const nextConfig = {
       "tikomatata.com",
       "files.tikomatata.co.ke",
       "minio-lcswg0k.37.60.233.230.sslip.io",
+      "ibb.co",
     ],
   },
   async redirects() {
@@ -30,6 +31,11 @@ const nextConfig = {
       {
         source: "/bnp",
         destination: "https://tikomatata.com/event/bnp-experience",
+        permanent: true,
+      },
+      {
+        source: "/ftla",
+        destination: "https://triply.co/ftla",
         permanent: true,
       },
     ]
