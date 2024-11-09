@@ -73,7 +73,7 @@ const Home: React.FC<Props> = () => {
                         startTime: "16:00",
                         endTime: "04:00",
                         location: "Bomas of Kenya Outdoor Grounds",
-                        posterUrl: "https://ibb.co/Wy5sxrJ",
+                        posterUrl: "https://tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fftla.9bb23bff.jpeg&w=3840&q=75",
                         ageLimit: 18,
                         serviceChargePercentage: 0
                       }}
