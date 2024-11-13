@@ -28,6 +28,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
           link.click()
         })
         .catch((err) => {
+          console.log(err, "could not download ticket")
           errorToast(
             "An error occured while downloading your ticket. If the issue persists, please contact us.",
           )
@@ -58,7 +59,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                 <div className="top-div bg-[#f7edff] relative h-[250px] px-[50px]">
                   <div className="center-content top-logo w-full flex flex-col justify-center items-center mt-[1.5em]">
                     <img
-                      src="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata.953bdde3.png&w=1200&q=75"
+                      src="https://tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata.953bdde3.png&w=640&q=75"
                       alt="tikomatata logo"
                       width="79"
                       height="17"
@@ -121,7 +122,7 @@ export const TicketToDownload = ({ ticket, event, ticketRef }: any) => {
                 </div>
                 <div className="mt-4 h-[8vh] bg-[#f7edff] flex items-center justify-center">
                   <img
-                    src="https://dev.tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata.953bdde3.png&w=1200&q=75"
+                    src="https://tikomatata.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftikomatata.953bdde3.png&w=640&q=75"
                     alt="tikomatata logo"
                     width="79"
                     height="17"
