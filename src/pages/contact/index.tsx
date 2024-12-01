@@ -26,7 +26,7 @@ export default function Contact() {
                 </a>
               </p>
             </li>
-            <li className="mb-8 flex flex-col items-center justify-center">
+            {/* <li className="mb-8 flex flex-col items-center justify-center">
               <h3 className="mb-4 text-xl tracking-tight font-extrabold text-white">Phone</h3>
               <p className="mb-4 font-light text-gray-500 dark:text-gray-400 sm:text-xl">
                 Call us at{" "}
@@ -34,7 +34,7 @@ export default function Contact() {
                   0740459940
                 </a>
               </p>
-            </li>
+            </li> */}
           </ul>
         </div>
       </section>
